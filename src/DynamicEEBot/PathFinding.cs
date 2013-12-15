@@ -101,8 +101,8 @@ namespace DynamicEEBot
 
         public Stack<Square> Start(int startX, int startY, int targetX, int targetY, Bot bot)
         {
-            closedSquares = new Square[128, 128];
-            openSquares = new Square[128, 128];
+            closedSquares = new Square[bot.room.width, bot.room.height];
+            openSquares = new Square[bot.room.width, bot.room.height];
             openSquaresList = new List<Square>();
 
             int h = CalculateH(startX, startY, targetX, targetY);

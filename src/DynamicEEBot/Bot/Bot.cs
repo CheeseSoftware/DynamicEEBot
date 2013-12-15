@@ -21,6 +21,7 @@ namespace DynamicEEBot
             subBotHandler.AddSubBot(new Commands(this), this);
             subBotHandler.AddSubBot(new Zombies(this), this);
             subBotHandler.AddSubBot(new WorldEdit(this), this);
+            subBotHandler.AddSubBot(new Dig(this), this);
         }
 
         protected override void OnMessage(object sender, PlayerIOClient.Message m)
@@ -38,7 +39,8 @@ namespace DynamicEEBot
                                 if (message[0] == '!')
                                 {
                                     message = message.Replace("!", "");
-                                    subBotHandler.onCommand(sender, message, playerList[player], this);
+                                    if (playerList.ContainsKey(player))
+                                        subBotHandler.onCommand(sender, message, playerList[player], this);
                                 }
                             }
                             break;

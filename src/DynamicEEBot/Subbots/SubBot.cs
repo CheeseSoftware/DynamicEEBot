@@ -11,7 +11,7 @@ namespace DynamicEEBot
     public abstract class SubBot
     {
         protected Bot bot;
-        protected Task updateTask;
+        protected Thread updateTask;
         protected int UpdateSleep = 200;
         public int id = -1;
         private bool enabledValue;
@@ -38,7 +38,7 @@ namespace DynamicEEBot
                     }
                     else
                     {
-                        this.updateTask.Dispose();
+                        this.updateTask.Suspend();
                         this.onDisable(bot);
                         Console.WriteLine(this.GetType().Name + ".cs is disabled.");
                     }
@@ -49,7 +49,7 @@ namespace DynamicEEBot
         public SubBot(Bot bot)
         {
             this.bot = bot;
-            updateTask = new Task(() =>
+            updateTask = new Thread(() =>
                 {
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();

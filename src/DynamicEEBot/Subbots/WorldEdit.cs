@@ -30,7 +30,9 @@ namespace DynamicEEBot
                         int y = m.GetInt(2);
                         int previousBlock = bot.room.getBlock(layer, x, y).blockId;
                         int blockId = m.GetInt(3);
-                        int placer = m.GetInt(4);
+                        int placer = -1;
+                        if (m.Count > 4)
+                            placer = m.GetInt(4);
                         if (bot.playerList.ContainsKey(placer))
                         {
                             Player player = bot.playerList[placer];
@@ -116,7 +118,7 @@ namespace DynamicEEBot
                                 {
                                     for (int y = editBlock1.Y; y <= editBlock2.Y; y++)
                                     {
-                                        if(bot.room.getBlock(fromLayer, x, y).blockId == from)
+                                        if (bot.room.getBlock(fromLayer, x, y).blockId == from)
                                             bot.room.DrawBlock(Block.CreateBlock(toLayer, x, y, to, player.id));
                                     }
                                 }

@@ -17,7 +17,7 @@ namespace DynamicEEBot
         public Zombies(Bot bot)
             : base(bot)
         {
-            UpdateSleep = 10;
+            UpdateSleep = 300;
             zombieUpdateStopWatch.Start();
             zombieDrawStopWatch.Start();
             enabled = true;
@@ -38,8 +38,9 @@ namespace DynamicEEBot
             switch (args[0])
             {
                 case "zombie":
+                    if(isBotMod)
                     {
-                        Zombie zombie = new Zombie(bot.playerList[player.id].blockX * 16, bot.playerList[player.id].blockY * 16);
+                        Zombie zombie = new Zombie(player.blockX * 16, player.blockY * 16);
                         lock (zombieList)
                         {
                             zombieList.Add(zombie);

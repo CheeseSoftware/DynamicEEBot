@@ -13,7 +13,7 @@ namespace DynamicEEBot
         PathFinding pathFinding = new PathFinding();
         Block zombieBlock = null;
         Block zombieOldBlock = null;
-        Player targetBotPlayer = null;
+        Player targetPlayer = null;
         Stopwatch updateTimer = new Stopwatch();
         Stopwatch lagTimer = new Stopwatch();
         Stack<Square> pathToGo = null;
@@ -57,17 +57,17 @@ namespace DynamicEEBot
                 }
                 if (lowestDistancePlayer != null)
                 {
-                    targetBotPlayer = lowestDistancePlayer;
+                    targetPlayer = lowestDistancePlayer;
 
                 }
             }
 
-            if (targetBotPlayer != null && xBlock != targetBotPlayer.x && yBlock != targetBotPlayer.y)
+            if (targetPlayer != null && xBlock != targetPlayer.x && yBlock != targetPlayer.y)
             {
                 //pathFinding = null;
                 //pathFinding = new PathFinding();
                 //lagTimer.Restart();
-                pathToGo = pathFinding.Start(xBlock, yBlock, targetBotPlayer.blockX, targetBotPlayer.blockY, bot);
+                pathToGo = pathFinding.Start(xBlock, yBlock, targetPlayer.blockX, targetPlayer.blockY, bot);
                 //Console.WriteLine("elapsed shitlagtime " + lagTimer.ElapsedMilliseconds + "MS");
 
                 if (pathToGo != null && pathToGo.Count != 0)
@@ -82,12 +82,12 @@ namespace DynamicEEBot
                     yBlock = next.y;
                 }
 
-                if (targetBotPlayer != null)
+                if (targetPlayer != null)
                 {
-                    if (GetDistanceBetween(targetBotPlayer, xBlock, yBlock) <= 1 && !targetBotPlayer.isgod)
+                    if (GetDistanceBetween(targetPlayer, xBlock, yBlock) <= 1 && !targetPlayer.isgod)
                     {
-                        targetBotPlayer.killPlayer();
-                        bot.connection.Send("say", "/kill " + targetBotPlayer.name);
+                        targetPlayer.killPlayer();
+                        bot.connection.Send("say", "/kill " + targetPlayer.name);
                     }
                 }
             }

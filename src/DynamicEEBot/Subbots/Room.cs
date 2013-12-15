@@ -38,18 +38,20 @@ namespace DynamicEEBot
                         data.woots = m.GetInt(3);
                         data.totalWoots = m.GetInt(4);
                         data.key = derot(m.GetString(5));
-                        Player player = new Player(bot, m.GetInt(6), m.GetString(9), 0, m.GetInt(7), m.GetInt(8), false, false, false, 0, false, false, 0);
-                        lock (bot.playerList)
-                            bot.playerList.Add(player.id, player);
+                        //Player player = new Player(bot, m.GetInt(6), m.GetString(9), 0, m.GetInt(7), m.GetInt(8), false, false, false, 0, false, false, 0);
+                        //lock (bot.playerList)
+                        //  bot.playerList.Add(player.id, player);
                         data.width = m.GetInt(12);
                         data.height = m.GetInt(13);
+                        ResetMap();
+                        data.DeSerialize(m);
+                        loadedWorld = true;
                     }
-                    goto case "reset";
+                    break;
                 case "reset":
                     {
                         loadedWorld = false;
                         ResetMap();
-                        data.DeSerialize(m);
                         loadedWorld = true;
                     }
                     break;
@@ -59,7 +61,9 @@ namespace DynamicEEBot
                         int x = m.GetInt(1);
                         int y = m.GetInt(2);
                         int blockID = m.GetInt(3);
-                        int placer = m.GetInt(4);
+                        int placer = -1;
+                        if (m.Count > 4)
+                            placer = m.GetInt(4);
                         Block b = Block.CreateBlock(layer, x, y, blockID, placer);
                         data.blockMap[layer, x, y].Add(b);
                         //lock (blocksToPlace)
@@ -117,8 +121,7 @@ namespace DynamicEEBot
                     break;
                 case "pos":
                     {
-                        Player p = bot.playerList[player.id];
-                        bot.connection.Send("say", "Your position: X:" + p.blockX + " Y:" + p.blockY);
+                        bot.connection.Send("say", "Your position: X:" + player.blockX + " Y:" + player.blockY);
                     }
                     break;
             }
@@ -191,7 +194,7 @@ namespace DynamicEEBot
                 foreach (Block b in blocksToPlace.Values)
                 {
                     b.Send(bot);
-                    Thread.Sleep(5);
+                    Thread.Sleep(4);
                 }
             }
         }
