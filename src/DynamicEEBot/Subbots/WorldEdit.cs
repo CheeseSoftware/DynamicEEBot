@@ -27,7 +27,7 @@ namespace DynamicEEBot
                         int blockId = m.GetInt(3);
                         int placer = m.GetInt(4);
                         Player player = bot.playerList[placer];
-                        if(player.hasVar("brush"))
+                        if(player.hasVar("brush") && blockId == 32)
                         {
                             if((bool)player.getVar("brush"))
                             {
@@ -42,7 +42,7 @@ namespace DynamicEEBot
                                         int tempy = y + (int)(a * System.Math.Sin(mAngle));
                                         if (tempx > 0 && tempx < bot.room.width && tempy > 0 && tempy < bot.room.height)
                                         {
-                                            bot.room.DrawBlock(Block.CreateBlock(layer, tempx, tempy, blockId, -1));
+                                            bot.room.DrawBlock(Block.CreateBlock(brushBlock >= 500 ? 1 : 0, tempx, tempy, brushBlock, -1));
                                         }
                                     }
                                 }
@@ -59,7 +59,7 @@ namespace DynamicEEBot
             switch (args[0])
             {
                 case "b":
-                    //if (isBotMod)
+                    if (isBotMod)
                     {
                         if (player.hasVar("brush"))
                             player.setVar("brush", !(bool)player.getVar("brush"));
@@ -70,7 +70,7 @@ namespace DynamicEEBot
                     }
                     break;
                 case "bs":
-                    //if (isBotMod)
+                    if (isBotMod)
                     {
                         int size;
                         if (args.Length > 1 && int.TryParse(args[1], out size))
@@ -84,8 +84,8 @@ namespace DynamicEEBot
                             bot.connection.Send("say", "Usage: !bs <size>");
                     }
                     break;
-                case "block":
-                    //if(isBotMod)
+                case "bb":
+                    if(isBotMod)
                     {
                         int blockId;
                         if (args.Length > 1 && int.TryParse(args[1], out blockId))
@@ -93,7 +93,7 @@ namespace DynamicEEBot
                             player.setVar("brushblock", blockId);
                         }
                         else
-                            bot.connection.Send("say", "Usage: !block <id>");
+                            bot.connection.Send("say", "Usage: !bb <id>");
                     }
                     break;
                 case "fill":
