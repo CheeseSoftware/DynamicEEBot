@@ -191,7 +191,7 @@ namespace DynamicEEBot
                 foreach (Block b in blocksToPlace.Values)
                 {
                     b.Send(bot);
-                    Thread.Sleep(8);
+                    Thread.Sleep(5);
                 }
             }
         }
