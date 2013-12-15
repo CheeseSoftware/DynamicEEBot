@@ -16,7 +16,7 @@ namespace DynamicEEBot
         public int width;
         public int height;
         public string key;
-        public Block[, ,] blockMap;
+        public List<Block>[, ,] blockMap;
 
         public void DeSerialize(Message m)
         {
@@ -48,13 +48,13 @@ namespace DynamicEEBot
                                     int yIndex = (yByteArray[x] * 256) + yByteArray[x + 1];
                                     if (blockId == 242)
                                     {
-                                        int rotation = m.GetInt(i);
-                                        int thisId = m.GetInt(i + 1);
-                                        int targetId = m.GetInt(i + 2);
-                                        blockMap[layer, xIndex, yIndex] = Block.CreatePortal(xIndex, yIndex, rotation, thisId, targetId);
+                                        //int rotation = m.GetInt(i);
+                                        //int thisId = m.GetInt(i + 1);
+                                        //int targetId = m.GetInt(i + 2);
+                                        //blockMap[layer, xIndex, yIndex].Add(Block.CreatePortal(xIndex, yIndex, rotation, thisId, targetId));
                                     }
                                     else
-                                        blockMap[layer, xIndex, yIndex] = Block.CreateBlock(layer, xIndex, yIndex, blockId, -1);
+                                        blockMap[layer, xIndex, yIndex].Add(Block.CreateBlock(layer, xIndex, yIndex, blockId, -1));
                                 }
                                 i += 1;
                             }

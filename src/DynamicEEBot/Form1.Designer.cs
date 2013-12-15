@@ -42,6 +42,7 @@
             this.loginTab = new System.Windows.Forms.TabPage();
             this.subbotsTab = new System.Windows.Forms.TabPage();
             this.subbotCheckedListBox = new System.Windows.Forms.CheckedListBox();
+            this.accessButton = new System.Windows.Forms.Button();
             this.tabs.SuspendLayout();
             this.loginTab.SuspendLayout();
             this.subbotsTab.SuspendLayout();
@@ -99,6 +100,7 @@
             this.codeBox.Name = "codeBox";
             this.codeBox.Size = new System.Drawing.Size(127, 20);
             this.codeBox.TabIndex = 10;
+            this.codeBox.Text = "1111";
             // 
             // worldIdBox
             // 
@@ -106,7 +108,7 @@
             this.worldIdBox.Name = "worldIdBox";
             this.worldIdBox.Size = new System.Drawing.Size(127, 20);
             this.worldIdBox.TabIndex = 9;
-            this.worldIdBox.Text = "PW1IPLpnFZbEI";
+            this.worldIdBox.Text = "PWNUAeW4VibEI";
             // 
             // passwordBox
             // 
@@ -115,7 +117,7 @@
             this.passwordBox.PasswordChar = '*';
             this.passwordBox.Size = new System.Drawing.Size(128, 20);
             this.passwordBox.TabIndex = 8;
-            this.passwordBox.Text = "kasekakorna";
+            this.passwordBox.Text = "technic";
             // 
             // emailBox
             // 
@@ -123,7 +125,7 @@
             this.emailBox.Name = "emailBox";
             this.emailBox.Size = new System.Drawing.Size(128, 20);
             this.emailBox.TabIndex = 7;
-            this.emailBox.Text = "gustav9797@hotmail.se";
+            this.emailBox.Text = "guhammar@gmail.com";
             // 
             // connectButton
             // 
@@ -148,6 +150,7 @@
             // 
             // loginTab
             // 
+            this.loginTab.Controls.Add(this.accessButton);
             this.loginTab.Controls.Add(this.emailBox);
             this.loginTab.Controls.Add(this.connectButton);
             this.loginTab.Controls.Add(this.passwordBox);
@@ -185,6 +188,16 @@
             this.subbotCheckedListBox.TabIndex = 0;
             this.subbotCheckedListBox.SelectedValueChanged += new System.EventHandler(this.subbotCheckedListBox_SelectedValueChanged);
             // 
+            // accessButton
+            // 
+            this.accessButton.Location = new System.Drawing.Point(224, 113);
+            this.accessButton.Name = "accessButton";
+            this.accessButton.Size = new System.Drawing.Size(100, 23);
+            this.accessButton.TabIndex = 17;
+            this.accessButton.Text = "Access";
+            this.accessButton.UseVisualStyleBackColor = true;
+            this.accessButton.Click += new System.EventHandler(this.accessButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -218,6 +231,7 @@
         public System.Windows.Forms.TabControl tabs;
         public System.Windows.Forms.CheckedListBox subbotCheckedListBox;
         public System.Windows.Forms.TextBox codeBox;
+        private System.Windows.Forms.Button accessButton;
     }
 }
 

@@ -103,7 +103,8 @@ namespace DynamicEEBot
                             {
                                 playerList.Add(ID, temp);
                             }
-                            nameList.Add(temp.name, ID);
+                            if (!nameList.ContainsKey(temp.name))
+                                nameList.Add(temp.name, ID);
                         }
                     }
                     break;

@@ -8,6 +8,10 @@ namespace DynamicEEBot
 {
     class WorldEdit : SubBot
     {
+        private Point editBlock1 = new Point(-1, -1);
+        private Point editBlock2 = new Point(-1, -1);
+        private Point nullPoint = new Point(-1, -1);
+        private bool bothPointsSet = false;
 
         public WorldEdit(Bot bot)
             : base(bot)
@@ -24,27 +28,66 @@ namespace DynamicEEBot
                         int layer = m.GetInt(0);
                         int x = m.GetInt(1);
                         int y = m.GetInt(2);
+                        int previousBlock = bot.room.getBlock(layer, x, y).blockId;
                         int blockId = m.GetInt(3);
                         int placer = m.GetInt(4);
-                        Player player = bot.playerList[placer];
-                        if(player.hasVar("brush") && blockId == 32)
+                        if (bot.playerList.ContainsKey(placer))
                         {
-                            if((bool)player.getVar("brush"))
+                            Player player = bot.playerList[placer];
+                            if (blockId == 32)
                             {
-                                int brushSize = player.getVar("brushsize") == null ? 1 : (int)player.getVar("brushsize");
-                                int brushBlock = player.getVar("brushblock") == null ? 9 : (int)player.getVar("brushblock");
-                                for (int a = brushSize; a > 0; a--)
+                                if (player.hasVar("brush") && (bool)player.getVar("brush"))
                                 {
-                                    for (double i = 0.0; i < 360.0; i += (10 / brushSize))
+                                    int brushSize = player.getVar("brushsize") == null ? 1 : (int)player.getVar("brushsize");
+                                    int brushBlock = player.getVar("brushblock") == null ? 9 : (int)player.getVar("brushblock");
+                                    for (int a = brushSize; a > 0; a--)
                                     {
-                                        double mAngle = i * System.Math.PI / 180;
-                                        int tempx = x + (int)(a * System.Math.Cos(mAngle));
-                                        int tempy = y + (int)(a * System.Math.Sin(mAngle));
-                                        if (tempx > 0 && tempx < bot.room.width && tempy > 0 && tempy < bot.room.height)
+                                        for (double i = 0.0; i < 360.0; i += (10 / brushSize))
                                         {
-                                            bot.room.DrawBlock(Block.CreateBlock(brushBlock >= 500 ? 1 : 0, tempx, tempy, brushBlock, -1));
+                                            double mAngle = i * System.Math.PI / 180;
+                                            int tempx = x + (int)(a * System.Math.Cos(mAngle));
+                                            int tempy = y + (int)(a * System.Math.Sin(mAngle));
+                                            if (tempx > 0 && tempx < bot.room.width && tempy > 0 && tempy < bot.room.height)
+                                            {
+                                                bot.room.DrawBlock(Block.CreateBlock(brushBlock >= 500 ? 1 : 0, tempx, tempy, brushBlock, player.id));
+                                            }
                                         }
                                     }
+                                }
+                                else
+                                {
+                                    if (editBlock1 != nullPoint && editBlock2 != nullPoint)
+                                    {
+                                        editBlock1 = nullPoint;
+                                        editBlock2 = nullPoint;
+                                    }
+
+                                    if (editBlock1 == nullPoint)
+                                    {
+                                        editBlock1 = new Point(x, y);
+                                        bothPointsSet = false;
+                                        bot.connection.Send("say", x + y + " First block placed");
+                                    }
+                                    else if (editBlock2 == nullPoint)
+                                    {
+                                        editBlock2 = new Point(x, y);
+                                        bothPointsSet = true;
+                                        bot.connection.Send("say", x + y + " Second block placed");
+                                        int temp;
+                                        if (editBlock1.X > editBlock2.X)
+                                        {
+                                            temp = editBlock1.X;
+                                            editBlock1.X = editBlock2.X;
+                                            editBlock2.X = temp;
+                                        }
+                                        if (editBlock1.Y > editBlock2.Y)
+                                        {
+                                            temp = editBlock1.Y;
+                                            editBlock1.Y = editBlock2.Y;
+                                            editBlock2.Y = temp;
+                                        }
+                                    }
+                                    bot.room.DrawBlock(Block.CreateBlock(0, x, y, previousBlock, player.id));
                                 }
                             }
                         }
@@ -58,6 +101,48 @@ namespace DynamicEEBot
         {
             switch (args[0])
             {
+                case "replace":
+                    if (isBotMod)
+                    {
+                        int from;
+                        int to;
+                        if (args.Length > 2 && int.TryParse(args[1], out from) && int.TryParse(args[2], out to))
+                        {
+                            int fromLayer = from >= 500 ? 1 : 0;
+                            int toLayer = to >= 500 ? 1 : 0;
+                            if (bothPointsSet)
+                            {
+                                for (int x = editBlock1.X; x <= editBlock2.X; x++)
+                                {
+                                    for (int y = editBlock1.Y; y <= editBlock2.Y; y++)
+                                    {
+                                        if(bot.room.getBlock(fromLayer, x, y).blockId == from)
+                                            bot.room.DrawBlock(Block.CreateBlock(toLayer, x, y, to, player.id));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case "set":
+                    if (isBotMod)
+                    {
+                        int id;
+                        if (args.Length > 1 && int.TryParse(args[1], out id))
+                        {
+                            if (bothPointsSet)
+                            {
+                                for (int x = editBlock1.X; x <= editBlock2.X; x++)
+                                {
+                                    for (int y = editBlock1.Y; y <= editBlock2.Y; y++)
+                                    {
+                                        bot.room.DrawBlock(Block.CreateBlock(id >= 500 ? 1 : 0, x, y, id, player.id));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
                 case "b":
                     if (isBotMod)
                     {
@@ -75,7 +160,7 @@ namespace DynamicEEBot
                         int size;
                         if (args.Length > 1 && int.TryParse(args[1], out size))
                         {
-                            if(size < 10)
+                            if (size < 10)
                                 player.setVar("brushsize", size);
                             else
                                 bot.connection.Send("say", "Too big size! 0-9");
@@ -85,7 +170,7 @@ namespace DynamicEEBot
                     }
                     break;
                 case "bb":
-                    if(isBotMod)
+                    if (isBotMod)
                     {
                         int blockId;
                         if (args.Length > 1 && int.TryParse(args[1], out blockId))
@@ -96,7 +181,7 @@ namespace DynamicEEBot
                             bot.connection.Send("say", "Usage: !bb <id>");
                     }
                     break;
-                case "fill":
+                case "fillworld":
                     if (args.Length > 1 && isBotMod)
                     {
                         int blockId;
@@ -177,7 +262,7 @@ namespace DynamicEEBot
                         }
                     }
                     break;
-                case "replace":
+                case "replaceworld":
                     if (isBotMod)
                     {
                         if (args.Length > 2 && isBotMod)

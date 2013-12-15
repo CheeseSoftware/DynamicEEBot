@@ -58,5 +58,10 @@ namespace DynamicEEBot
                 subBot.enabled = subbotCheckedListBox.GetItemChecked(i);
             }
         }
+
+        private void accessButton_Click(object sender, EventArgs e)
+        {
+            bot.connection.Send("access", codeBox.Text);
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace DynamicEEBot
 {
     public class Bot : BotBase
     {
-        SubBots.SubBotHandler subBotHandler;
+        public SubBots.SubBotHandler subBotHandler;
         public Room room;
 
         public Bot(Form1 form)
@@ -25,22 +25,25 @@ namespace DynamicEEBot
 
         protected override void OnMessage(object sender, PlayerIOClient.Message m)
         {
-            base.OnMessage(sender, m);
-            subBotHandler.onMessage(sender, m, this);
-            switch (m.Type)
-            {
-                case "say":
+            new System.Threading.Thread(() =>
+                {
+                    base.OnMessage(sender, m);
+                    subBotHandler.onMessage(sender, m, this);
+                    switch (m.Type)
                     {
-                        int player = m.GetInt(0);
-                        string message = m.GetString(1);
-                        if (message[0] == '!')
-                        {
-                            message = message.Replace("!", "");
-                            subBotHandler.onCommand(sender, message, playerList[player], this);
-                        }
+                        case "say":
+                            {
+                                int player = m.GetInt(0);
+                                string message = m.GetString(1);
+                                if (message[0] == '!')
+                                {
+                                    message = message.Replace("!", "");
+                                    subBotHandler.onCommand(sender, message, playerList[player], this);
+                                }
+                            }
+                            break;
                     }
-                    break;
-            }
+                }).Start();
         }
 
         protected override void OnDisconnect(object sender, string reason)

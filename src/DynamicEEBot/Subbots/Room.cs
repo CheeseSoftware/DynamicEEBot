@@ -61,7 +61,7 @@ namespace DynamicEEBot
                         int blockID = m.GetInt(3);
                         int placer = m.GetInt(4);
                         Block b = Block.CreateBlock(layer, x, y, blockID, placer);
-                        blockMap[layer, x, y] = b;
+                        data.blockMap[layer, x, y].Add(b);
                         //lock (blocksToPlace)
                         {
                             BlockPos p = new BlockPos(b.layer, b.x, b.y);
@@ -80,13 +80,13 @@ namespace DynamicEEBot
                     }
                     break;
                 case "bc":
-                    data.blockMap[0, m.GetInt(0), m.GetInt(1)] = Block.CreateBlockCoin(m.GetInt(0), m.GetInt(1), m.GetInt(2), m.GetInt(3));
+                    data.blockMap[0, m.GetInt(0), m.GetInt(1)].Add(Block.CreateBlockCoin(m.GetInt(0), m.GetInt(1), m.GetInt(2), m.GetInt(3)));
                     break;
                 case "bs":
-                    data.blockMap[0, m.GetInt(0), m.GetInt(1)] = Block.CreateNoteBlock(m.GetInt(0), m.GetInt(1), m.GetInt(2), m.GetInt(3));
+                    data.blockMap[0, m.GetInt(0), m.GetInt(1)].Add(Block.CreateNoteBlock(m.GetInt(0), m.GetInt(1), m.GetInt(2), m.GetInt(3)));
                     break;
                 case "pt":
-                    data.blockMap[0, m.GetInt(0), m.GetInt(1)] = Block.CreatePortal(m.GetInt(0), m.GetInt(1), m.GetInt(3), m.GetInt(4), m.GetInt(5));
+                    data.blockMap[0, m.GetInt(0), m.GetInt(1)].Add(Block.CreatePortal(m.GetInt(0), m.GetInt(1), m.GetInt(3), m.GetInt(4), m.GetInt(5)));
                     break;
             }
         }
@@ -108,7 +108,7 @@ namespace DynamicEEBot
                     break;
                 case "checkblock":
                     {
-                        Block b = blockMap[0, player.blockX, player.blockY];
+                        Block b = data.blockMap[0, player.blockX, player.blockY].Last();
                         int id = -1;
                         if (b != null)
                             id = b.b_userId;
@@ -162,7 +162,7 @@ namespace DynamicEEBot
         {
             if (x >= 0 && y >= 0 && x < width && y < height)
             {
-                return blockMap[layer, x, y];
+                return data.blockMap[layer, x, y].Last();
             }
             return Block.CreateBlock(layer, x, y, 0, -1);
         }
@@ -170,14 +170,15 @@ namespace DynamicEEBot
         public void ResetMap()
         {
             blocksToPlace.Clear();
-            data.blockMap = new Block[4, width, height];
+            data.blockMap = new List<Block>[4, width, height];
             for (int i = 0; i < 4; i++)
             {
                 for (int x = 0; x < width; x++)
                 {
                     for (int y = 0; y < height; y++)
                     {
-                        blockMap[i, x, y] = Block.CreateBlock(i, x, y, 0, -1);
+                        data.blockMap[i, x, y] = new List<Block>();
+                        data.blockMap[i, x, y].Add(Block.CreateBlock(i, x, y, 0, -1));
                     }
                 }
             }
@@ -190,7 +191,7 @@ namespace DynamicEEBot
                 foreach (Block b in blocksToPlace.Values)
                 {
                     b.Send(bot);
-                    Thread.Sleep(new TimeSpan(55000));
+                    Thread.Sleep(8);
                 }
             }
         }
@@ -202,7 +203,7 @@ namespace DynamicEEBot
                 BlockPos p = new BlockPos(b.layer, b.x, b.y);
                 if (!blocksToPlace.ContainsKey(p))
                 {
-                    if (data.blockMap[b.layer, b.x, b.y].blockId != b.blockId)
+                    if (data.blockMap[b.layer, b.x, b.y].Last().blockId != b.blockId)
                     {
                         lock (blocksToPlace)
                         {
@@ -257,11 +258,6 @@ namespace DynamicEEBot
         public string key
         {
             get { return data.key; }
-        }
-
-        public Block[, ,] blockMap
-        {
-            get { return data.blockMap; }
         }
 
         public override void onEnable(Bot bot)

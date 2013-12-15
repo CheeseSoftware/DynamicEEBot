@@ -73,17 +73,17 @@ namespace DynamicEEBot.SubBots
                 {
                     if (pair.Value != null && pair.Value.enabled)
                     {
-                        Task task = new Task(() =>//new Thread(() =>
-                        {
+                        //Task task = new Task(() =>//new Thread(() =>
+                        //{
                             pair.Value.onMessage(sender, m, bot);
-                        });
+//                        });
 
                         lock (tasks)
                         {
-                            tasks.Enqueue(new TaskData(pair.Value.GetType().ToString(), task, new SubBots.OnMessage(m)));
+                            //tasks.Enqueue(new TaskData(pair.Value.GetType().ToString(), task, new SubBots.OnMessage(m)));
                         }
 
-                        task.Start();
+                        //task.Start();
                     }
                 }
             }
@@ -105,18 +105,18 @@ namespace DynamicEEBot.SubBots
                 {
                     if (pair.Value != null)
                     {
-                        Task task = new Task(() =>
-                        {
+                        //Task task = new Task(() =>
+                        //{
                             pair.Value.onDisconnect(sender, reason, bot);
                             pair.Value.onDisable(bot);
-                        });
+                        //});
 
                         lock (tasks)
                         {
-                            tasks.Enqueue(new TaskData(pair.Value.GetType().ToString(), task, new SubBots.OnDisconnect(reason)));
+                            //tasks.Enqueue(new TaskData(pair.Value.GetType().ToString(), task, new SubBots.OnDisconnect(reason)));
                         }
 
-                        task.Start();
+                        //task.Start();
                     }
                 }
 
@@ -144,17 +144,17 @@ namespace DynamicEEBot.SubBots
                 {
                     if (pair.Value != null && pair.Value.enabled)
                     {
-                        Task task = new Task(() =>//new Thread(() =>
-                        {
+                        //Task task = new Task(() =>//new Thread(() =>
+                        //{
                             pair.Value.onCommand(sender, text, args, player, isBotMod, bot);
-                        });
+                        //});
 
                         lock (tasks)
                         {
-                            tasks.Enqueue(new TaskData(pair.Value.GetType().ToString(), task, new SubBots.OnCommand(text, player.id, player)));
+                            //tasks.Enqueue(new TaskData(pair.Value.GetType().ToString(), task, new SubBots.OnCommand(text, player.id, player)));
                         }
 
-                        task.Start();
+                        //task.Start();
                     }
                 }
             }
