@@ -67,7 +67,7 @@ namespace DynamicEEBot.SubBots
 
         public void onMessage(object sender, PlayerIOClient.Message m, Bot bot)
         {
-            lock (SubBots)
+            //lock (SubBots)
             {
                 foreach (var pair in SubBots)
                 {

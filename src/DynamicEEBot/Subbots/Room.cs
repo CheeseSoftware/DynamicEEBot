@@ -54,11 +54,11 @@ namespace DynamicEEBot
         {
             lock (blockMap)
                 blockMap = null;
-            lock(blockQueue)
+            lock (blockQueue)
                 blockQueue = null;
             lock (blockRepairQueue)
                 blockRepairQueue = null;
-            lock(blockSet)
+            lock (blockSet)
                 blockSet = null;
             StopDrawerThread();
         }
@@ -92,9 +92,10 @@ namespace DynamicEEBot
                         LoadMap(m, 18);
                         loadedWorld = true;
 
-                        bool isOwner = m.GetBoolean(9);
-                        if (isOwner)
-                            StartDrawThread();
+                        //bool isOwner = m.GetBoolean(9);
+                        //if (isOwner)
+                        
+                        StartDrawThread();
                     }
                     break;
                 case "reset":
@@ -151,73 +152,63 @@ namespace DynamicEEBot
                 blockDrawerEnabled = true;
                 Thread thread = new Thread(() =>
                 {
-                    try
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+
+                    while (bot.connected)
                     {
-
-                        Stopwatch stopwatch = new Stopwatch();
-                        stopwatch.Start();
-
-                        while (bot.connected)
+                        while (bot.hasCode)
                         {
-                            while (bot.hasCode)
+
+                            lock (blockQueue)
                             {
-
-                                lock (blockQueue)
+                                if (blockQueue.Count != 0)
                                 {
-                                    if (blockQueue.Count != 0)
+
+                                    if (blockSet.Contains(blockQueue.Peek()))
                                     {
-
-                                        if (blockSet.Contains(blockQueue.Peek()))
-                                        {
-                                            //Console.WriteLine("jag är en sjuk sak");
-                                            blockQueue.Peek().Send(bot);//.Send(bot.connection);
-                                            lock (blockRepairQueue)
-                                                blockRepairQueue.Enqueue(blockQueue.Dequeue());
-                                            //Console.WriteLine("!!");
-                                        }
-                                        else
-                                        {
-                                            blockQueue.Dequeue();
-                                            continue;
-                                        }
-                                    }
-                                    else if (blockRepairQueue.Count != 0)
-                                    {
-                                        while (!blockSet.Contains(blockRepairQueue.Peek()))
-                                        {
-                                            blockRepairQueue.Dequeue();
-                                            if (blockRepairQueue.Count == 0)
-                                                break;
-                                        }
-
-                                        if (blockRepairQueue.Count == 0)
-                                            continue;
-
-                                        blockRepairQueue.Peek().Send(bot);
-                                        blockRepairQueue.Enqueue(blockRepairQueue.Dequeue());
+                                        //Console.WriteLine("jag är en sjuk sak");
+                                        blockQueue.Peek().Send(bot);//.Send(bot.connection);
+                                        lock (blockRepairQueue)
+                                            blockRepairQueue.Enqueue(blockQueue.Dequeue());
+                                        //Console.WriteLine("!!");
                                     }
                                     else
                                     {
-                                        Thread.Sleep(5);
+                                        blockQueue.Dequeue();
                                         continue;
                                     }
-                                    double sleepTime = drawSleep - stopwatch.Elapsed.TotalMilliseconds;
-                                    if (sleepTime >= 0.5)
-                                    {
-                                        Thread.Sleep((int)sleepTime);
-                                    }
-                                    stopwatch.Reset();
                                 }
-                            }
-                            Thread.Sleep(100);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        //bot.shutdown();
-                        throw e;
-                    }
+                                else if (blockRepairQueue.Count != 0)
+                                {
+                                    while (!blockSet.Contains(blockRepairQueue.Peek()))
+                                    {
+                                        blockRepairQueue.Dequeue();
+                                        if (blockRepairQueue.Count == 0)
+                                            break;
+                                    }
 
+                                    if (blockRepairQueue.Count == 0)
+                                        continue;
+
+                                    blockRepairQueue.Peek().Send(bot);
+                                    blockRepairQueue.Enqueue(blockRepairQueue.Dequeue());
+                                }
+                                else
+                                {
+                                    Thread.Sleep(5);
+                                    continue;
+                                }
+                                double sleepTime = drawSleep - stopwatch.Elapsed.TotalMilliseconds;
+                                if (sleepTime >= 0.5)
+                                {
+                                    Thread.Sleep((int)sleepTime);
+                                }
+                                stopwatch.Reset();
+                            }
+                        }
+                        Thread.Sleep(100);
+                    }
                 });
 
                 drawRepairThread = thread;
@@ -295,14 +286,14 @@ namespace DynamicEEBot
             for (int i = 0; i < 2; i++)
             {
                 lock (blockMap)
-                blockMap[i] = new List<Block>[width, height];
-                /*for (int x = 0; x < width; x++)
+                    blockMap[i] = new List<Block>[width, height];
+                for (int x = 0; x < width; x++)
                 {
                     for (int y = 0; y < height; y++)
                     {
-                        blockMap[i, x, y].Add(Block.CreateBlock(i, x, y, 0, -1));
+                        blockMap[i][x, y] = new List<Block>();
                     }
-                }*/
+                }
             }
         }
 
@@ -342,7 +333,7 @@ namespace DynamicEEBot
                     {
                         if (b == b2)
                         {
-                            return;
+                           // return;
                         }
                         else if (b2.layer == b.layer && b2.x == b.x && b2.y == b.y)
                         {

@@ -17,7 +17,7 @@ namespace DynamicEEBot
         public Dictionary<int, Player> playerList = new Dictionary<int, Player>();
         public Dictionary<string, int> nameList = new Dictionary<string, int>();
 
-        public bool hasCode = false;
+        public bool hasCode = true;
 
         public BotBase(Form1 form)
         {
