@@ -14,6 +14,7 @@ namespace DynamicEEBot
         {
             blockTranslator.Add((int)Blocks.Stone, new InventoryItem(new object[]{
                 "stone",
+                               0, //ITEMTYPE(BLOCK)
                 1, //XPGAIN
                 10, //SHOPBUY
                 1, //SHOPSELL
@@ -23,6 +24,7 @@ namespace DynamicEEBot
 
             blockTranslator.Add((int)Blocks.Copper, new InventoryItem(new object[]{
                 "copper",
+                               0, //ITEMTYPE(BLOCK)
                 5, //XPGAIN
                 5, //SHOPBUY
                 2, //SHOPSELL
@@ -32,6 +34,7 @@ namespace DynamicEEBot
 
             blockTranslator.Add((int)Blocks.Iron, new InventoryItem(new object[]{
                 "iron",
+                               0, //ITEMTYPE(BLOCK)
                 6, //XPGAIN
                 8, //SHOPBUY
                 3, //SHOPSELL
@@ -42,6 +45,7 @@ namespace DynamicEEBot
 
             blockTranslator.Add((int)Blocks.Gold, new InventoryItem(new object[]{
                 "gold",
+                               0, //ITEMTYPE(BLOCK)
                 15, //XPGAIN
                 15, //SHOPBUY
                 14, //SHOPSELL
@@ -51,6 +55,7 @@ namespace DynamicEEBot
 
             blockTranslator.Add((int)Blocks.Emerald, new InventoryItem(new object[]{
                 "emerald",
+                               0, //ITEMTYPE(BLOCK)
                 5, //XPGAIN
                 5, //SHOPBUY
                 0, //SHOPSELL
@@ -60,6 +65,7 @@ namespace DynamicEEBot
 
             blockTranslator.Add((int)Blocks.Ruby, new InventoryItem(new object[]{
                 "ruby",
+                               0, //ITEMTYPE(BLOCK)
                 5, //XPGAIN
                 5, //SHOPBUY
                 0, //SHOPSELL
@@ -69,6 +75,7 @@ namespace DynamicEEBot
 
             blockTranslator.Add((int)Blocks.Sapphire, new InventoryItem(new object[]{
                 "sapphire",
+                               0, //ITEMTYPE(BLOCK)
                 5, //XPGAIN
                 5, //SHOPBUY
                 0, //SHOPSELL
@@ -78,6 +85,7 @@ namespace DynamicEEBot
 
             blockTranslator.Add((int)Blocks.Diamond, new InventoryItem(new object[]{
                 "diamond",
+               0, //ITEMTYPE(BLOCK)
                 5, //XPGAIN
                 5, //SHOPBUY
                 0, //SHOPSELL
@@ -85,13 +93,20 @@ namespace DynamicEEBot
                 48  //LEVELREQ
             }));
 
-
-
-
             foreach (InventoryItem i in blockTranslator.Values)
             {
                 itemTranslator.Add(i.GetName(), i);
             }
+
+            /*itemTranslator.Add("iron pickaxe", new InventoryItem(new object[]{
+                "Iron pickaxe",
+                1, //ITEMTYPE(PICKAXE)
+                0,//TEMP
+                100, //SHOPBUY
+                1, //SHOPSELL
+                0,  //LEVELREQ
+                2, //DIGMODIFIER
+            }));*/
         }
     }
     public enum Blocks

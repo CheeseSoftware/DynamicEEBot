@@ -95,12 +95,12 @@ namespace DynamicEEBot
             {
                 case "digcommands":
                     {
-                        //new Thread(() =>
-                            //{
+                        new Task(() =>
+                            {
                                 bot.connection.Send("say", "commands: !xp, !level, !inventory, ");
                                 Thread.Sleep(1000);
                                 bot.connection.Send("say", "!xpleft, !buy <item> <amount>, !sell <item> <amount> ");
-                            //}).Start();
+                            }).Start();
                     }
                     break;
                 case "generate":
@@ -155,7 +155,7 @@ namespace DynamicEEBot
                     }
                     break;
                 case "setshop":
-                    if(isBotMod)
+                    if (isBotMod)
                     {
                         lock (bot.playerList)
                         {
@@ -169,12 +169,11 @@ namespace DynamicEEBot
                     break;
                 case "money":
                     {
-                        lock (bot.playerList)
-                            bot.connection.Send("say", player.name + ": Money: " + player.digMoney);
+                        bot.connection.Send("say", player.name + ": Money: " + player.digMoney);
                     }
                     break;
                 case "setmoney":
-                    if(isBotMod)
+                    if (isBotMod)
                     {
                         int money;
                         if (args.Length > 1 && int.TryParse(args[1], out money))

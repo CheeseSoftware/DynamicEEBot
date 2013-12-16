@@ -21,6 +21,16 @@ namespace DynamicEEBot
             this.data = item.data;
         }
 
+        public InventoryItem()
+        {
+
+        }
+
+        public int GetType()
+        {
+            return (int)data[1];
+        }
+
         public string GetName()
         {
             return (string)this.data[0];
@@ -44,6 +54,11 @@ namespace DynamicEEBot
         public void SetDataAt(object data, int index)
         {
             this.data[index] = data;
+        }
+
+        public override string ToString()
+        {
+            return GetName();
         }
 
         public override bool Equals(object obj)
