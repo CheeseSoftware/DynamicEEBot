@@ -6,15 +6,52 @@ using System.Threading.Tasks;
 using System.Threading;
 using Graphics.Tools.Noise;
 using DynamicEEBot.Subbots.Dig.Item;
+using System.Drawing;
 
 namespace DynamicEEBot.Subbots.Dig
 {
     public partial class Dig : SubBot
     {
+        Dictionary<int, Point> firstGodPositions = new Dictionary<int, Point>();
         public override void onMessage(object sender, PlayerIOClient.Message m, Bot bot)
         {
             switch (m.Type)
             {
+                case "add":
+                    {
+                        string name = m.GetString(1);
+                        bot.connection.Send("say", "/giveedit " + name);
+                    }
+                    break;
+                case "god":
+                    {
+                        int id = m.GetInt(0);
+                        bool god = m.GetBoolean(1);
+                        if (bot.playerList.ContainsKey(id))
+                        {
+                            Player p = bot.playerList[id];
+                            if (p.name != "gustav9797" && p.name != "ostkaka")
+                            {
+                                if (god)
+                                {
+                                    if (!firstGodPositions.ContainsKey(id))
+                                        firstGodPositions.Add(id, new Point(p.blockX, p.blockY));
+                                    string name = bot.playerList[id].name;
+                                    bot.connection.Send("say", "/removeedit " + name);
+                                    bot.connection.Send("say", "/giveedit " + name);
+                                }
+                                else
+                                {
+                                    if (firstGodPositions.ContainsKey(id))
+                                    {
+                                        bot.connection.Send("say", "/teleport " + p.name + " " + firstGodPositions[id].X + " " + firstGodPositions[id].Y);
+                                        firstGodPositions.Remove(id);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
                 case "init":
                     digHardness = new float[bot.room.width, bot.room.height];
                     resetDigHardness();
@@ -80,22 +117,22 @@ namespace DynamicEEBot.Subbots.Dig
                                 return;
                             }
                         }
-                        if(player.hasPickaxe())
+                        if (player.hasPickaxe())
                         {
                             if (horizontal == 0 || vertical == 0)
                                 DigBlock(blockX + (int)horizontal, blockY + (int)vertical, player, player.digStrength, true);
                             blockId = bot.room.getBlock(0, blockX, blockY).blockId;
-                                DigBlock(blockX, blockY, player, player.digStrength, true);
+                            DigBlock(blockX, blockY, player, player.digStrength, true);
 
                         }
                     }
                     break;
                 case "b":
                     {
-                        int blockId = m.GetInt(3);
+                        int layer = m.GetInt(0);
                         int x = m.GetInt(1);
                         int y = m.GetInt(2);
-
+                        int blockId = m.GetInt(3);
                         resetBlockHardness(x, y, blockId);
                     }
                     break;
@@ -327,5 +364,20 @@ namespace DynamicEEBot.Subbots.Dig
             }
         }
 
+        public override void onEnable(Bot bot)
+        {
+
+        }
+
+        public override void onDisable(Bot bot)
+        {
+            lock (bot.playerList)
+            {
+                foreach (Player p in bot.playerList.Values)
+                {
+                    p.Save();
+                }
+            }
+        }
     }
 }
