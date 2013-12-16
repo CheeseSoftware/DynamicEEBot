@@ -12,7 +12,7 @@ namespace DynamicEEBot
     {
         protected Bot bot;
         protected Task updateTask;
-        protected int UpdateSleep = 200;
+        protected int UpdateSleep = 4;
         public int id = -1;
         private bool enabledValue;
         public bool enabled

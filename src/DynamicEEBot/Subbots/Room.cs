@@ -65,7 +65,7 @@ namespace DynamicEEBot
 
         private void StopDrawerThread()
         {
-            throw new NotImplementedException();
+            
         }
 
         public override void onMessage(object sender, PlayerIOClient.Message m, Bot bot)
@@ -94,8 +94,6 @@ namespace DynamicEEBot
 
                         //bool isOwner = m.GetBoolean(9);
                         //if (isOwner)
-                        
-                        StartDrawThread();
                     }
                     break;
                 case "reset":
@@ -286,12 +284,14 @@ namespace DynamicEEBot
             for (int i = 0; i < 2; i++)
             {
                 lock (blockMap)
-                    blockMap[i] = new List<Block>[width, height];
-                for (int x = 0; x < width; x++)
                 {
-                    for (int y = 0; y < height; y++)
+                    blockMap[i] = new List<Block>[width, height];
+                    for (int x = 0; x < width; x++)
                     {
-                        blockMap[i][x, y] = new List<Block>();
+                        for (int y = 0; y < height; y++)
+                        {
+                            blockMap[i][x, y] = new List<Block>();
+                        }
                     }
                 }
             }
@@ -312,6 +312,20 @@ namespace DynamicEEBot
                 while (blockSet.Contains(b))
                 {
                     blockSet.Remove(b);
+                }
+                
+                foreach (Block b2 in blockSet)
+                {
+                    if (b.Equals(b2))
+                    {
+                        lock (blockMap)
+                        {
+                            blockMap[b.layer][b.x, b.y].Add(b2);
+                        }
+
+                        blockSet.Remove(b2);
+                        break;
+                    }
                 }
             }
         }
@@ -429,6 +443,11 @@ namespace DynamicEEBot
                 }
                 DrawBorder();
             }
+        }
+
+        public void SetSleepTime(int sleep)
+        {
+            this.drawSleep = sleep;
         }
 
         public void DrawBorder()

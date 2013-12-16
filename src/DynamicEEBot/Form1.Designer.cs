@@ -60,6 +60,8 @@
             this.nudTaskTimeLimit = new System.Windows.Forms.NumericUpDown();
             this.lbTasks = new System.Windows.Forms.ListBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.tabs.SuspendLayout();
             this.loginTab.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -69,6 +71,8 @@
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTaskAbortLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTaskTimeLimit)).BeginInit();
+            this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // label4
@@ -132,6 +136,7 @@
             this.tabs.Controls.Add(this.loginTab);
             this.tabs.Controls.Add(this.subbotsTab);
             this.tabs.Controls.Add(this.tabPage1);
+            this.tabs.Controls.Add(this.tabPage2);
             this.tabs.Location = new System.Drawing.Point(0, 0);
             this.tabs.Multiline = true;
             this.tabs.Name = "tabs";
@@ -406,6 +411,35 @@
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.numericUpDown1);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(477, 336);
+            this.tabPage2.TabIndex = 4;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(8, 61);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown1.TabIndex = 0;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -429,6 +463,8 @@
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTaskAbortLimit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTaskTimeLimit)).EndInit();
+            this.tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -466,6 +502,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnAbortTask;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
     }
 }
 

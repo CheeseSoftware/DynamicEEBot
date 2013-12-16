@@ -247,5 +247,10 @@ namespace DynamicEEBot
             }));
         }
 
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            bot.room.SetSleepTime((int)numericUpDown1.Value);
+        }
+
     }
 }
