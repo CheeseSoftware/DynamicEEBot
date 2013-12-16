@@ -312,11 +312,11 @@ namespace DynamicEEBot
             {
                 Object[] sendData = new object[dataArray.Length - 1];
                 Array.Copy(dataArray, sendData, dataArray.Length - 1);
-                bot.connection.Send(bot.room.key, sendData);
+                bot.connection.Send(bot.room.Key, sendData);
             }
             else
             {
-                bot.connection.Send(bot.room.key, dataArray);
+                bot.connection.Send(bot.room.Key, dataArray);
             }
         }
 

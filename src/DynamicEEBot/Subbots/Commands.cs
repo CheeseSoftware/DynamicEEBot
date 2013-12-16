@@ -32,35 +32,34 @@ namespace DynamicEEBot
 
         public override void onCommand(object sender, string text, string[] args, Player player, bool isBotMod, Bot bot)
         {
-
-
-            switch (args[0])
+            if (isBotMod)
             {
-                case "roomname":
-                    if (isBotMod)
+                switch (args[0])
+                {
+                    case "crash":
+                        Thread.Sleep(61000);
+                        throw new System.Exception("I'm a happy error in a sunny day.");
+                        break;
+                    case "roomname":
                         if (args.Length > 1)
                             bot.connection.Send("name", string.Join(" ", args).Replace("roomname ", ""));
-                    break;
-                case "woot":
-                    if (isBotMod)
+                        break;
+                    case "woot":
                         bot.connection.Send("wootup");
-                    break;
-                case "reset":
-                    if (isBotMod)
+                        break;
+                    case "reset":
                         bot.connection.Send("say", "/reset");
-                    break;
-                case "load":
-                    if (isBotMod)
+                        break;
+                    case "load":
                         bot.connection.Send("say", "/loadlevel");
-                    break;
-                case "save":
-                    if (isBotMod)
+                        break;
+                    case "save":
                         bot.connection.Send("save");
-                    break;
-                case "clear":
-                    if (isBotMod)
+                        break;
+                    case "clear":
                         bot.connection.Send("clear");
-                    break;
+                        break;
+                }
             }
         }
 

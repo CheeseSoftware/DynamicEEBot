@@ -101,8 +101,8 @@ namespace DynamicEEBot
 
         public Stack<Square> Start(int startX, int startY, int targetX, int targetY, Bot bot)
         {
-            closedSquares = new Square[bot.room.width, bot.room.height];
-            openSquares = new Square[bot.room.width, bot.room.height];
+            closedSquares = new Square[bot.room.Width, bot.room.Height];
+            openSquares = new Square[bot.room.Width, bot.room.Height];
             openSquaresList = new List<Square>();
 
             int h = CalculateH(startX, startY, targetX, targetY);
@@ -169,7 +169,7 @@ namespace DynamicEEBot
                         current.G + adjacentSquares[i].cost,
                         CalculateH(current.x + adjacentSquares[i].x, current.y + adjacentSquares[i].y, targetX, targetY),
                         current);
-                    if (neighbour.x < 0 || neighbour.y < 0 || neighbour.x > bot.room.width || neighbour.y > bot.room.height)
+                    if (neighbour.x < 0 || neighbour.y < 0 || neighbour.x > bot.room.Width || neighbour.y > bot.room.Height)
                         continue;
                     if (bot.room.getBlock(0, neighbour.x, neighbour.y).blockId != 4)
                         neighbour.G += 10000;

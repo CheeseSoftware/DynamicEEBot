@@ -53,11 +53,11 @@ namespace DynamicEEBot.Subbots.Dig
                     }
                     break;
                 case "init":
-                    digHardness = new float[bot.room.width, bot.room.height];
+                    digHardness = new float[bot.room.Width, bot.room.Height];
                     resetDigHardness();
                     break;
                 case "reset":
-                    digHardness = new float[bot.room.width, bot.room.height];
+                    digHardness = new float[bot.room.Width, bot.room.Height];
                     resetDigHardness();
                     break;
                 case "m":
@@ -161,8 +161,8 @@ namespace DynamicEEBot.Subbots.Dig
                 case "generate":
                     if (isBotMod)
                     {
-                        digHardness = new float[bot.room.width, bot.room.height];
-                        Generate(bot.room.width, bot.room.height);//lock(bot.playerList
+                        digHardness = new float[bot.room.Width, bot.room.Height];
+                        Generate(bot.room.Width, bot.room.Height);//lock(bot.playerList
                     }
                     break;
                 case "givexp":

@@ -5,24 +5,67 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using PlayerIOClient;
 
 namespace DynamicEEBot
 {
     public class Room : SubBot
     {
-        RoomData data;
-        public SafeDictionary<BlockPos, Block> blocksToPlace = new SafeDictionary<BlockPos, Block>();
-        public bool loadedWorld = false;
+        //public SafeDictionary<BlockPos, Block> blocksToPlace = new SafeDictionary<BlockPos, Block>();
+
         private Thread drawRepairThread;
+
+        List<Block>[][,] blockMap;
+        Queue<Block> blockQueue;
+        Queue<Block> blockRepairQueue;
+        HashSet<Block> blockSet;
+
+        bool blockDrawerEnabled = false;
+
+
+        public bool loadedWorld = false;
+        private string owner;
+        private string name;
+        private int totalPlays;
+        private int woots;
+        private int totalWoots;
+        private int width;
+        private int height;
+        private string key;
+
+        int drawSleep = 8;
 
         public Room(Bot bot)
             : base(bot)
         {
-            data = new RoomData();
-            ResetMap();
-            drawRepairThread = new Thread(DrawRepair);
-            drawRepairThread.Start();
             enabled = true;
+        }
+
+        public override void onEnable(Bot bot)
+        {
+            blockMap = new List<Block>[2][,];
+            blockQueue = new Queue<Block>();
+            blockRepairQueue = new Queue<Block>();
+            blockSet = new HashSet<Block>();
+            //ResetMap();
+        }
+
+        public override void onDisable(Bot bot)
+        {
+            lock (blockMap)
+                blockMap = null;
+            lock(blockQueue)
+                blockQueue = null;
+            lock (blockRepairQueue)
+                blockRepairQueue = null;
+            lock(blockSet)
+                blockSet = null;
+            StopDrawerThread();
+        }
+
+        private void StopDrawerThread()
+        {
+            throw new NotImplementedException();
         }
 
         public override void onMessage(object sender, PlayerIOClient.Message m, Bot bot)
@@ -32,72 +75,159 @@ namespace DynamicEEBot
                 case "init":
                     {
                         loadedWorld = false;
-                        data.owner = m.GetString(0);
-                        data.name = m.GetString(1);
-                        data.totalPlays = m.GetInt(2);
-                        data.woots = m.GetInt(3);
-                        data.totalWoots = m.GetInt(4);
-                        data.key = derot(m.GetString(5));
-                        //Player player = new Player(bot, m.GetInt(6), m.GetString(9), 0, m.GetInt(7), m.GetInt(8), false, false, false, 0, false, false, 0);
+                        owner = m.GetString(0);
+                        name = m.GetString(1);
+                        totalPlays = m.GetInt(2);
+                        woots = m.GetInt(3);
+                        totalWoots = m.GetInt(4);
+                        key = BotUtility.rot13(m.GetString(5));
+                        //Player player = new Player(bot, m.GetInt(devil), m.GetString(9), 0, m.GetInt(7), m.GetInt(music), false, false, false, 0, false, false, 0);
                         //lock (bot.playerList)
                         //  bot.playerList.Add(player.id, player);
-                        data.width = m.GetInt(12);
-                        data.height = m.GetInt(13);
+                        width = m.GetInt(12);
+                        height = m.GetInt(13);
+
+
                         ResetMap();
-                        data.DeSerialize(m);
+                        LoadMap(m, 18);
                         loadedWorld = true;
+
+                        bool isOwner = m.GetBoolean(9);
+                        if (isOwner)
+                            StartDrawThread();
                     }
                     break;
                 case "reset":
                     {
                         loadedWorld = false;
-                        ResetMap();
+                        //ResetMap();
+                        LoadMap(m, 0);
                         loadedWorld = true;
                     }
                     break;
+
+                case "access":
+                    StartDrawThread();
+                    break;
+
+                case "lostaccess":
+                    StopDrawerThread();
+                    break;
+
                 case "b":
+                case "bc":
+                case "bs":
+                case "pt":
                     {
-                        int layer = m.GetInt(0);
+                        /*int layer = m.GetInt(0);
                         int x = m.GetInt(1);
                         int y = m.GetInt(2);
                         int blockID = m.GetInt(3);
                         int placer = -1;
                         if (m.Count > 4)
                             placer = m.GetInt(4);
-                        Block b = Block.CreateBlock(layer, x, y, blockID, placer);
-                        data.blockMap[layer, x, y].Add(b);
-                        //lock (blocksToPlace)
-                        {
-                            BlockPos p = new BlockPos(b.layer, b.x, b.y);
-                            while (blocksToPlace.ContainsKey(p))
-                            {
-                                blocksToPlace.Remove(p);
-                            }
-                        }
+                        Block b = Block.CreateBlock(layer, x, y, blockID, placer);*/
+                        Block b = new Block(m);
+
+                        this.OnBlockDraw(b);
+
                     }
                     break;
                 case "updatemeta":
                     {
-                        data.owner = m.GetString(0);
-                        data.name = m.GetString(1);
-                        data.totalPlays = m.GetInt(2);
+                        owner = m.GetString(0);
+                        name = m.GetString(1);
+                        totalPlays = m.GetInt(2);
                     }
                     break;
-                case "bc":
-                    data.blockMap[0, m.GetInt(0), m.GetInt(1)].Add(Block.CreateBlockCoin(m.GetInt(0), m.GetInt(1), m.GetInt(2), m.GetInt(3)));
-                    break;
-                case "bs":
-                    data.blockMap[0, m.GetInt(0), m.GetInt(1)].Add(Block.CreateNoteBlock(m.GetInt(0), m.GetInt(1), m.GetInt(2), m.GetInt(3)));
-                    break;
-                case "pt":
-                    data.blockMap[0, m.GetInt(0), m.GetInt(1)].Add(Block.CreatePortal(m.GetInt(0), m.GetInt(1), m.GetInt(3), m.GetInt(4), m.GetInt(5)));
-                    break;
+            }
+        }
+
+        private void StartDrawThread()
+        {
+            bot.connection.Send(key + "k", true);
+            if (!blockDrawerEnabled)
+            {
+                blockDrawerEnabled = true;
+                Thread thread = new Thread(() =>
+                {
+                    try
+                    {
+
+                        Stopwatch stopwatch = new Stopwatch();
+                        stopwatch.Start();
+
+                        while (bot.connected)
+                        {
+                            while (bot.hasCode)
+                            {
+
+                                lock (blockQueue)
+                                {
+                                    if (blockQueue.Count != 0)
+                                    {
+
+                                        if (blockSet.Contains(blockQueue.Peek()))
+                                        {
+                                            //Console.WriteLine("jag är en sjuk sak");
+                                            blockQueue.Peek().Send(bot);//.Send(bot.connection);
+                                            lock (blockRepairQueue)
+                                                blockRepairQueue.Enqueue(blockQueue.Dequeue());
+                                            //Console.WriteLine("!!");
+                                        }
+                                        else
+                                        {
+                                            blockQueue.Dequeue();
+                                            continue;
+                                        }
+                                    }
+                                    else if (blockRepairQueue.Count != 0)
+                                    {
+                                        while (!blockSet.Contains(blockRepairQueue.Peek()))
+                                        {
+                                            blockRepairQueue.Dequeue();
+                                            if (blockRepairQueue.Count == 0)
+                                                break;
+                                        }
+
+                                        if (blockRepairQueue.Count == 0)
+                                            continue;
+
+                                        blockRepairQueue.Peek().Send(bot);
+                                        blockRepairQueue.Enqueue(blockRepairQueue.Dequeue());
+                                    }
+                                    else
+                                    {
+                                        Thread.Sleep(5);
+                                        continue;
+                                    }
+                                    double sleepTime = drawSleep - stopwatch.Elapsed.TotalMilliseconds;
+                                    if (sleepTime >= 0.5)
+                                    {
+                                        Thread.Sleep((int)sleepTime);
+                                    }
+                                    stopwatch.Reset();
+                                }
+                            }
+                            Thread.Sleep(100);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        //bot.shutdown();
+                        throw e;
+                    }
+
+                });
+
+                drawRepairThread = thread;
+                thread.Start();
             }
         }
 
         public override void onDisconnect(object sender, string reason, Bot bot)
         {
-            blocksToPlace.Clear();
+            //blocksToPlace.Clear();
             drawRepairThread.Abort();
         }
 
@@ -106,13 +236,14 @@ namespace DynamicEEBot
             switch (args[0])
             {
                 case "rsize":
+                    lock (blockSet)
                     {
-                        bot.connection.Send("say", "Size: " + blocksToPlace.Count);
+                        bot.connection.Send("say", "Size: " + blockSet.Count);
                     }
                     break;
-                case "checkblock":
+                /*case "checkblock":
                     {
-                        Block b = data.blockMap[0, player.blockX, player.blockY].Last();
+                        Block b = blockMap[0, player.blockX, player.blockY].Last();
                         int id = -1;
                         if (b != null)
                             id = b.b_userId;
@@ -123,154 +254,249 @@ namespace DynamicEEBot
                     {
                         bot.connection.Send("say", "Your position: X:" + player.blockX + " Y:" + player.blockY);
                     }
-                    break;
+                    break;*/
             }
-        }
-
-        private string derot(string arg1)
-        {
-            int num = 0;
-            string str = "";
-            for (int i = 0; i < arg1.Length; i++)
-            {
-                num = arg1[i];
-                if ((num >= 0x61) && (num <= 0x7a))
-                {
-                    if (num > 0x6d)
-                    {
-                        num -= 13;
-                    }
-                    else
-                    {
-                        num += 13;
-                    }
-                }
-                else if ((num >= 0x41) && (num <= 90))
-                {
-                    if (num > 0x4d)
-                    {
-                        num -= 13;
-                    }
-                    else
-                    {
-                        num += 13;
-                    }
-                }
-                str = str + ((char)num);
-            }
-            return str;
         }
 
         public Block getBlock(int layer, int x, int y)
         {
+            return getBlock(layer, x, y, 0);
+        }
+
+        public Block getBlock(int layer, int x, int y, int rollbacks)
+        {
+            while (blockMap == null)
+                Thread.Sleep(100);
+
+            while (blockMap[layer] == null)
+                Thread.Sleep(100);
+
+
             if (x >= 0 && y >= 0 && x < width && y < height)
             {
-                return data.blockMap[layer, x, y].Last();
+                lock (blockMap)
+                {
+                    if (blockMap[layer][x, y].Count > 0)
+                    {
+                        if (blockMap[layer][x, y].Count <= rollbacks)
+                            return Block.CreateBlock(layer, x, y, 0, -1);
+                        else
+                            return blockMap[layer][x, y][blockMap[layer][x, y].Count - 1 - rollbacks];
+                    }
+                }
             }
             return Block.CreateBlock(layer, x, y, 0, -1);
         }
 
         public void ResetMap()
         {
-            blocksToPlace.Clear();
-            data.blockMap = new List<Block>[4, width, height];
-            for (int i = 0; i < 4; i++)
+            lock (blockSet)
+                blockSet.Clear();//blocksToPlace.Clear();
+            for (int i = 0; i < 2; i++)
             {
-                for (int x = 0; x < width; x++)
+                lock (blockMap)
+                blockMap[i] = new List<Block>[width, height];
+                /*for (int x = 0; x < width; x++)
                 {
                     for (int y = 0; y < height; y++)
                     {
-                        data.blockMap[i, x, y] = new List<Block>();
-                        data.blockMap[i, x, y].Add(Block.CreateBlock(i, x, y, 0, -1));
+                        blockMap[i, x, y].Add(Block.CreateBlock(i, x, y, 0, -1));
                     }
-                }
+                }*/
             }
         }
 
-        private void DrawRepair()
+        private void OnBlockDraw(Block b)
         {
-            while (true)
+            while (blockMap[b.layer] == null)
+                Thread.Sleep(50);
+
+            lock (blockMap)
             {
-                foreach (Block b in blocksToPlace.Values)
+                blockMap[b.layer][b.x, b.y].Add(b);
+            }
+
+            lock (blockSet)
+            {
+                while (blockSet.Contains(b))
                 {
-                    b.Send(bot);
-                    Thread.Sleep(4);
+                    blockSet.Remove(b);
                 }
             }
         }
 
         public void DrawBlock(Block b)
         {
+
+            if (b == null)
+                return;
+            if (Block.Compare(getBlock(b.layer, b.x, b.y), b))
+                return;
+
             if (b.x > 0 && b.x < width - 1 && b.y > 0 && b.y < height - 1)
             {
-                BlockPos p = new BlockPos(b.layer, b.x, b.y);
-                if (!blocksToPlace.ContainsKey(p))
+
+                lock (blockSet)
                 {
-                    if (data.blockMap[b.layer, b.x, b.y].Last().blockId != b.blockId)
+                    foreach (Block b2 in blockSet)
                     {
-                        lock (blocksToPlace)
+                        if (b == b2)
                         {
-                            blocksToPlace.Add(p, b);
+                            return;
+                        }
+                        else if (b2.layer == b.layer && b2.x == b.x && b2.y == b.y)
+                        {
+                            blockSet.Remove(b2);
+                            break;
+                        }
+                    }
+
+                    blockSet.Add(b);
+                }
+
+
+                lock (blockQueue)
+                    blockQueue.Enqueue(b);
+            }
+        }
+
+        private void LoadMap(Message m, uint position)
+        {
+            lock (blockMap)
+            {
+                byte[] xByteArray;
+                byte[] yByteArray;
+                for (uint i = position; i < m.Count; i++)
+                {
+                    if (m[i] is byte[])
+                    {
+                        int blockID = m.GetInt(i - 2);
+                        int layer = m.GetInt(i - 1);
+                        xByteArray = m.GetByteArray(i);
+                        yByteArray = m.GetByteArray(i + 1);
+                        int xIndex = 0;
+                        int yIndex = 0;
+                        i += 2;
+                        for (int x = 0; x < xByteArray.Length; x += 2)
+                        {
+                            xIndex = (xByteArray[x] * 256) + xByteArray[x + 1];
+                            yIndex = (yByteArray[x] * 256) + yByteArray[x + 1];
+
+                            Block block;
+
+                            switch (blockID)
+                            {
+                                case 165: //coin gate
+                                case 43: //coin door
+                                    {
+                                        int coinsToOpen = m.GetInt(i);
+                                        block = Block.CreateBlockCoin(xIndex, yIndex, blockID, coinsToOpen);
+                                        break;
+                                    }
+
+                                case 83: //PERCUSSION
+                                case 77: //piano
+                                    {
+                                        int soundId = m.GetInt(i);
+                                        block = Block.CreateNoteBlock(xIndex, yIndex, blockID, soundId);
+                                        break;
+                                    }
+
+                                case 381: //invisible portal
+                                case 242: //portal
+                                    {
+                                        int rotation = m.GetInt(i);
+                                        int id = m.GetInt(i + 1);
+                                        int target = m.GetInt(i + 1);
+                                        block = Block.CreatePortal(xIndex, yIndex, rotation, id, target);
+                                        break;
+                                    }
+
+                                case 1000:
+                                    {
+                                        string text = m.GetString(i);
+                                        block = Block.CreateText(xIndex, yIndex, text);
+                                    }
+                                    break;
+
+                                case 361: //spikes
+                                    {
+                                        int rotation = m.GetInt(i);
+                                        block = Block.CreateSpike(xIndex, yIndex, rotation);
+                                        break;
+                                    }
+
+                                case 374: // world portal
+                                default:
+                                    block = Block.CreateBlock(layer, xIndex, yIndex, blockID, -1);
+                                    break;
+
+                            }
+                            blockMap[layer][xIndex, yIndex].Add(block);//blockID;
                         }
                     }
                 }
-                else
+                DrawBorder();
+            }
+        }
+
+        public void DrawBorder()
+        {
+            lock (blockMap)
+            {
+                for (int x = 0; x < width; x++)
                 {
-                    while (blocksToPlace.ContainsKey(p))
-                        blocksToPlace.Remove(p);
-                    DrawBlock(b);
+                    for (int y = 0; y < height; y++)
+                    {
+                        if (x == 0 || y == 0 || x == width - 1 || y == width - 1)
+                        {
+                            blockMap[0][x, y].Clear();
+                            blockMap[0][x, y].Add(Block.CreateBlock(0, x, y, 9, -1));
+                            //Console.WriteLine("Border at " + x + " " + y);
+                        }
+                    }
                 }
             }
         }
 
-        public string owner
+        public string Owner
         {
-            get { return data.owner; }
+            get { return owner; }
         }
 
-        public string name
+        public string Name
         {
-            get { return data.name; }
+            get { return name; }
         }
 
-        public int totalPlays
+        public int TotalPlays
         {
-            get { return data.totalPlays; }
+            get { return totalPlays; }
         }
 
-        public int woots
+        public int Woots
         {
-            get { return data.woots; }
+            get { return woots; }
         }
 
-        public int totalWoots
+        public int TotalWoots
         {
-            get { return data.totalWoots; }
+            get { return totalWoots; }
         }
 
-        public int width
+        public int Width
         {
-            get { return data.width; }
+            get { return width; }
         }
 
-        public int height
+        public int Height
         {
-            get { return data.height; }
+            get { return height; }
         }
 
-        public string key
+        public string Key
         {
-            get { return data.key; }
-        }
-
-        public override void onEnable(Bot bot)
-        {
-            //throw new NotImplementedException();
-        }
-
-        public override void onDisable(Bot bot)
-        {
-            //throw new NotImplementedException();
+            get { return key; }
         }
 
         public override void Update(Bot bot)

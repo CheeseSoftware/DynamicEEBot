@@ -77,7 +77,7 @@ namespace DynamicEEBot.Subbots.Dig.Item
             unchecked
             {
                 int hash = 64;
-                hash = hash * 21 + data.GetHashCode();
+                hash = hash * 21;// + roomData.GetHashCode();
                 return hash;
             }
         }

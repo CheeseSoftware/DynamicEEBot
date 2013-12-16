@@ -44,7 +44,7 @@ namespace DynamicEEBot
                         foreach (Player player in bot.playerList.Values)
                         {
                             player.tick();
-                            /*if (player.blockX > 0 && player.blockX < bot.room.width - 1 && player.blockY > 0 && player.blockY < bot.room.height - 1)
+                            /*if (player.blockX > 0 && player.blockX < bot.room.Width - 1 && player.blockY > 0 && player.blockY < bot.room.Height - 1)
                             {
                                 bot.room.DrawBlock(Block.CreateBlock(0, player.blockX, player.blockY, 16, -1)); 
                             }*/

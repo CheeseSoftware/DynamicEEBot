@@ -30,7 +30,7 @@ namespace DynamicEEBot.Subbots.Dig
         {
             lock (dugBlocksToPlaceQueueLock)
             {
-                while (dugBlocksToPlaceQueue.Count > bot.room.width * bot.room.height / 20)
+                while (dugBlocksToPlaceQueue.Count > bot.room.Width * bot.room.Height / 20)
                 {
                     bot.room.DrawBlock(dugBlocksToPlaceQueue.Dequeue());
                 }
@@ -65,7 +65,7 @@ namespace DynamicEEBot.Subbots.Dig
             if (digHardness == null)
                 resetDigHardness();
 
-            if (!(x > 0 && y > 0 && x < bot.room.width && y < bot.room.height))
+            if (!(x > 0 && y > 0 && x < bot.room.Width && y < bot.room.Height))
                 return;
 
             if (digHardness[x, y] <= 0)
@@ -159,11 +159,11 @@ namespace DynamicEEBot.Subbots.Dig
 
         private void resetDigHardness()
         {
-            digHardness = new float[bot.room.width, bot.room.height];
+            digHardness = new float[bot.room.Width, bot.room.Height];
 
-            for (int y = 0; y < bot.room.height; y++)
+            for (int y = 0; y < bot.room.Height; y++)
             {
-                for (int x = 0; x < bot.room.width; x++)
+                for (int x = 0; x < bot.room.Width; x++)
                 {
                     resetBlockHardness(x, y, bot.room.getBlock(0, x, y).blockId);
                 }
@@ -172,11 +172,11 @@ namespace DynamicEEBot.Subbots.Dig
 
         private void resetBlockHardness(int x, int y, int blockId)
         {
-            if (x < 0 || y < 0 || x >= bot.room.width || y >= bot.room.height)
+            if (x < 0 || y < 0 || x >= bot.room.Width || y >= bot.room.Height)
             {
                 if (digHardness == null)
                 {
-                    digHardness = new float[bot.room.width, bot.room.height];
+                    digHardness = new float[bot.room.Width, bot.room.Height];
                 }
             }
 

@@ -52,8 +52,8 @@ namespace DynamicEEBot
                     {
                         for (int i = 0; i < 3; i++)
                         {
-                            int x = r.Next(1, bot.room.width - 1);
-                            int y = r.Next(1, bot.room.height - 1);
+                            int x = r.Next(1, bot.room.Width - 1);
+                            int y = r.Next(1, bot.room.Height - 1);
                             Zombie zombie = new Zombie(x * 16, y * 16);
                             lock (zombieList)
                             {
