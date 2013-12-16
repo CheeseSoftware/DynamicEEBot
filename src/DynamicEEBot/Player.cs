@@ -76,10 +76,13 @@ namespace DynamicEEBot
             {
                 digLevel_ = 1;
                 Pair<IFormatter, Stream> writeStuff = inventory.Load(@"data\" + name);
-                digXp = (int)writeStuff.first.Deserialize(writeStuff.second);
-                digMoney_ = (int)writeStuff.first.Deserialize(writeStuff.second);
-                writeStuff.second.Close();
-                xpRequired = getXpRequired(digLevel);
+                if (writeStuff != null)
+                {
+                    digXp = (int)writeStuff.first.Deserialize(writeStuff.second);
+                    digMoney_ = (int)writeStuff.first.Deserialize(writeStuff.second);
+                    writeStuff.second.Close();
+                    xpRequired = getXpRequired(digLevel);
+                }
             }
         }
 
@@ -91,7 +94,7 @@ namespace DynamicEEBot
 
         public int digMoney { get { return digMoney_; } set { digMoney_ = value; } }
 
-        public int digStrength { get { return 1 + digLevel / 4; } }
+        public int digStrength { get { int bla = !hasPickaxe() ? 1 + digLevel / 4 : Pickaxe.Hardness; return bla; } }
 
         private static int getXpRequired(int level) { return BetterMath.Fibonacci(level + 2) * 8; }
 

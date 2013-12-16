@@ -214,10 +214,17 @@ namespace DynamicEEBot.Subbots.Dig.Item
         {
             IFormatter formatter = new BinaryFormatter();
             Stream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
-            string version = (string)formatter.Deserialize(stream);
-            //Console.WriteLine("Loaded inventory version: " + version);
-            storedItems = (Dictionary<int, Pair<InventoryItem, int>>)formatter.Deserialize(stream);
-            return new Pair<IFormatter, Stream>(formatter, stream);
+            if (stream.Length > 0)
+            {
+                string version = (string)formatter.Deserialize(stream);
+                //Console.WriteLine("Loaded inventory version: " + version);
+                if (stream.Length > 0)
+                {
+                    storedItems = (Dictionary<int, Pair<InventoryItem, int>>)formatter.Deserialize(stream);
+                    return new Pair<IFormatter, Stream>(formatter, stream);
+                }
+            }
+            return null;
         }
     }
 

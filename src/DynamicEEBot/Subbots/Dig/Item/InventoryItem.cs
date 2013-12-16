@@ -93,6 +93,8 @@ namespace DynamicEEBot.Subbots.Dig.Item
 
         public static bool operator ==(InventoryItem a, InventoryItem b)
         {
+            if ((object)b == null || (object)a == null)
+                return object.Equals(a, b);
             return a.GetData() == b.GetData() && a.GetName() == b.GetName();
         }
 

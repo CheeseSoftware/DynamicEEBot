@@ -80,26 +80,42 @@ namespace DynamicEEBot.Subbots.Dig
                 {
                     blockId = 4;
                     BlockItem temp = (BlockItem)DigBlockMap.blockTranslator[block.blockId];
-                    if (player.digLevel >= Convert.ToInt32(temp.GetDataAt(5)))
+                    if (player.digLevel + 5 >= temp.Hardness)
                     {
                         if (digHardness[x, y] <= digStrength)
                         {
                             BlockItem newsak = new BlockItem(temp);
                             player.inventory.AddItem(newsak, 1);
-                            player.digXp += Convert.ToInt32(temp.GetDataAt(1));
-                            PickaxeItem pick = player.Pickaxe;
-                            if (pick != null)
+                            player.digXp += (int)Math.Round((float)temp.XPGain * (float)player.Pickaxe.XPModifier);
+                        }
+                        if (player.hasPickaxe())
+                        {
+                            player.Pickaxe.onDamage(temp.Hardness);
+                            if (player.Pickaxe.Durability <= 0)
                             {
-                                pick.onDamage(temp.Hardness);
-                                if (pick.Durability <= 0)
+                                PickaxeItem bestPick = null;
+                                for (int slot = 0; slot < player.inventory.capacity; slot++)
                                 {
-                                    bot.connection.Send("say", player.name + ": Your pick broke!");
-                                    player.inventory.RemoveItem(pick, 1);
-                                    player.Pickaxe = null;
-                                    return;
+                                    InventoryItem item = player.inventory.GetItem(slot);
+                                    if (item != null && item.ItemType == (int)ItemType.Pickaxe)
+                                    {
+                                        PickaxeItem pick = (PickaxeItem)item;
+                                        if (bestPick == null || (pick.Hardness > bestPick.Hardness && pick.Hardness <= player.Pickaxe.Hardness))
+                                        {
+                                            bestPick = pick;
+                                        }
+                                    }
                                 }
+                                if (bestPick != null)
+                                {
+                                    player.Pickaxe = bestPick;
+                                    bot.connection.Send("say", player.name + ": Pickaxe broke! You now use an other one in your inventory.");
+                                }
+                                else
+                                    bot.connection.Send("say", player.name + ": Pickaxe broke! Get another one!");
+                                player.inventory.RemoveItem(player.Pickaxe, 1);
+                                return;
                             }
-                            player.Pickaxe = pick;
                         }
                     }
                     else

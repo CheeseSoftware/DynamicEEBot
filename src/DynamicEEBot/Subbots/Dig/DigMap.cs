@@ -92,23 +92,30 @@ namespace DynamicEEBot.Subbots.Dig
             }
 
             itemTranslator.Add("mudpickaxe", new PickaxeItem(
-    "Iron pickaxe",
-    100, //SHOPBUY
-    1, //SHOPSELL
-    100, //DURABILITY
-    2, //HARDNESS
-    1.1F, //XPMODIFIER
-    0 //LEVELREQ
-));
+                "Mud pickaxe",
+                10, //SHOPBUY
+                1, //SHOPSELL
+                100, //DURABILITY
+                1, //HARDNESS
+                0.5F //XPMODIFIER
+            ));
+
+            itemTranslator.Add("stonepickaxe", new PickaxeItem(
+                "Stone pickaxe",
+                100, //SHOPBUY
+                50, //SHOPSELL
+                500, //DURABILITY
+                3, //HARDNESS
+                1.2F //XPMODIFIER
+            ));
 
             itemTranslator.Add("ironpickaxe", new PickaxeItem(
                 "Iron pickaxe",
-                100, //SHOPBUY
-                1, //SHOPSELL
-                100, //DURABILITY
-                2, //HARDNESS
-                1.1F, //XPMODIFIER
-                0 //LEVELREQ
+                200, //SHOPBUY
+                100, //SHOPSELL
+                2000, //DURABILITY
+                10, //HARDNESS
+                1.5F //XPMODIFIER
             ));
         }
     }

@@ -9,10 +9,10 @@ namespace DynamicEEBot.Subbots.Dig.Item
     public class PickaxeItem : InventoryItem, Item.IDestroyable
     {
         int totalDurability;
-        public PickaxeItem(string name, int buyPrice, int sellPrice, int durability, int hardness, float xpModifier, int levelReq)
+        public PickaxeItem(string name, int buyPrice, int sellPrice, int durability, int hardness, float xpModifier)
             : base()
         {
-            this.SetData(new object[] { name, buyPrice, sellPrice, durability, hardness, xpModifier, levelReq });
+            this.SetData(new object[] { name, buyPrice, sellPrice, durability, hardness, xpModifier });
             totalDurability = durability;
         }
 
@@ -22,9 +22,9 @@ namespace DynamicEEBot.Subbots.Dig.Item
             totalDurability = Durability;
         }
 
-        public int XPModifier
+        public float XPModifier
         {
-            get { return (int)GetDataAt(5); }
+            get { return (float)GetDataAt(5); }
         }
         public int LevelReq
         {
