@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
 
 namespace DynamicEEBot
@@ -13,6 +14,7 @@ namespace DynamicEEBot
     public partial class Form1 : Form
     {
         Bot bot;
+        Dictionary<string, string> passwordList = new Dictionary<string,string>();
 
         public Form1()
         {
@@ -20,9 +22,103 @@ namespace DynamicEEBot
             bot = new Bot(this);
         }
 
+        private void SaveData()
+        {
+            string data = "#VILKEN BRA FIL" + Environment.NewLine;
+
+            data += "accounts:" + Environment.NewLine;
+
+            foreach (var o in cbEmail.Items)
+            {
+                data += o.ToString() + "\t";
+
+                if (passwordList.ContainsKey(o.ToString()))
+                {
+                    data += BotUtility.rot13(passwordList[o.ToString()]);
+                }
+
+                data += Environment.NewLine;
+            }
+
+            data += "worlds:" + Environment.NewLine;
+
+            foreach (var o in cbWorldId.Items)
+            {
+                data += o.ToString() + Environment.NewLine;
+            }
+
+            StreamWriter writer;// = new StreamWriter("data.1337");
+
+            if (File.Exists("data.1337"))
+                writer = new StreamWriter("data.1337");
+            else
+                writer = new StreamWriter(File.Create("data.1337"));
+
+            writer.Write(data);
+            writer.Close();
+        }
+
+        private void LoadData()
+        {
+            if (!File.Exists("data.1337"))
+                return;
+
+            StreamReader reader = new StreamReader("data.1337");
+
+            //string[] data = reader.ReadLine.Replace(Environment.NewLine, "\n").Replace("\n\r", "\n").Replace('\r','\n').Split('\n');
+            //reader.Close();
+
+            string type = "boring";
+
+            while(!reader.EndOfStream)//foreach (string s in data)
+            {
+                string s = reader.ReadLine();
+
+                if (s == "accounts:" || s == "worlds:")
+                    type = s;
+                else
+                {
+                    switch (type)
+                    {
+                        case "accounts:":
+                            {
+                                string[] pair = s.Split('\t');
+                                string username = pair[0];
+                                string password;
+                                if (pair.Count() >= 2)
+                                    password = BotUtility.rot13(pair[1]);
+                                else
+                                    password = "";
+
+                                passwordList.Add(username, password);
+                                cbEmail.Items.Add(username);
+                            }
+                            break;
+
+                        case "worlds:":
+                            cbWorldId.Items.Add(s);
+                            break;
+                    }
+                }
+               
+            }
+
+            reader.Close();
+
+            if (cbEmail.Items.Count >= 1)
+            {
+                cbEmail.Text = cbEmail.Items[0].ToString();
+                if (passwordList.ContainsKey(cbEmail.Items[0].ToString()))
+                    tbPassword.Text = passwordList[cbEmail.Items[0].ToString()];
+            }
+            if (cbWorldId.Items.Count >= 1)
+                cbWorldId.Text = cbWorldId.Items[0].ToString();
+
+        }
+
         private void loginButton_Click(object sender, EventArgs e)
         {
-            if (bot.Login(emailBox.Text, passwordBox.Text))
+            if (bot.Login(cbEmail.Text.Split('#').First(), tbPassword.Text.Split('#').First()))
                 loginButton.Enabled = false;
             else
                 loginButton.Text = "Login failed";
@@ -33,7 +129,7 @@ namespace DynamicEEBot
             if (!bot.connected)
             {
                 connectButton.Text = "Connecting...";
-                if (bot.Connect(worldIdBox.Text, "Everybodyedits176"))
+                if (bot.Connect(cbWorldId.Text.Split('#').First(), "Everybodyedits176"))
                     connectButton.Text = "Disconnect";
                 else
                     connectButton.Text = "Connect failed";
@@ -61,7 +157,42 @@ namespace DynamicEEBot
 
         private void accessButton_Click(object sender, EventArgs e)
         {
-            bot.connection.Send("access", codeBox.Text);
+            bot.connection.Send("access", tbCode.Text.Split('#').First());
+        }
+
+        private void btnAddEmail_Click(object sender, EventArgs e)
+        {
+            if (!cbEmail.Items.Contains(cbEmail.Text))
+            {
+                cbEmail.Items.Add(cbEmail.Text);
+                passwordList.Add(cbEmail.Text, tbPassword.Text);
+                SaveData();
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            LoadData();
+        }
+
+        private void buttonAddServer_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAddWorldId_Click(object sender, EventArgs e)
+        {
+            if (!cbWorldId.Items.Contains(cbWorldId.Text))
+            {
+                cbWorldId.Items.Add(cbWorldId.Text);
+                SaveData();
+            }
+        }
+
+        private void cbEmail_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (passwordList.ContainsKey(cbEmail.Text))
+                tbPassword.Text = passwordList[cbEmail.Text];
         }
     }
 }

@@ -74,7 +74,7 @@ namespace DynamicEEBot
                 while (!connected && error == null) { }
                 if (connection.Connected)
                 {
-                    connection.Send("access", form.codeBox.Text);
+                    //connection.Send("access", form..Text);
                     return true;
                 }
                 else
