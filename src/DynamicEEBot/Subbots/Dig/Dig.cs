@@ -100,7 +100,7 @@ namespace DynamicEEBot.Subbots.Dig
                                     if (item != null && item.ItemType == (int)ItemType.Pickaxe)
                                     {
                                         PickaxeItem pick = (PickaxeItem)item;
-                                        if (bestPick == null || (pick.Hardness > bestPick.Hardness && pick.Hardness <= player.Pickaxe.Hardness))
+                                        if (bestPick == null || (pick.Hardness > bestPick.Hardness && pick.Hardness <= player.Pickaxe.Hardness && pick != player.Pickaxe))
                                         {
                                             bestPick = pick;
                                         }
@@ -188,22 +188,6 @@ namespace DynamicEEBot.Subbots.Dig
             {
                 if (Shop.shopInventory.ContainsKey(DigBlockMap.blockTranslator[blockId].GetName()))
                     digHardness[x, y] = Convert.ToInt32(Shop.shopInventory[DigBlockMap.blockTranslator[blockId].GetName()].GetDataAt(4));
-            }
-        }
-
-
-        public override void onEnable(Bot bot)
-        {
-        }
-
-        public override void onDisable(Bot bot)
-        {
-            lock (bot.playerList)
-            {
-                foreach (Player p in bot.playerList.Values)
-                {
-                    p.Save();
-                }
             }
         }
     }

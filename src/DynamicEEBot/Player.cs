@@ -94,7 +94,7 @@ namespace DynamicEEBot
 
         public int digMoney { get { return digMoney_; } set { digMoney_ = value; } }
 
-        public int digStrength { get { int bla = !hasPickaxe() ? 1 + digLevel / 4 : Pickaxe.Hardness; return bla; } }
+        public int digStrength { get { int bla = !hasPickaxe() ? 1 + digLevel / 4 : Pickaxe.Hardness * digLevel/4; return bla; } }
 
         private static int getXpRequired(int level) { return BetterMath.Fibonacci(level + 2) * 8; }
 
