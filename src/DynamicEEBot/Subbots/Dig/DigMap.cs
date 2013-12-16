@@ -1,10 +1,11 @@
-﻿using System;
+﻿using DynamicEEBot.Subbots.Dig.Item;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DynamicEEBot
+namespace DynamicEEBot.Subbots.Dig
 {
     public class DigBlockMap
     {
@@ -12,101 +13,103 @@ namespace DynamicEEBot
         public static Dictionary<string, InventoryItem> itemTranslator = new Dictionary<string, InventoryItem>();
         static DigBlockMap()
         {
-            blockTranslator.Add((int)Blocks.Stone, new InventoryItem(new object[]{
+            blockTranslator.Add((int)Blocks.Stone, new BlockItem(
                 "stone",
-                               0, //ITEMTYPE(BLOCK)
                 1, //XPGAIN
                 10, //SHOPBUY
                 1, //SHOPSELL
                 5, //HARDNESS
                 0  //LEVELREQ
-            }));
+            ));
 
-            blockTranslator.Add((int)Blocks.Copper, new InventoryItem(new object[]{
+            blockTranslator.Add((int)Blocks.Copper, new BlockItem(
                 "copper",
-                               0, //ITEMTYPE(BLOCK)
                 5, //XPGAIN
                 5, //SHOPBUY
                 2, //SHOPSELL
                 10, //HARDNESS
                 2  //LEVELREQ
-            }));
+            ));
 
-            blockTranslator.Add((int)Blocks.Iron, new InventoryItem(new object[]{
+            blockTranslator.Add((int)Blocks.Iron, new BlockItem(
                 "iron",
-                               0, //ITEMTYPE(BLOCK)
                 6, //XPGAIN
                 8, //SHOPBUY
                 3, //SHOPSELL
                 14, //HARDNESS
                 8  //LEVELREQ
-            }));
+            ));
 
 
-            blockTranslator.Add((int)Blocks.Gold, new InventoryItem(new object[]{
+            blockTranslator.Add((int)Blocks.Gold, new BlockItem(
                 "gold",
-                               0, //ITEMTYPE(BLOCK)
                 15, //XPGAIN
                 15, //SHOPBUY
                 14, //SHOPSELL
                 18, //HARDNESS
                 16  //LEVELREQ
-            }));
+            ));
 
-            blockTranslator.Add((int)Blocks.Emerald, new InventoryItem(new object[]{
+            blockTranslator.Add((int)Blocks.Emerald, new BlockItem(
                 "emerald",
-                               0, //ITEMTYPE(BLOCK)
                 5, //XPGAIN
                 5, //SHOPBUY
                 0, //SHOPSELL
                 24, //HARDNESS
                 24  //LEVELREQ
-            }));
+            ));
 
-            blockTranslator.Add((int)Blocks.Ruby, new InventoryItem(new object[]{
+            blockTranslator.Add((int)Blocks.Ruby, new BlockItem(
                 "ruby",
-                               0, //ITEMTYPE(BLOCK)
                 5, //XPGAIN
                 5, //SHOPBUY
                 0, //SHOPSELL
                 30, //HARDNESS
                 32  //LEVELREQ
-            }));
+            ));
 
-            blockTranslator.Add((int)Blocks.Sapphire, new InventoryItem(new object[]{
+            blockTranslator.Add((int)Blocks.Sapphire, new BlockItem(
                 "sapphire",
-                               0, //ITEMTYPE(BLOCK)
                 5, //XPGAIN
                 5, //SHOPBUY
                 0, //SHOPSELL
                 36, //HARDNESS
                 40  //LEVELREQ
-            }));
+            ));
 
-            blockTranslator.Add((int)Blocks.Diamond, new InventoryItem(new object[]{
+            blockTranslator.Add((int)Blocks.Diamond, new BlockItem(
                 "diamond",
-               0, //ITEMTYPE(BLOCK)
                 5, //XPGAIN
                 5, //SHOPBUY
                 0, //SHOPSELL
                 56, //HARDNESS
                 48  //LEVELREQ
-            }));
+            ));
 
             foreach (InventoryItem i in blockTranslator.Values)
             {
                 itemTranslator.Add(i.GetName(), i);
             }
 
-            /*itemTranslator.Add("iron pickaxe", new InventoryItem(new object[]{
+            itemTranslator.Add("mudpickaxe", new PickaxeItem(
+    "Iron pickaxe",
+    100, //SHOPBUY
+    1, //SHOPSELL
+    100, //DURABILITY
+    2, //HARDNESS
+    1.1F, //XPMODIFIER
+    0 //LEVELREQ
+));
+
+            itemTranslator.Add("ironpickaxe", new PickaxeItem(
                 "Iron pickaxe",
-                1, //ITEMTYPE(PICKAXE)
-                0,//TEMP
                 100, //SHOPBUY
                 1, //SHOPSELL
-                0,  //LEVELREQ
-                2, //DIGMODIFIER
-            }));*/
+                100, //DURABILITY
+                2, //HARDNESS
+                1.1F, //XPMODIFIER
+                0 //LEVELREQ
+            ));
         }
     }
     public enum Blocks

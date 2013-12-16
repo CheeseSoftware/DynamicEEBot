@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DynamicEEBot.Subbots.Dig;
+using DynamicEEBot.Subbots.Dig.Item;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

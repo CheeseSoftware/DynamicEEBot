@@ -5,19 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Graphics.Tools.Noise;
+using DynamicEEBot.Subbots.Dig.Item;
+using System.Diagnostics;
 
-namespace DynamicEEBot
+namespace DynamicEEBot.Subbots.Dig
 {
     public partial class Dig : SubBot
     {
         protected Queue<Block> dugBlocksToPlaceQueue = new Queue<Block>();
         protected object dugBlocksToPlaceQueueLock = 0;
         protected float[,] digHardness;
+        private Stopwatch playerSaveStopwatch;
 
         public Dig(Bot bot)
             : base(bot)
         {
             resetDigHardness();
+            playerSaveStopwatch = new Stopwatch();
+            playerSaveStopwatch.Start();
             enabled = true;
         }
 
@@ -29,6 +34,17 @@ namespace DynamicEEBot
                 {
                     bot.room.DrawBlock(dugBlocksToPlaceQueue.Dequeue());
                 }
+            }
+            if (playerSaveStopwatch.ElapsedMilliseconds >= 5000)
+            {
+                lock (bot.playerList)
+                {
+                    foreach (Player p in bot.playerList.Values)
+                    {
+                        p.Save();
+                    }
+                }
+                playerSaveStopwatch.Restart();
             }
         }
 
@@ -63,15 +79,27 @@ namespace DynamicEEBot
                 if (DigBlockMap.blockTranslator.ContainsKey(block.blockId))
                 {
                     blockId = 4;
-                    InventoryItem temp = DigBlockMap.blockTranslator[block.blockId];
+                    BlockItem temp = (BlockItem)DigBlockMap.blockTranslator[block.blockId];
                     if (player.digLevel >= Convert.ToInt32(temp.GetDataAt(5)))
                     {
                         if (digHardness[x, y] <= digStrength)
                         {
-
-                            InventoryItem newsak = new InventoryItem(temp.GetData());
+                            BlockItem newsak = new BlockItem(temp);
                             player.inventory.AddItem(newsak, 1);
                             player.digXp += Convert.ToInt32(temp.GetDataAt(1));
+                            PickaxeItem pick = player.Pickaxe;
+                            if (pick != null)
+                            {
+                                pick.onDamage(temp.Hardness);
+                                if (pick.Durability <= 0)
+                                {
+                                    bot.connection.Send("say", player.name + ": Your pick broke!");
+                                    player.inventory.RemoveItem(pick, 1);
+                                    player.Pickaxe = null;
+                                    return;
+                                }
+                            }
+                            player.Pickaxe = pick;
                         }
                     }
                     else
@@ -150,13 +178,6 @@ namespace DynamicEEBot
 
         public override void onEnable(Bot bot)
         {
-            lock (bot.playerList)
-            {
-                foreach (Player p in bot.playerList.Values)
-                {
-                    p.Load();
-                }
-            }
         }
 
         public override void onDisable(Bot bot)

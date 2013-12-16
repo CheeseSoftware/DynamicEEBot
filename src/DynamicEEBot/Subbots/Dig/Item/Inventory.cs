@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DynamicEEBot
+namespace DynamicEEBot.Subbots.Dig.Item
 {
     public class Inventory
     {
@@ -48,8 +48,12 @@ namespace DynamicEEBot
         {
             lock (storedItems)
             {
-                return storedItems[slot].first;
+                if (storedItems.ContainsKey(slot))
+                {
+                    return storedItems[slot].first;
+                }
             }
+            return null;
         }
 
         public int GetItemCount(int slot)
@@ -127,6 +131,18 @@ namespace DynamicEEBot
             }
         }
 
+        public bool RemoveItem(int slot, int amount)
+        {
+            if (GetItem(slot) != null)
+            {
+                if (GetItemCount(slot) >= amount)
+                {
+                    return RemoveItem(GetItem(slot), amount);
+                }
+            }
+            return false;
+        }
+
         public bool AddItem(InventoryItem item, int amount)
         {
             lock (storedItems)
@@ -154,10 +170,12 @@ namespace DynamicEEBot
         {
             lock (storedItems)
             {
-                string contents = "Inventory: ";
-                foreach (Pair<InventoryItem, int> i in storedItems.Values)
+                string contents = "";
+                if (storedItems.Count == 0)
+                    contents = "Empty";
+                foreach (KeyValuePair<int, Pair<InventoryItem, int>> i in storedItems)
                 {
-                    contents += i.second + " " + i.first.GetName() + ", ";
+                    contents += i.Key + ":" + i.Value.second + "*" + i.Value.first.GetName() + ", ";
                 }
                 return contents;
             }
@@ -176,6 +194,11 @@ namespace DynamicEEBot
                 }
                 return -1;
             }
+        }
+
+        public void Clear()
+        {
+            storedItems.Clear();
         }
 
         public Pair<IFormatter, Stream> Save(string path)

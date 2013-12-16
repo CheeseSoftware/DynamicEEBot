@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Graphics.Tools.Noise;
 
-namespace DynamicEEBot
+namespace DynamicEEBot.Subbots.Dig
 {
     public partial class Dig : SubBot
     {

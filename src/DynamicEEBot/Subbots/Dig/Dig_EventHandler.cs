@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Graphics.Tools.Noise;
+using DynamicEEBot.Subbots.Dig.Item;
 
-namespace DynamicEEBot
+namespace DynamicEEBot.Subbots.Dig
 {
     public partial class Dig : SubBot
     {
@@ -57,17 +58,34 @@ namespace DynamicEEBot
                                     {
                                         float distance = (float)Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
                                         if (distance <= 1.41421357 * (player.digRange - 1) || distance < 1.4142)
-                                            DigBlock(blockX + x + (int)Math.Ceiling(horizontal), blockY + y + (int)Math.Ceiling(vertical), player, (player.digRange - distance) * player.digStrength, false);
+                                        {
+                                            int cx = blockX + x + (int)Math.Ceiling(horizontal);
+                                            int cy = blockY + y + (int)Math.Ceiling(vertical);
+                                            if (player.hasPickaxe())
+                                            {
+                                                PickaxeItem pick = player.Pickaxe;
+                                                if (pick.Durability >= digHardness[cx, cy])
+                                                {
+                                                    DigBlock(
+                                                        cx,
+                                                        cy,
+                                                        player,
+                                                        (player.digRange - distance) * player.digStrength,
+                                                        false);
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                                 return;
                             }
                         }
+                        if(player.hasPickaxe())
                         {
                             if (horizontal == 0 || vertical == 0)
                                 DigBlock(blockX + (int)horizontal, blockY + (int)vertical, player, player.digStrength, true);
                             blockId = bot.room.getBlock(0, blockX, blockY).blockId;
-                            DigBlock(blockX, blockY, player, player.digStrength, true);
+                                DigBlock(blockX, blockY, player, player.digStrength, true);
 
                         }
                     }
@@ -204,7 +222,7 @@ namespace DynamicEEBot
                                             if (player.digMoney >= (itemPrice * amount))
                                             {
                                                 player.digMoney -= itemPrice;
-                                                player.inventory.AddItem(new InventoryItem(item.GetData()), amount);
+                                                player.inventory.AddItem(item.onBought(player, amount), amount);
                                                 bot.connection.Send("say", "Item bought!");
                                             }
                                             else
@@ -214,10 +232,13 @@ namespace DynamicEEBot
                                             bot.connection.Send("say", player.name + ": The requested item does not exist.");
                                     }
                                     else
-                                        bot.connection.Send("say", player.name + ": Please specify what you want to buy.");
+                                        bot.connection.Send("say", player.name + ": Usage: !buy <item> [amount=1]");
                                 }
+                                else
+                                    bot.connection.Send("say", player.name + ": You aren't near the shop.");
                             }
-                            bot.connection.Send("say", player.name + ": You aren't near the shop.");
+                            else
+                                bot.connection.Send("say", player.name + ": You aren't near the shop.");
                         }
                     }
                     break;
@@ -231,39 +252,75 @@ namespace DynamicEEBot
                                 {
                                     if (args.Length > 1)
                                     {
-                                        string itemName = args[1].ToLower();
-                                        if (DigBlockMap.itemTranslator.ContainsKey(itemName))
+                                        int slot;
+                                        if (int.TryParse(args[1], out slot))
                                         {
-                                            InventoryItem item = DigBlockMap.itemTranslator[itemName];
-                                            int itemSellPrice = Shop.GetSellPrice(item);
-                                            int amount = 1;
-                                            if (args.Length >= 3)
-                                                int.TryParse(args[2], out amount);
-                                            if (player.inventory.Contains(item) != -1 && player.inventory.GetItemCount(item) >= amount)
+                                            InventoryItem item = player.inventory.GetItem(slot);
+                                            if (item != null)
                                             {
-                                                player.digMoney += itemSellPrice * amount;
-                                                if (!player.inventory.RemoveItem(item, amount))
-                                                    throw new Exception("Could not remove item?D:");
-                                                bot.connection.Send("say", player.name + ": Item sold! You received " + (itemSellPrice * amount) + " money.");
+                                                int itemSellPrice = item.SellPrice;
+                                                int amount = 1;
+                                                if (args.Length > 2)
+                                                    int.TryParse(args[2], out amount);
+                                                if (player.inventory.GetItemCount(item) >= amount)
+                                                {
+                                                    item.onSold(player, amount);
+                                                    if (!player.inventory.RemoveItem(slot, amount))
+                                                        throw new Exception("Could not remove item?D:");
+                                                    bot.connection.Send("say", player.name + ": Item sold! You received " + (itemSellPrice * amount) + " money.");
+                                                }
+                                                else
+                                                    bot.connection.Send("say", player.name + ": You don't have enough of that item.");
                                             }
                                             else
-                                                bot.connection.Send("say", player.name + ": You do not have enough of that item.");
+                                                bot.connection.Send("say", player.name + ": You don't have that item.");
                                         }
                                         else
-                                            bot.connection.Send("say", player.name + ": The item does not exist.");
+                                            bot.connection.Send("say", player.name + ": Usage: !sell <slot> [amount=1]");
                                     }
                                     else
-                                        bot.connection.Send("say", player.name + ": Please specify what you want to sell.");
+                                        bot.connection.Send("say", player.name + ": Usage: !sell <slot> [amount=1]");
                                 }
                             }
                             bot.connection.Send("say", player.name + ": You aren't near the shop.");
                         }
                     }
                     break;
-
-                case "!placestones":
+                case "usepick":
                     {
-
+                        int slot;
+                        if (args.Length > 1 && int.TryParse(args[1], out slot))
+                        {
+                            InventoryItem item = player.inventory.GetItem(slot);
+                            if (item != null && item.ItemType == (int)ItemType.Pickaxe)
+                            {
+                                player.Pickaxe = (PickaxeItem)item;
+                                bot.connection.Send("say", player.name + ": Using pick in slot " + slot);
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case "durability":
+                    {
+                        if (player.hasPickaxe())
+                        {
+                            bot.connection.Send("say", player.name + ": Durability: " + player.Pickaxe.Durability);
+                        }
+                        else
+                            bot.connection.Send("say", player.name + ": You must use a pickaxe! !usepickaxe");
+                    }
+                    break;
+                case "trashme":
+                    {
+                        new Thread(() =>
+                            {
+                                lock (player.inventory)
+                                {
+                                    player.inventory.Clear();
+                                }
+                                player.Pickaxe = null;
+                            }).Start();
                     }
                     break;
 

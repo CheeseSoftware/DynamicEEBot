@@ -4,12 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DynamicEEBot
+namespace DynamicEEBot.Subbots.Dig.Item
 {
     [Serializable]
-    public class InventoryItem
+    public abstract class InventoryItem : Subbots.Dig.Item.IShopItem
     {
         private object[] data;
+
+        public virtual int ItemType
+        {
+            get { return -1; }
+        }
 
         public InventoryItem(object[] data)
         {
@@ -24,11 +29,6 @@ namespace DynamicEEBot
         public InventoryItem()
         {
 
-        }
-
-        public int GetType()
-        {
-            return (int)data[1];
         }
 
         public string GetName()
@@ -51,7 +51,7 @@ namespace DynamicEEBot
             this.data = data;
         }
 
-        public void SetDataAt(object data, int index)
+        public void SetDataAt(int index, object data)
         {
             this.data[index] = data;
         }
@@ -64,12 +64,12 @@ namespace DynamicEEBot
         public override bool Equals(object obj)
         {
             InventoryItem item = obj as InventoryItem;
-            return /*item.GetData() == GetData() && */item.GetName() == GetName();
+            return item.GetData() == GetData() && item.GetName() == GetName();
         }
 
         public bool Equals(InventoryItem item)
         {
-            return /*item.GetData() == GetData() && */item.GetName() == GetName();
+            return item.GetData() == GetData() && item.GetName() == GetName();
         }
 
         public override int GetHashCode()
@@ -84,13 +84,23 @@ namespace DynamicEEBot
 
         public static bool operator !=(InventoryItem a, InventoryItem b)
         {
-            return /*a.GetData() != b.GetData() || */a.GetName() != b.GetName();
+            //if ((object)b == null && (object)a == null)
+              //  return false;
+            if ((object)b == null || (object)a == null)
+                return !object.Equals(a, b);
+            return a.GetData() != b.GetData() || a.GetName() != b.GetName();
         }
 
         public static bool operator ==(InventoryItem a, InventoryItem b)
         {
-            return /*a.GetData() == b.GetData() && */a.GetName() == b.GetName();
+            return a.GetData() == b.GetData() && a.GetName() == b.GetName();
         }
 
+        public abstract int BuyPrice { get; }
+        public abstract int SellPrice { get; }
+        public abstract bool Buyable { get; }
+        public abstract bool Sellable { get; }
+        public abstract InventoryItem onBought(Player player, int amount);
+        public abstract void onSold(Player player, int amount);
     }
 }

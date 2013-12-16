@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DynamicEEBot.Subbots.Dig.Item;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -19,11 +20,13 @@ namespace DynamicEEBot
         protected int digMoney_ = 0;
         protected bool betaDig = false;
         protected bool fastDig = true;
+        protected PickaxeItem currentPickaxe = null;
+        //protected int currentPickaxeSlot = -1;
 
         public Player(Bot bot, int ID, string name, int frame, float xPos, float yPos, bool isGod, bool isMod, bool bla, int coins, bool purple, bool isFriend, int level)
             : base(bot, ID, name, frame, xPos, yPos, isGod, isMod, bla, coins, purple, isFriend, level)
         {
-            //digLevel_ = 10;
+            Load();
         }
 
         public void setVar(string key, object value)
@@ -46,6 +49,13 @@ namespace DynamicEEBot
                 return true;
             return false;
         }
+
+        public bool hasPickaxe()
+        {
+            return currentPickaxe != null;
+        }
+
+        public PickaxeItem Pickaxe { get { return currentPickaxe; } set { currentPickaxe = value; } }
 
         public object[] getData()
         {

@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="libnoise, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -86,10 +89,14 @@
     <Compile Include="Subbots\Dig\DigMap.cs" />
     <Compile Include="Subbots\Dig\Dig_EventHandler.cs" />
     <Compile Include="Subbots\Dig\Dig_Generator.cs" />
-    <Compile Include="Subbots\Dig\Inventory.cs" />
-    <Compile Include="Subbots\Dig\InventoryItem.cs" />
+    <Compile Include="Subbots\Dig\Item\BlockItem.cs" />
+    <Compile Include="Subbots\Dig\Item\IDestroyable.cs" />
+    <Compile Include="Subbots\Dig\Item\Inventory.cs" />
+    <Compile Include="Subbots\Dig\Item\InventoryItem.cs" />
+    <Compile Include="Subbots\Dig\Item\IShopItem.cs" />
+    <Compile Include="Subbots\Dig\Item\ItemType.cs" />
     <Compile Include="Subbots\Dig\Pair.cs" />
-    <Compile Include="Subbots\Dig\Pickaxe.cs" />
+    <Compile Include="Subbots\Dig\Item\PickaxeItem.cs" />
     <Compile Include="Subbots\Dig\Shop.cs" />
     <Compile Include="Subbots\PlayerPhysics.cs" />
     <Compile Include="Program.cs" />
