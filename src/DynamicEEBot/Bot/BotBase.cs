@@ -17,6 +17,8 @@ namespace DynamicEEBot
         public Dictionary<int, Player> playerList = new Dictionary<int, Player>();
         public Dictionary<string, int> nameList = new Dictionary<string, int>();
 
+        public bool hasCode = false;
+
         public BotBase(Form1 form)
         {
             this.form = form;
@@ -180,6 +182,7 @@ namespace DynamicEEBot
                     }
                     break;
                 case "lostaccess":
+                    
                     break;
                 case "k":
                     {

@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DynamicEEBot
@@ -14,7 +16,7 @@ namespace DynamicEEBot
     public partial class Form1 : Form
     {
         Bot bot;
-        Dictionary<string, string> passwordList = new Dictionary<string,string>();
+        Dictionary<string, string> passwordList = new Dictionary<string, string>();
 
         public Form1()
         {
@@ -47,12 +49,12 @@ namespace DynamicEEBot
                 data += o.ToString() + Environment.NewLine;
             }
 
-            StreamWriter writer;// = new StreamWriter("data.1337");
+            StreamWriter writer;// = new StreamWriter("roomData.1337");
 
-            if (File.Exists("data.1337"))
-                writer = new StreamWriter("data.1337");
+            if (File.Exists("roomData.1337"))
+                writer = new StreamWriter("roomData.1337");
             else
-                writer = new StreamWriter(File.Create("data.1337"));
+                writer = new StreamWriter(File.Create("roomData.1337"));
 
             writer.Write(data);
             writer.Close();
@@ -60,17 +62,17 @@ namespace DynamicEEBot
 
         private void LoadData()
         {
-            if (!File.Exists("data.1337"))
+            if (!File.Exists("roomData.1337"))
                 return;
 
-            StreamReader reader = new StreamReader("data.1337");
+            StreamReader reader = new StreamReader("roomData.1337");
 
             //string[] data = reader.ReadLine.Replace(Environment.NewLine, "\n").Replace("\n\r", "\n").Replace('\r','\n').Split('\n');
             //reader.Close();
 
             string type = "boring";
 
-            while(!reader.EndOfStream)//foreach (string s in data)
+            while (!reader.EndOfStream)//foreach (string s in data)
             {
                 string s = reader.ReadLine();
 
@@ -100,7 +102,7 @@ namespace DynamicEEBot
                             break;
                     }
                 }
-               
+
             }
 
             reader.Close();
@@ -194,5 +196,56 @@ namespace DynamicEEBot
             if (passwordList.ContainsKey(cbEmail.Text))
                 tbPassword.Text = passwordList[cbEmail.Text];
         }
+
+        private void btnAbortTask_Click(object sender, EventArgs e)
+        {
+            if (lbTasks.SelectedItem != null)
+            {
+                Task t = ((SubBots.TaskData)lbTasks.SelectedItem).task;
+                lbTasks.Items.Remove(lbTasks.SelectedItem);
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.Invoke(new Action(() =>
+            {
+                List<SubBots.TaskData> deadTasks = bot.subBotHandler.Update((int)nudTaskTimeLimit.Value);
+
+                foreach (var o in deadTasks)
+                {
+                    if (o.stopwatch.ElapsedMilliseconds / 1000 > nudTaskAbortLimit.Value)
+                    {
+                        if (o.task.IsCompleted == false || o.task.Status == TaskStatus.Running || o.task.Status == TaskStatus.WaitingToRun || o.task.Status == TaskStatus.WaitingForActivation)
+                        {
+                            o.task.Dispose();
+                        }
+                    }
+                }
+
+                {
+                    foreach (var o in deadTasks)
+                    {
+                        lbTasks.Items.Add(o);
+                    }
+                }
+
+                for (int i = 0; i < lbTasks.Items.Count; i++)
+                {
+                    SubBots.TaskData t = (SubBots.TaskData)lbTasks.Items[0];
+                    lbTasks.Items.RemoveAt(0);
+
+
+                    if ((t.task.IsCompleted == false || t.task.Status == TaskStatus.Running || t.task.Status == TaskStatus.WaitingToRun || t.task.Status == TaskStatus.WaitingForActivation))
+                    {
+                        lbTasks.Items.Add(t);
+                    }
+                }
+
+
+
+            }));
+        }
+
     }
 }

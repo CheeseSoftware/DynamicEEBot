@@ -239,7 +239,7 @@ namespace DynamicEEBot
             List<int> _loc_8 = new List<int>();
             //int _loc_10 = 0;
             int _loc_11 = 0;
-            if (param1.x < 16 || param1.y < 16 || param1.x >= room.width * 16 || param1.y >= room.height * 16)
+            if (param1.x < 16 || param1.y < 16 || param1.x >= room.Width * 16 || param1.y >= room.Height * 16)
             {
                 //Console.WriteLine("returning 1, worldborder, " + name + " " + param1.x / 16 + " " + param1.y / 16);
                 return 1;
@@ -264,7 +264,7 @@ namespace DynamicEEBot
             {
                 for (int yy = -2; yy < 1; yy++)
                 {
-                    if (_loc_3 + xx > 0 && _loc_3 + xx < room.width && _loc_4 + yy > 0 && _loc_4 + yy <= room.height)
+                    if (_loc_3 + xx > 0 && _loc_3 + xx < room.Width && _loc_4 + yy > 0 && _loc_4 + yy <= room.Height)
                     {
                         for (int xTest = 0; xTest < 16; xTest++)
                         {
@@ -672,9 +672,9 @@ namespace DynamicEEBot
                     //Console.WriteLine("entered portal with id " + currentBlock.thisID + " and target id " + currentTarget + " and rotation " + currentBlock.rotation);
 
                     //targetPortalList = world.getPortals(world.getPortal(cx, cy).target);
-                    for (int x = 1; x < room.width; x++)
+                    for (int x = 1; x < room.Width; x++)
                     {
-                        for (int y = 1; y < room.height; y++)
+                        for (int y = 1; y < room.Height; y++)
                         {
                             Block block = room.getBlock(0, x, y);
                             if (block.isPortal() && block.blockId == currentTarget)
@@ -1183,25 +1183,25 @@ namespace DynamicEEBot
                         {
                             if (!this.hascrown && !isgodmod)
                             {
-                                this.connection.send(Bl.data.m + "k");
+                                this.connection.send(Bl.roomData.m + "k");
                             }
                             break;
                         }
                         case 6:
                         {
-                            this.connection.send(Bl.data.m + "r");
+                            this.connection.send(Bl.roomData.m + "r");
                             this.state.showRed();
                             break;
                         }
                         case 7:
                         {
-                            this.connection.send(Bl.data.m + "g");
+                            this.connection.send(Bl.roomData.m + "g");
                             this.state.showGreen();
                             break;
                         }
                         case 8:
                         {
-                            this.connection.send(Bl.data.m + "b");
+                            this.connection.send(Bl.roomData.m + "b");
                             this.state.showBlue();
                             break;
                         }
@@ -1216,7 +1216,7 @@ namespace DynamicEEBot
                             {
                                 this.state.showPurple();
                             }
-                            this.connection.send(Bl.data.m + "sp", this.purple);
+                            this.connection.send(Bl.roomData.m + "sp", this.purple);
                             break;
                         }
                         case 77:

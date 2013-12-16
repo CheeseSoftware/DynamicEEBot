@@ -49,7 +49,7 @@ namespace DynamicEEBot
                                             double mAngle = i * System.Math.PI / 180;
                                             int tempx = x + (int)(a * System.Math.Cos(mAngle));
                                             int tempy = y + (int)(a * System.Math.Sin(mAngle));
-                                            if (tempx > 0 && tempx < bot.room.width && tempy > 0 && tempy < bot.room.height)
+                                            if (tempx > 0 && tempx < bot.room.Width && tempy > 0 && tempy < bot.room.Height)
                                             {
                                                 bot.room.DrawBlock(Block.CreateBlock(brushBlock >= 500 ? 1 : 0, tempx, tempy, brushBlock, player.id));
                                             }
@@ -189,9 +189,9 @@ namespace DynamicEEBot
                         int blockId;
                         Int32.TryParse(args[1], out blockId);
                         int layer = (blockId >= 500) ? 1 : 0;
-                        for (int y = 1; y < bot.room.height - 1; y++)
+                        for (int y = 1; y < bot.room.Height - 1; y++)
                         {
-                            for (int x = 1; x < bot.room.width - 1; x++)
+                            for (int x = 1; x < bot.room.Width - 1; x++)
                             {
                                 bot.room.DrawBlock(Block.CreateBlock(layer, x, y, blockId, -1));
                             }
@@ -239,7 +239,7 @@ namespace DynamicEEBot
                                     {
                                         Point current = new Point(closeBlocks[i].X + parent.X, closeBlocks[i].Y + parent.Y);
                                         Block currentBlock = bot.room.getBlock(toReplaceLayer, current.X, current.Y);
-                                        if (currentBlock.blockId == toReplace && !blocksToCheck.Contains(current) && !blocksToFill.Contains(current) && current.X >= 0 && current.Y >= 0 && current.X <= bot.room.width && current.Y <= bot.room.height)
+                                        if (currentBlock.blockId == toReplace && !blocksToCheck.Contains(current) && !blocksToFill.Contains(current) && current.X >= 0 && current.Y >= 0 && current.X <= bot.room.Width && current.Y <= bot.room.Height)
                                         {
                                             blocksToFill.Add(current);
                                             blocksToCheck.Enqueue(current);
@@ -274,9 +274,9 @@ namespace DynamicEEBot
                             Int32.TryParse(args[2], out blockId2);
                             int layer1 = (blockId1 >= 500) ? 1 : 0;
                             int layer2 = (blockId2 >= 500) ? 1 : 0;
-                            for (int y = 1; y < bot.room.height - 1; y++)
+                            for (int y = 1; y < bot.room.Height - 1; y++)
                             {
-                                for (int x = 1; x < bot.room.width - 1; x++)
+                                for (int x = 1; x < bot.room.Width - 1; x++)
                                 {
                                     if (bot.room.getBlock(layer1, x, y).blockId == blockId1)
                                         bot.room.DrawBlock(Block.CreateBlock(layer2, x, y, blockId2, -1));
