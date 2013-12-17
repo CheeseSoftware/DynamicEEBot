@@ -23,7 +23,6 @@ namespace DynamicEEBot.Subbots.Dig
             resetDigHardness();
             playerSaveStopwatch = new Stopwatch();
             playerSaveStopwatch.Start();
-            enabled = true;
         }
 
         public override void Update(Bot bot)

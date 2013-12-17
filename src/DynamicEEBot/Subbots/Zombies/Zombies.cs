@@ -20,7 +20,6 @@ namespace DynamicEEBot
             UpdateSleep = 300;
             zombieUpdateStopWatch.Start();
             zombieDrawStopWatch.Start();
-            enabled = true;
         }
 
         public override void onMessage(object sender, PlayerIOClient.Message m, Bot bot)

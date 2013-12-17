@@ -63,6 +63,7 @@ namespace DynamicEEBot
             subBotHandler.AddSubBot(new WorldEdit(this), this);
             subBotHandler.AddSubBot(new Dig(this), this);
             subBotHandler.AddSubBot(new MazeGenerator(this), this);
+            subBotHandler.AddSubBot(new Redstone(this), this);
         }
 
         protected override void OnDisconnect(object sender, string reason)
