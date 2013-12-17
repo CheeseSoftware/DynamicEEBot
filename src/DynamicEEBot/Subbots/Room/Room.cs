@@ -139,11 +139,64 @@ namespace DynamicEEBot.Subbots
         }
         #endregion
 
+<<<<<<< HEAD:src/DynamicEEBot/Subbots/Room/Room.cs
         #region block draw functions
         /// <summary>
         /// Körs när "b" tas emot och lägger blocket i blockmap
         /// </summary>
         /// <param name="b"></param>
+=======
+        public Block getBotBlock(int layer, int x, int y)
+        {
+            if (x >= 0 && y >= 0 && x < width && y < height)
+            {
+                lock (blockSet)
+                {
+                    foreach (Block b in blockSet)
+                    {
+                        if (b.x == x && b.y == y && b.layer == layer)
+                            return b;
+                    }
+                }
+
+                while (blockMap == null)
+                    Thread.Sleep(100);
+
+                while (blockMap[layer] == null)
+                    Thread.Sleep(100);
+
+                lock (blockMap)
+                {
+                    if (blockMap[layer][x, y].Count > 0)
+                    {
+                        return blockMap[layer][x, y][blockMap[layer][x, y].Count - 1];
+                    }
+                }
+            }
+            return Block.CreateBlock(layer, x, y, 0, -1);
+        }
+
+        public void ResetMap()
+        {
+            lock (blockSet)
+                blockSet.Clear();//blocksToPlace.Clear();
+            for (int i = 0; i < 2; i++)
+            {
+                lock (blockMap)
+                {
+                    blockMap[i] = new List<Block>[width, height];
+                    for (int x = 0; x < width; x++)
+                    {
+                        for (int y = 0; y < height; y++)
+                        {
+                            blockMap[i][x, y] = new List<Block>();
+                        }
+                    }
+                }
+            }
+        }
+
+>>>>>>> 8106b37e68b2e762bb443c996d36bd5a49ad968d:src/DynamicEEBot/Subbots/Room.cs
         private void OnBlockDraw(Block b)
         {
             while (blockMap == null || blockMap[b.layer] == null)
@@ -186,7 +239,7 @@ namespace DynamicEEBot.Subbots
 
             if (b == null)
                 return;
-            if (Block.Compare(getBlock(b.layer, b.x, b.y), b))
+            if (Block.Compare(getBotBlock(b.layer, b.x, b.y), b))
                 return;
 
             if (b.x > 0 && b.x < width - 1 && b.y > 0 && b.y < height - 1)

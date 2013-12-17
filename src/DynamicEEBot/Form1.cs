@@ -101,9 +101,15 @@ namespace DynamicEEBot
             reader.Close();
 
             if (cbServer.Items.Count >= 1)
+            {
                 cbServer.Text = cbServer.Items[0].ToString();
+            }
             else
-                cbServer.Text = "";
+            {
+                cbServer.Text = "everybody-edits-su9rn58o40itdbnw69plyw";
+                cbServer.Items.Add("everybody-edits-su9rn58o40itdbnw69plyw");
+            }
+
             if (cbEmail.Items.Count >= 1)
             {
                 cbEmail.Text = cbEmail.Items[0].ToString();
