@@ -110,6 +110,8 @@ namespace DynamicEEBot
             openSquares[startX, startY] = start;
             openSquaresList.Add(start);
             Square current = start;
+            int maxCount = 1000;
+
             while (openSquaresList.Count > 0)
             {
                 //Find square with lowest F score in openlist
@@ -146,6 +148,9 @@ namespace DynamicEEBot
                     Console.WriteLine(str);
                     return newpath;
                 }
+
+                if (closedSquares.Length > maxCount)
+                    return null;
 
                 //Switch current square from openlist to closedlist
                 closedSquares[current.x, current.y] = current;

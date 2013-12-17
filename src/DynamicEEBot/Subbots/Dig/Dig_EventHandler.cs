@@ -12,7 +12,7 @@ namespace DynamicEEBot.Subbots.Dig
 {
     public partial class Dig : SubBot
     {
-        Dictionary<int, Point> firstGodPositions = new Dictionary<int, Point>();
+        //Dictionary<int, Point> firstGodPositions = new Dictionary<int, Point>();
         public override void onMessage(object sender, PlayerIOClient.Message m, Bot bot)
         {
             switch (m.Type)
@@ -20,10 +20,10 @@ namespace DynamicEEBot.Subbots.Dig
                 case "add":
                     {
                         string name = m.GetString(1);
-                        bot.connection.Send("say", "/giveedit " + name);
+                        //bot.connection.Send("say", "/giveedit " + name);
                     }
                     break;
-                case "god":
+                /*case "god":
                     {
                         int id = m.GetInt(0);
                         bool god = m.GetBoolean(1);
@@ -51,7 +51,7 @@ namespace DynamicEEBot.Subbots.Dig
                             }
                         }
                     }
-                    break;
+                    break;*/
                 case "init":
                     digHardness = new float[bot.room.Width, bot.room.Height];
                     resetDigHardness();

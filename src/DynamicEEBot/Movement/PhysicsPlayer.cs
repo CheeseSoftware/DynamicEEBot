@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Collections.Generic;
 using System;
+using DynamicEEBot.Subbots;
 namespace DynamicEEBot
 {
     /*import Player.*;

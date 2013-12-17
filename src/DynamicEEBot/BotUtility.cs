@@ -43,6 +43,28 @@ namespace DynamicEEBot
             return str;
         }
 
+        public static int Fibonacci(int i)
+        {
+            if (i < 1)
+            {
+                return 0;
+            }
+            else
+            {
+                int j = 1;
+                int k = 0;
+
+
+                for (int l = 1; l < i; l++)
+                {
+                    j += k;
+                    k = j;
+                }
+
+                return j;
+            }
+        }
+
         public static bool isTaskRunning(Task task)
         {
             return (task.IsCompleted == false

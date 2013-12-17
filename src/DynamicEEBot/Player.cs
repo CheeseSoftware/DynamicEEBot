@@ -11,7 +11,7 @@ namespace DynamicEEBot
 {
     public class Player : PhysicsPlayer
     {
-        Dictionary<string, object> Var = new Dictionary<string, object>();
+        Dictionary<string, object> vars = new Dictionary<string, object>();
         Stopwatch betaDigTimer = new Stopwatch();
         public Inventory inventory = new Inventory(100);
         protected int xp = 0;
@@ -31,21 +31,21 @@ namespace DynamicEEBot
 
         public void setVar(string key, object value)
         {
-            if (Var.ContainsKey(key))
-                Var.Remove(key);
-            Var.Add(key, value);
+            if (vars.ContainsKey(key))
+                vars.Remove(key);
+            vars.Add(key, value);
         }
 
         public object getVar(string key)
         {
-            if (Var.ContainsKey(key))
-                return Var[key];
+            if (vars.ContainsKey(key))
+                return vars[key];
             return null;
         }
 
         public bool hasVar(string key)
         {
-            if (Var.ContainsKey(key))
+            if (vars.ContainsKey(key))
                 return true;
             return false;
         }
@@ -96,7 +96,7 @@ namespace DynamicEEBot
 
         public int digStrength { get { int bla = !hasPickaxe() ? 1 + digLevel / 4 : Pickaxe.Hardness * digLevel/4; return bla; } }
 
-        private static int getXpRequired(int level) { return BetterMath.Fibonacci(level + 2) * 8; }
+        private static int getXpRequired(int level) { return BotUtility.Fibonacci(level + 2) * 8; }
 
         public int digXp
         {

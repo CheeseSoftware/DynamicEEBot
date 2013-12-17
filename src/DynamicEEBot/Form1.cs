@@ -136,7 +136,10 @@ namespace DynamicEEBot
             {
                 connectButton.Text = "Connecting...";
                 if (bot.Connect(cbWorldId.Text.Split('#').First(), "Everybodyedits176"))
+                {
+                    bot.OnConnect();
                     connectButton.Text = "Disconnect";
+                }
                 else
                     connectButton.Text = "Connect failed";
             }

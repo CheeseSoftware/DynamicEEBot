@@ -300,6 +300,7 @@
             this.cbServer.Size = new System.Drawing.Size(292, 21);
             this.cbServer.TabIndex = 0;
             this.cbServer.TabStop = false;
+            this.cbServer.Items.Add("everybody-edits-su9rn58o40itdbnw69plyw");
             this.cbServer.Text = "everybody-edits-su9rn58o40itdbnw69plyw";
             // 
             // subbotsTab

@@ -53,7 +53,11 @@ namespace DynamicEEBot
         public SubBot(Bot bot)
         {
             this.bot = bot;
-            updateTask = new Task(() => {
+            updateTask = new Task(() =>
+            {
+            });
+                new Thread(()=>
+                    {
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();
                     while (enabled)

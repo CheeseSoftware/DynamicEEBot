@@ -75,8 +75,8 @@ namespace DynamicEEBot.SubBots
                     {
                         //Task task = new Task(() =>//new Thread(() =>
                         //{
-                            o.onMessage(sender, m, bot);
-//                        });
+                        o.onMessage(sender, m, bot);
+                        //                        });
 
                         lock (tasks)
                         {
@@ -101,32 +101,19 @@ namespace DynamicEEBot.SubBots
                         task.Dispose();
                 }
             }
-
             lock (SubBots)
             {
                 foreach (SubBot o in SubBots.Values)
                 {
                     if (o != null)
                     {
-                        //Task task = new Task(() =>
-                        //{
-                            o.onDisconnect(sender, reason, bot);
-                            o.onDisable(bot);
-                        //});
-
-                        lock (tasks)
-                        {
-                            //tasks.Enqueue(new TaskData(o.GetType().ToString(), task, new SubBots.OnDisconnect(reason)));
-                        }
-
-                        //task.Start();
+                        o.onDisconnect(sender, reason, bot);
+                        o.onDisable(bot);
                     }
                 }
 
                 System.Threading.Thread.Sleep(500);
-
                 SubBots.Clear();
-
                 bot.form.Invoke(new Action(() =>
                     bot.form.subbotCheckedListBox.Items.Clear()
                     ));
@@ -149,7 +136,7 @@ namespace DynamicEEBot.SubBots
                     {
                         //Task task = new Task(() =>//new Thread(() =>
                         //{
-                            o.onCommand(sender, text, args, player, isBotMod, bot);
+                        o.onCommand(sender, text, args, player, isBotMod, bot);
                         //});
 
                         lock (tasks)

@@ -1,4 +1,6 @@
-﻿using DynamicEEBot.Subbots.Dig;
+﻿using DynamicEEBot.Subbots;
+using DynamicEEBot.Subbots.Dig;
+using DynamicEEBot.Subbots.WorldEdit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +18,13 @@ namespace DynamicEEBot
             : base(form)
         {
             subBotHandler = new SubBots.SubBotHandler();
-            this.room = new Room(this);
+            /*this.room = new Room(this);
             subBotHandler.AddSubBot(room, this);
             subBotHandler.AddSubBot(new PlayerPhysics(this), this);
             subBotHandler.AddSubBot(new Commands(this), this);
             subBotHandler.AddSubBot(new Zombies(this), this);
             subBotHandler.AddSubBot(new WorldEdit(this), this);
-            subBotHandler.AddSubBot(new Dig(this), this);
+            subBotHandler.AddSubBot(new Dig(this), this);*/
         }
 
         protected override void OnMessage(object sender, PlayerIOClient.Message m)
@@ -47,6 +49,18 @@ namespace DynamicEEBot
                             break;
                     }
                 }).Start();
+        }
+
+        public void OnConnect()
+        {
+            subBotHandler = new SubBots.SubBotHandler();
+            this.room = new Room(this);
+            subBotHandler.AddSubBot(room, this);
+            subBotHandler.AddSubBot(new PlayerPhysics(this), this);
+            subBotHandler.AddSubBot(new Commands(this), this);
+            subBotHandler.AddSubBot(new Zombies(this), this);
+            subBotHandler.AddSubBot(new WorldEdit(this), this);
+            subBotHandler.AddSubBot(new Dig(this), this);
         }
 
         protected override void OnDisconnect(object sender, string reason)

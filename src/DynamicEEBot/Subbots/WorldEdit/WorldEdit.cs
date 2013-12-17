@@ -4,14 +4,14 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace DynamicEEBot
+namespace DynamicEEBot.Subbots.WorldEdit
 {
     class WorldEdit : SubBot
     {
-        private Point editBlock1 = new Point(-1, -1);
-        private Point editBlock2 = new Point(-1, -1);
+        public bool bothPointsSet = false;
+        public Point editBlock1 = new Point(-1, -1);
+        public Point editBlock2 = new Point(-1, -1);
         private Point nullPoint = new Point(-1, -1);
-        private bool bothPointsSet = false;
 
         public WorldEdit(Bot bot)
             : base(bot)
@@ -40,20 +40,12 @@ namespace DynamicEEBot
                             {
                                 if (player.hasVar("brush") && (bool)player.getVar("brush"))
                                 {
-                                    int brushSize = player.getVar("brushsize") == null ? 1 : (int)player.getVar("brushsize");
-                                    int brushBlock = player.getVar("brushblock") == null ? 9 : (int)player.getVar("brushblock");
-                                    for (int a = brushSize; a > 0; a--)
+                                    if (player.hasVar("brushtype"))
                                     {
-                                        for (double i = 0.0; i < 360.0; i += (10 / brushSize))
-                                        {
-                                            double mAngle = i * System.Math.PI / 180;
-                                            int tempx = x + (int)(a * System.Math.Cos(mAngle));
-                                            int tempy = y + (int)(a * System.Math.Sin(mAngle));
-                                            if (tempx > 0 && tempx < bot.room.Width && tempy > 0 && tempy < bot.room.Height)
-                                            {
-                                                bot.room.DrawBlock(Block.CreateBlock(brushBlock >= 500 ? 1 : 0, tempx, tempy, brushBlock, player.id));
-                                            }
-                                        }
+                                        int brushSize = player.getVar("brushsize") == null ? 1 : (int)player.getVar("brushsize");
+                                        int brushBlock = player.getVar("brushblock") == null ? 9 : (int)player.getVar("brushblock");
+                                        Brush brush = (Brush)player.getVar("brushtype");
+                                        brush.Draw(bot, player, this, x, y);
                                     }
                                 }
                                 else
@@ -103,8 +95,24 @@ namespace DynamicEEBot
         {
             switch (args[0])
             {
+                case "bset":
+                    {
+                        if (args.Length > 2)
+                        {
+                            if (player.hasVar("brushtype"))
+                            {
+                                Brush brush = (Brush)player.getVar("brushtype");
+                                brush.SetData(args[1], args[2], bot, player);
+                            }
+                            else
+                                bot.connection.Send("say", "You have no brush.");
+                        }
+                        else
+                            bot.connection.Send("say", "Usage: !brushset <var> <value>");
+                    }
+                    break;
                 case "replace":
-                    if (isBotMod)
+                    //if (isBotMod)
                     {
                         int from;
                         int to;
@@ -127,100 +135,44 @@ namespace DynamicEEBot
                     }
                     break;
                 case "set":
-                    if (isBotMod)
+                    //if (isBotMod)
                     {
-                        if (args.Length > 1 && args[1].Contains('%'))
+                        if (player.hasVar("brush"))
                         {
-                            Dictionary<int, int> blockPercent = new Dictionary<int, int>();
-                            string[] temp = args[1].Split(',');
-                            for (int i = 0; i < temp.Length; i++)
-                            {
-                                string[] percentBlock = temp[i].Split('%');
-                                int percent = 0;
-                                int block = 0;
-                                int.TryParse(percentBlock[0], out percent);
-                                int.TryParse(percentBlock[1], out block);
-                                if (percent != 0)
-                                    blockPercent.Add(block, percent);
-                            }
-                            if (blockPercent.Count > 0)
-                            {
-                                Random r = new Random();
-                                int blockIdHighest = 0;
-                                int percentHighest = 0;
-                                foreach (KeyValuePair<int, int> pair in blockPercent)
-                                {
-                                    if (pair.Value > percentHighest)
-                                    {
-                                        percentHighest = pair.Value;
-                                        blockIdHighest = pair.Key;
-                                    }
-                                }
-                                Dictionary<int, double> chances = new Dictionary<int, double>();
-                                chances.Add(blockIdHighest, 100);
-                                int totalChance = 100;
-                                foreach (KeyValuePair<int, int> pair in blockPercent)
-                                {
-                                    if (pair.Key != blockIdHighest)
-                                    {
-                                        chances.Add(pair.Key, Math.Round(100*(double)((double)pair.Value / (double)percentHighest)));
-                                        totalChance += (int)chances[pair.Key];
-                                    }
-                                }
-                                //Console.WriteLine(chances);
-                                if (bothPointsSet)
-                                {
-                                    for (int x = editBlock1.X; x <= editBlock2.X; x++)
-                                    {
-                                        for (int y = editBlock1.Y; y <= editBlock2.Y; y++)
-                                        {
-                                            int random = r.Next(totalChance + 1);
-                                            int block = 0;
-                                            int current = 0;
-                                            foreach (KeyValuePair<int, double> pair in chances)
-                                            {
-                                                int blabla = current + (int)Math.Round((pair.Value / totalChance) * totalChance);
-                                                if (random >= current && random <= blabla)
-                                                {
-                                                    block = pair.Key;
-                                                    bot.room.DrawBlock(Block.CreateBlock(block >= 500 ? 1 : 0, x, y, block, player.id));
-                                                    break;
-                                                }
-                                                current += (blabla - current);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            int id;
-                            if (args.Length > 1 && int.TryParse(args[1], out id))
-                            {
-                                if (bothPointsSet)
-                                {
-                                    for (int x = editBlock1.X; x <= editBlock2.X; x++)
-                                    {
-                                        for (int y = editBlock1.Y; y <= editBlock2.Y; y++)
-                                        {
-                                            bot.room.DrawBlock(Block.CreateBlock(id >= 500 ? 1 : 0, x, y, id, player.id));
-                                        }
-                                    }
-                                }
-                            }
+                            string arg = "";
+                            if (args.Length > 1)
+                                arg = args[1];
+                            Brush brush = (Brush)player.getVar("brushtype");
+                            brush.DrawArea(bot, player, this, arg);
                         }
                     }
                     break;
                 case "b":
-                    if (isBotMod)
+                    //if (isBotMod)
                     {
-                        if (player.hasVar("brush"))
-                            player.setVar("brush", !(bool)player.getVar("brush"));
+                        if (args.Length == 1)
+                        {
+                            if (player.hasVar("brush"))
+                                player.setVar("brush", !(bool)player.getVar("brush"));
+                            else
+                                player.setVar("brush", true);
+                            bool playerHasBrush = (bool)player.getVar("brush");
+                            bot.connection.Send("say", player.name + ": Brush is " + (playerHasBrush ? "ON" : "OFF"));
+                        }
+                        else if (args.Length > 1)
+                        {
+                            string brushName = args[1].Trim().ToLower();
+                            Brush brush = (Brush)Brush.FromName(brushName);
+                            if (brush != null)
+                            {
+                                player.setVar("brushtype", brush);
+                                bot.connection.Send("say", "Your brush is now: " + brushName);
+                            }
+                            else
+                                bot.connection.Send("say", "Brush does not exist.");
+                        }
                         else
-                            player.setVar("brush", true);
-                        bool playerHasBrush = (bool)player.getVar("brush");
-                        bot.connection.Send("say", player.name + ": Brush is " + (playerHasBrush ? "ON" : "OFF"));
+                            bot.connection.Send("say", "Usage: !brush <brushname>");
                     }
                     break;
                 case "bs":
