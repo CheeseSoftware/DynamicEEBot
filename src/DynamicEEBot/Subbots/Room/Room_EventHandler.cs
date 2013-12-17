@@ -83,22 +83,49 @@ namespace DynamicEEBot.Subbots
                     StopDrawThread();
                     break;
                 case "b":
+                    /*{
+                        int layer = m.GetInt(0);
+                        int x = m.GetInt(1);
+                        int y = m.GetInt(2);
+                        int blockId = m.GetInt(3);
+                        int userId = m.GetInt(4);
+                        Block b = Block.CreateBlockCoin(x, y, blockId, coinsToOpen);
+                        this.OnBlockDraw(b);
+                    }
+                    break;*/
                 case "bc":
-                case "bs":
-                case "pt":
-                    {
-                        int layer = 0;
+                    /*{
                         int x = m.GetInt(0);
                         int y = m.GetInt(1);
-                        int blockID = m.GetInt(2);
+                        int blockId = m.GetInt(2);
+                        int coinsToOpen = m.GetInt(3);
+                        Block b = Block.CreateBlockCoin(x, y, blockId, coinsToOpen);
+                        this.OnBlockDraw(b);
+                    }
+                    break;*/
+                case "bs":
+                    /*{
+                        int x = m.GetInt(0);
+                        int y = m.GetInt(1);
+                        int blockId = m.GetInt(2);
+                        int soundId = m.GetInt(3);
+                        Block b = Block.CreateNoteBlock(x, y, blockId, soundId);
+                        this.OnBlockDraw(b);
+                    }
+                    break;*/
+                case "pt":
+                    {
+                        /*int x = m.GetInt(0);
+                        int y = m.GetInt(1);
+                        int blockId = m.GetInt(2);
                         int rotation = m.GetInt(3);
-                        int id = m.GetInt(4);
+                        int myId = m.GetInt(4);
                         int targetId = m.GetInt(5);
                         int placer = -1;
                         if (bot.nameList.ContainsKey(Owner))
                             placer = bot.nameList[Owner];
-
-                        Block b = Block.CreateBlock(layer, x, y, blockID, placer);
+                        Block b = Block.CreatePortal(x, y, rotation, myId, targetId);*/
+                        Block b = new Block(m);
                         this.OnBlockDraw(b);
                     }
                     break;
