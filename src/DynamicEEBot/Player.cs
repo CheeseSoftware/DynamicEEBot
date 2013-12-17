@@ -64,6 +64,8 @@ namespace DynamicEEBot
 
         public void Save()
         {
+            if (!Directory.Exists("data"))
+                Directory.CreateDirectory("data");
             Pair<IFormatter, Stream> writeStuff = inventory.Save(@"data\" + name);
             writeStuff.first.Serialize(writeStuff.second, digXp);
             writeStuff.first.Serialize(writeStuff.second, digMoney);
@@ -72,6 +74,8 @@ namespace DynamicEEBot
 
         public void Load()
         {
+            if (!Directory.Exists("data"))
+                Directory.CreateDirectory("data");
             if (File.Exists(@"data\" + name))
             {
                 digLevel_ = 1;
