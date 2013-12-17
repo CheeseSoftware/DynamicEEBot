@@ -259,11 +259,6 @@ namespace DynamicEEBot.Subbots
                     //world start
                     for (i = i + 1; !(m[i] is string && m.GetString(i) == "we"); i++)
                     {
-                        if (m[i - 1] is string && m.GetString(i - 1) == "we")
-                        {
-                            i -= 1;
-                            break;
-                        }
                         if (m[i] is byte[])
                         {
                             if (m[i + 1] is byte[])
@@ -326,6 +321,16 @@ namespace DynamicEEBot.Subbots
                                 i += 1;
                             }
                             i += 1;
+                        }
+                        if (m[i - 1] is string && m.GetString(i - 1) == "we")
+                        {
+                            i -= 1;
+                            break;
+                        }
+                        if (m[i] is string && m.GetString(i) == "we")
+                        {
+                            i -= 1;
+                            break;
                         }
                     }
                     //world end

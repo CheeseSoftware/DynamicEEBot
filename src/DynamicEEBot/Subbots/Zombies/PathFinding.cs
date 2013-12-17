@@ -111,6 +111,7 @@ namespace DynamicEEBot
             openSquaresList.Add(start);
             Square current = start;
             int maxCount = 1000;
+            int currentCount = 0;
 
             while (openSquaresList.Count > 0)
             {
@@ -149,7 +150,7 @@ namespace DynamicEEBot
                     return newpath;
                 }
 
-                if (closedSquares.Length > maxCount)
+                if (currentCount > maxCount)
                     return null;
 
                 //Switch current square from openlist to closedlist
@@ -194,6 +195,7 @@ namespace DynamicEEBot
                         neighbour.parent = current;
                         openSquares[neighbour.x, neighbour.y] = neighbour;
                         openSquaresList.Add(neighbour);
+                        currentCount++;
                     }
                 }
             }

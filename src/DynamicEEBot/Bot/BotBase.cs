@@ -181,23 +181,73 @@ namespace DynamicEEBot
                         }
                     }
                     break;
-                case "lostaccess":
-                    
-                    break;
-                case "k":
+                case "k": //player got crown
                     {
-                        int playerID = m.GetInt(0);
-                        //Player got crown
+                        int userId = m.GetInt(0);
+                        if (playerList.ContainsKey(userId))
+                        {
+                            lock (playerList)
+                            {
+                                foreach (Player p in playerList.Values)
+                                {
+                                    p.hascrown = false;
+                                }
+                                playerList[userId].hascrown = true;
+                            }
+                        }
                     }
                     break;
-                case "ks":
+                case "ks": //player got silver crown
                     {
-                        int playerID = m.GetInt(0);
-                        //Player won level
+                        int userId = m.GetInt(0);
+                        if (playerList.ContainsKey(userId))
+                        {
+                            lock (playerList)
+                                playerList[userId].hascrownsilver = true;
+                        }
                     }
                     break;
-                case "c":
-                    connection.Send("autosay", 1);
+                case "c": //player took coin
+                    {
+                        int userId = m.GetInt(0);
+                        int totalCoins = m.GetInt(1);
+                        if (playerList.ContainsKey(userId))
+                        {
+                            lock (playerList)
+                                playerList[userId].coins = totalCoins;
+                        }
+                    }
+                    break;
+                case "levelup":
+                    {
+                        int userId = m.GetInt(0);
+                        int level = m.GetInt(1);
+                        if (playerList.ContainsKey(userId))
+                        {
+                            lock (playerList)
+                                playerList[userId].level = level;
+                        }
+                    }
+                    break;
+                case "tele": //owner used reset/load
+                    {
+                        bool resetUsed = m.GetBoolean(0);
+                        for (int i = 1; i < m.Count; i += 3)
+                        {
+                            int userId = m.GetInt(1);
+                            int spawnPosX = m.GetInt(2);
+                            int spawnPosY = m.GetInt(3);
+                            if (playerList.ContainsKey(userId))
+                            {
+                                lock (playerList)
+                                {
+                                    Player p = playerList[userId];
+                                    p.setPosition(spawnPosX * 16, spawnPosY * 16);
+                                    playerList[userId] = p;
+                                }
+                            }
+                        }
+                    }
                     break;
             }
         }

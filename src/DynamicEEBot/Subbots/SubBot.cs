@@ -33,6 +33,8 @@ namespace DynamicEEBot
                     if (value)
                     {
                         this.onEnable(bot);
+                        if (updateTask == null || updateTask.IsCanceled || updateTask.IsCompleted || updateTask.IsFaulted)
+                            updateTask = new Task(updateTaskWork);
                         updateTask.Start();
                         Console.WriteLine(this.GetType().Name + ".cs is enabled.");
                     }
@@ -53,26 +55,25 @@ namespace DynamicEEBot
         public SubBot(Bot bot)
         {
             this.bot = bot;
-            updateTask = new Task(() =>
-            {
-            });
-                new Thread(()=>
-                    {
-                    Stopwatch stopwatch = new Stopwatch();
-                    stopwatch.Start();
-                    while (enabled)
-                    {
-                        Update(bot);
-                        int time = (int)stopwatch.ElapsedMilliseconds;
-                        if (time < UpdateSleep)
-                            Thread.Sleep(UpdateSleep - time);
-                        stopwatch.Reset();
-                    }
-                });
+            updateTask = new Task(updateTaskWork);
         }
 
         ~SubBot()
         {
+        }
+
+        void updateTaskWork()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            while (enabled)
+            {
+                Update(bot);
+                int time = (int)stopwatch.ElapsedMilliseconds;
+                if (time < UpdateSleep)
+                    Thread.Sleep(UpdateSleep - time);
+                stopwatch.Reset();
+            }
         }
 
         public abstract void onEnable(Bot bot);
