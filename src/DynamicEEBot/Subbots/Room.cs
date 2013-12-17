@@ -266,6 +266,36 @@ namespace DynamicEEBot
             return Block.CreateBlock(layer, x, y, 0, -1);
         }
 
+        public Block getBotBlock(int layer, int x, int y)
+        {
+            if (x >= 0 && y >= 0 && x < width && y < height)
+            {
+                lock (blockSet)
+                {
+                    foreach (Block b in blockSet)
+                    {
+                        if (b.x == x && b.y == y && b.layer == layer)
+                            return b;
+                    }
+                }
+
+                while (blockMap == null)
+                    Thread.Sleep(100);
+
+                while (blockMap[layer] == null)
+                    Thread.Sleep(100);
+
+                lock (blockMap)
+                {
+                    if (blockMap[layer][x, y].Count > 0)
+                    {
+                        return blockMap[layer][x, y][blockMap[layer][x, y].Count - 1];
+                    }
+                }
+            }
+            return Block.CreateBlock(layer, x, y, 0, -1);
+        }
+
         public void ResetMap()
         {
             lock (blockSet)
@@ -324,7 +354,7 @@ namespace DynamicEEBot
 
             if (b == null)
                 return;
-            if (Block.Compare(getBlock(b.layer, b.x, b.y), b))
+            if (Block.Compare(getBotBlock(b.layer, b.x, b.y), b))
                 return;
 
             if (b.x > 0 && b.x < width - 1 && b.y > 0 && b.y < height - 1)

@@ -99,6 +99,7 @@
     <Compile Include="Subbots\Dig\Pair.cs" />
     <Compile Include="Subbots\Dig\Item\PickaxeItem.cs" />
     <Compile Include="Subbots\Dig\Shop.cs" />
+    <Compile Include="Subbots\MazeGenerator.cs" />
     <Compile Include="Subbots\PlayerPhysics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
