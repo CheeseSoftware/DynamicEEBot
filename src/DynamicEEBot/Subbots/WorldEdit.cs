@@ -129,16 +129,83 @@ namespace DynamicEEBot
                 case "set":
                     if (isBotMod)
                     {
-                        int id;
-                        if (args.Length > 1 && int.TryParse(args[1], out id))
+                        if (args.Length > 1 && args[1].Contains('%'))
                         {
-                            if (bothPointsSet)
+                            Dictionary<int, int> blockPercent = new Dictionary<int, int>();
+                            string[] temp = args[1].Split(',');
+                            for (int i = 0; i < temp.Length; i++)
                             {
-                                for (int x = editBlock1.X; x <= editBlock2.X; x++)
+                                string[] percentBlock = temp[i].Split('%');
+                                int percent = 0;
+                                int block = 0;
+                                int.TryParse(percentBlock[0], out percent);
+                                int.TryParse(percentBlock[1], out block);
+                                if (percent != 0)
+                                    blockPercent.Add(block, percent);
+                            }
+                            if (blockPercent.Count > 0)
+                            {
+                                Random r = new Random();
+                                int blockIdHighest = 0;
+                                int percentHighest = 0;
+                                foreach (KeyValuePair<int, int> pair in blockPercent)
                                 {
-                                    for (int y = editBlock1.Y; y <= editBlock2.Y; y++)
+                                    if (pair.Value > percentHighest)
                                     {
-                                        bot.room.DrawBlock(Block.CreateBlock(id >= 500 ? 1 : 0, x, y, id, player.id));
+                                        percentHighest = pair.Value;
+                                        blockIdHighest = pair.Key;
+                                    }
+                                }
+                                Dictionary<int, double> chances = new Dictionary<int, double>();
+                                chances.Add(blockIdHighest, 100);
+                                int totalChance = 100;
+                                foreach (KeyValuePair<int, int> pair in blockPercent)
+                                {
+                                    if (pair.Key != blockIdHighest)
+                                    {
+                                        chances.Add(pair.Key, Math.Round(100*(double)((double)pair.Value / (double)percentHighest)));
+                                        totalChance += (int)chances[pair.Key];
+                                    }
+                                }
+                                //Console.WriteLine(chances);
+                                if (bothPointsSet)
+                                {
+                                    for (int x = editBlock1.X; x <= editBlock2.X; x++)
+                                    {
+                                        for (int y = editBlock1.Y; y <= editBlock2.Y; y++)
+                                        {
+                                            int random = r.Next(totalChance + 1);
+                                            int block = 0;
+                                            int current = 0;
+                                            foreach (KeyValuePair<int, double> pair in chances)
+                                            {
+                                                int blabla = current + (int)Math.Round((pair.Value / totalChance) * totalChance);
+                                                if (random >= current && random <= blabla)
+                                                {
+                                                    block = pair.Key;
+                                                    bot.room.DrawBlock(Block.CreateBlock(block >= 500 ? 1 : 0, x, y, block, player.id));
+                                                    break;
+                                                }
+                                                current += (blabla - current);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            int id;
+                            if (args.Length > 1 && int.TryParse(args[1], out id))
+                            {
+                                if (bothPointsSet)
+                                {
+                                    for (int x = editBlock1.X; x <= editBlock2.X; x++)
+                                    {
+                                        for (int y = editBlock1.Y; y <= editBlock2.Y; y++)
+                                        {
+                                            bot.room.DrawBlock(Block.CreateBlock(id >= 500 ? 1 : 0, x, y, id, player.id));
+                                        }
                                     }
                                 }
                             }

@@ -28,34 +28,29 @@ namespace DynamicEEBot
         {
             string data = "#VILKEN BRA FIL" + Environment.NewLine;
 
-            data += "accounts:" + Environment.NewLine;
+            data += "servers:" + Environment.NewLine;
+            foreach (var o in cbServer.Items)
+                data += o.ToString() + Environment.NewLine;
 
+            data += "accounts:" + Environment.NewLine;
             foreach (var o in cbEmail.Items)
             {
                 data += o.ToString() + "\t";
-
                 if (passwordList.ContainsKey(o.ToString()))
-                {
                     data += BotUtility.rot13(passwordList[o.ToString()]);
-                }
 
                 data += Environment.NewLine;
             }
 
             data += "worlds:" + Environment.NewLine;
-
             foreach (var o in cbWorldId.Items)
-            {
                 data += o.ToString() + Environment.NewLine;
-            }
 
-            StreamWriter writer;// = new StreamWriter("roomData.1337");
-
+            StreamWriter writer;
             if (File.Exists("roomData.1337"))
                 writer = new StreamWriter("roomData.1337");
             else
                 writer = new StreamWriter(File.Create("roomData.1337"));
-
             writer.Write(data);
             writer.Close();
         }
@@ -66,22 +61,21 @@ namespace DynamicEEBot
                 return;
 
             StreamReader reader = new StreamReader("roomData.1337");
-
-            //string[] data = reader.ReadLine.Replace(Environment.NewLine, "\n").Replace("\n\r", "\n").Replace('\r','\n').Split('\n');
-            //reader.Close();
-
             string type = "boring";
 
             while (!reader.EndOfStream)//foreach (string s in data)
             {
                 string s = reader.ReadLine();
 
-                if (s == "accounts:" || s == "worlds:")
+                if (s == "servers:" || s == "accounts:" || s == "worlds:")
                     type = s;
                 else
                 {
                     switch (type)
                     {
+                        case "servers:":
+                            cbServer.Items.Add(s);
+                            break;
                         case "accounts:":
                             {
                                 string[] pair = s.Split('\t');
@@ -96,7 +90,6 @@ namespace DynamicEEBot
                                 cbEmail.Items.Add(username);
                             }
                             break;
-
                         case "worlds:":
                             cbWorldId.Items.Add(s);
                             break;
@@ -107,20 +100,31 @@ namespace DynamicEEBot
 
             reader.Close();
 
+            if (cbServer.Items.Count >= 1)
+                cbServer.Text = cbServer.Items[0].ToString();
+            else
+                cbServer.Text = "";
             if (cbEmail.Items.Count >= 1)
             {
                 cbEmail.Text = cbEmail.Items[0].ToString();
                 if (passwordList.ContainsKey(cbEmail.Items[0].ToString()))
                     tbPassword.Text = passwordList[cbEmail.Items[0].ToString()];
             }
+            else
+            {
+                cbEmail.Text = "";
+                tbPassword.Text = "";
+            }
             if (cbWorldId.Items.Count >= 1)
                 cbWorldId.Text = cbWorldId.Items[0].ToString();
+            else
+                cbWorldId.Text = "";
 
         }
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-            if (bot.Login(cbEmail.Text.Split('#').First(), tbPassword.Text.Split('#').First()))
+            if (bot.Login(cbEmail.Text.Split('#').First(), tbPassword.Text.Split('#').First(), cbServer.Text.Split('#').First()))
                 loginButton.Enabled = false;
             else
                 loginButton.Text = "Login failed";
@@ -179,7 +183,11 @@ namespace DynamicEEBot
 
         private void buttonAddServer_Click(object sender, EventArgs e)
         {
-
+            if (!cbServer.Items.Contains(cbServer.Text))
+            {
+                cbServer.Items.Add(cbServer.Text);
+                SaveData();
+            }
         }
 
         private void btnAddWorldId_Click(object sender, EventArgs e)
@@ -250,6 +258,38 @@ namespace DynamicEEBot
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             bot.room.SetSleepTime((int)numericUpDown1.Value);
+        }
+
+        private void btnRemoveServer_Click(object sender, EventArgs e)
+        {
+            if (cbServer.Items.Contains(cbServer.Text))
+            {
+                cbServer.Items.Remove(cbServer.Text);
+                SaveData();
+                cbServer.Text = "";
+            }
+        }
+
+        private void btnRemoveEmail_Click(object sender, EventArgs e)
+        {
+            if (cbEmail.Items.Contains(cbEmail.Text))
+            {
+                cbEmail.Items.Remove(cbEmail.Text);
+                passwordList.Remove(cbEmail.Text);
+                SaveData();
+                cbEmail.Text = "";
+                tbPassword.Text = "";
+            }
+        }
+
+        private void btnRemoveWorldId_Click(object sender, EventArgs e)
+        {
+            if (cbWorldId.Items.Contains(cbWorldId.Text))
+            {
+                cbWorldId.Items.Remove(cbWorldId.Text);
+                SaveData();
+                cbWorldId.Text = "";
+            }
         }
 
     }

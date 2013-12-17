@@ -24,11 +24,11 @@ namespace DynamicEEBot
             this.form = form;
         }
 
-        public bool Login(string email, string password)
+        public bool Login(string email, string password, string server)
         {
             PlayerIOError error = null;
             PlayerIO.QuickConnect.SimpleConnect(
-                "everybody-edits-su9rn58o40itdbnw69plyw",
+                server,
                 email,
                 password,
                 delegate(Client tempClient)

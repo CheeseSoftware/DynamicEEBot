@@ -39,7 +39,7 @@ namespace DynamicEEBot
                                 string message = m.GetString(1);
                                 if (message[0] == '!')
                                 {
-                                    message = message.Replace("!", "");
+                                    message = message.TrimStart('!');
                                     if (playerList.ContainsKey(player))
                                         subBotHandler.onCommand(sender, message, playerList[player], this);
                                 }

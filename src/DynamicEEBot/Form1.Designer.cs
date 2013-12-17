@@ -59,9 +59,13 @@
             this.nudTaskAbortLimit = new System.Windows.Forms.NumericUpDown();
             this.nudTaskTimeLimit = new System.Windows.Forms.NumericUpDown();
             this.lbTasks = new System.Windows.Forms.ListBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.btnRemoveEmail = new System.Windows.Forms.Button();
+            this.btnRemoveServer = new System.Windows.Forms.Button();
+            this.btnRemoveWorldId = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
             this.tabs.SuspendLayout();
             this.loginTab.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -96,20 +100,20 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 76);
+            this.label2.Location = new System.Drawing.Point(11, 76);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(73, 13);
+            this.label2.Size = new System.Drawing.Size(56, 13);
             this.label2.TabIndex = 14;
-            this.label2.Text = "EE Password:";
+            this.label2.Text = "Password:";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 49);
+            this.label1.Location = new System.Drawing.Point(11, 49);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 13);
+            this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 15;
-            this.label1.Text = "EE Email:";
+            this.label1.Text = "Email:";
             // 
             // loginButton
             // 
@@ -164,17 +168,17 @@
             this.groupBox3.Controls.Add(this.accessButton);
             this.groupBox3.Location = new System.Drawing.Point(8, 228);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(310, 100);
-            this.groupBox3.TabIndex = 20;
+            this.groupBox3.Size = new System.Drawing.Size(460, 100);
+            this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "groupBox3";
+            this.groupBox3.Text = "Code";
             // 
             // tbCode
             // 
             this.tbCode.Location = new System.Drawing.Point(47, 13);
             this.tbCode.Name = "tbCode";
             this.tbCode.Size = new System.Drawing.Size(100, 20);
-            this.tbCode.TabIndex = 18;
+            this.tbCode.TabIndex = 0;
             // 
             // accessButton
             // 
@@ -188,23 +192,25 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.btnRemoveWorldId);
             this.groupBox2.Controls.Add(this.btnAddWorldId);
             this.groupBox2.Controls.Add(this.cbWorldId);
             this.groupBox2.Controls.Add(this.connectButton);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Location = new System.Drawing.Point(8, 147);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(310, 75);
-            this.groupBox2.TabIndex = 19;
+            this.groupBox2.Size = new System.Drawing.Size(460, 75);
+            this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "groupBox2";
+            this.groupBox2.Text = "Connect";
             // 
             // btnAddWorldId
             // 
-            this.btnAddWorldId.Location = new System.Drawing.Point(191, 11);
+            this.btnAddWorldId.Location = new System.Drawing.Point(371, 11);
             this.btnAddWorldId.Name = "btnAddWorldId";
-            this.btnAddWorldId.Size = new System.Drawing.Size(75, 23);
+            this.btnAddWorldId.Size = new System.Drawing.Size(37, 23);
             this.btnAddWorldId.TabIndex = 23;
+            this.btnAddWorldId.TabStop = false;
             this.btnAddWorldId.Text = "Add";
             this.btnAddWorldId.UseVisualStyleBackColor = true;
             this.btnAddWorldId.Click += new System.EventHandler(this.btnAddWorldId_Click);
@@ -214,11 +220,13 @@
             this.cbWorldId.FormattingEnabled = true;
             this.cbWorldId.Location = new System.Drawing.Point(64, 13);
             this.cbWorldId.Name = "cbWorldId";
-            this.cbWorldId.Size = new System.Drawing.Size(121, 21);
-            this.cbWorldId.TabIndex = 17;
+            this.cbWorldId.Size = new System.Drawing.Size(301, 21);
+            this.cbWorldId.TabIndex = 0;
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnRemoveEmail);
+            this.groupBox1.Controls.Add(this.btnRemoveServer);
             this.groupBox1.Controls.Add(this.tbPassword);
             this.groupBox1.Controls.Add(this.btnAddEmail);
             this.groupBox1.Controls.Add(this.buttonAddServer);
@@ -230,35 +238,37 @@
             this.groupBox1.Controls.Add(this.loginButton);
             this.groupBox1.Location = new System.Drawing.Point(8, 8);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(310, 130);
-            this.groupBox1.TabIndex = 18;
+            this.groupBox1.Size = new System.Drawing.Size(460, 130);
+            this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Text = "Login";
             // 
             // tbPassword
             // 
             this.tbPassword.Location = new System.Drawing.Point(73, 73);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
-            this.tbPassword.Size = new System.Drawing.Size(121, 20);
-            this.tbPassword.TabIndex = 22;
+            this.tbPassword.Size = new System.Drawing.Size(292, 20);
+            this.tbPassword.TabIndex = 2;
             // 
             // btnAddEmail
             // 
-            this.btnAddEmail.Location = new System.Drawing.Point(200, 44);
+            this.btnAddEmail.Location = new System.Drawing.Point(371, 71);
             this.btnAddEmail.Name = "btnAddEmail";
-            this.btnAddEmail.Size = new System.Drawing.Size(75, 23);
+            this.btnAddEmail.Size = new System.Drawing.Size(37, 23);
             this.btnAddEmail.TabIndex = 21;
+            this.btnAddEmail.TabStop = false;
             this.btnAddEmail.Text = "Add";
             this.btnAddEmail.UseVisualStyleBackColor = true;
             this.btnAddEmail.Click += new System.EventHandler(this.btnAddEmail_Click);
             // 
             // buttonAddServer
             // 
-            this.buttonAddServer.Location = new System.Drawing.Point(200, 17);
+            this.buttonAddServer.Location = new System.Drawing.Point(371, 17);
             this.buttonAddServer.Name = "buttonAddServer";
-            this.buttonAddServer.Size = new System.Drawing.Size(75, 23);
+            this.buttonAddServer.Size = new System.Drawing.Size(37, 23);
             this.buttonAddServer.TabIndex = 20;
+            this.buttonAddServer.TabStop = false;
             this.buttonAddServer.Text = "Add";
             this.buttonAddServer.UseVisualStyleBackColor = true;
             this.buttonAddServer.Click += new System.EventHandler(this.buttonAddServer_Click);
@@ -266,19 +276,19 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 22);
+            this.label5.Location = new System.Drawing.Point(11, 22);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 13);
+            this.label5.Size = new System.Drawing.Size(41, 13);
             this.label5.TabIndex = 19;
-            this.label5.Text = "label5";
+            this.label5.Text = "Server:";
             // 
             // cbEmail
             // 
             this.cbEmail.FormattingEnabled = true;
             this.cbEmail.Location = new System.Drawing.Point(73, 46);
             this.cbEmail.Name = "cbEmail";
-            this.cbEmail.Size = new System.Drawing.Size(121, 21);
-            this.cbEmail.TabIndex = 17;
+            this.cbEmail.Size = new System.Drawing.Size(292, 21);
+            this.cbEmail.TabIndex = 1;
             this.cbEmail.SelectedIndexChanged += new System.EventHandler(this.cbEmail_SelectedIndexChanged);
             // 
             // cbServer
@@ -286,8 +296,9 @@
             this.cbServer.FormattingEnabled = true;
             this.cbServer.Location = new System.Drawing.Point(73, 19);
             this.cbServer.Name = "cbServer";
-            this.cbServer.Size = new System.Drawing.Size(121, 21);
-            this.cbServer.TabIndex = 16;
+            this.cbServer.Size = new System.Drawing.Size(292, 21);
+            this.cbServer.TabIndex = 0;
+            this.cbServer.TabStop = false;
             this.cbServer.Text = "everybody-edits-su9rn58o40itdbnw69plyw";
             // 
             // subbotsTab
@@ -322,7 +333,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(477, 336);
             this.tabPage1.TabIndex = 3;
-            this.tabPage1.Text = "Taks";
+            this.tabPage1.Text = "Tasks";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // label7
@@ -405,26 +416,21 @@
             this.lbTasks.Size = new System.Drawing.Size(233, 316);
             this.lbTasks.TabIndex = 0;
             // 
-            // timer1
-            // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 500;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label8);
             this.tabPage2.Controls.Add(this.numericUpDown1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(477, 336);
             this.tabPage2.TabIndex = 4;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "Room";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(8, 61);
+            this.numericUpDown1.Location = new System.Drawing.Point(78, 20);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -439,6 +445,54 @@
             0,
             0});
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 500;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // btnRemoveEmail
+            // 
+            this.btnRemoveEmail.Location = new System.Drawing.Point(414, 71);
+            this.btnRemoveEmail.Name = "btnRemoveEmail";
+            this.btnRemoveEmail.Size = new System.Drawing.Size(37, 23);
+            this.btnRemoveEmail.TabIndex = 24;
+            this.btnRemoveEmail.TabStop = false;
+            this.btnRemoveEmail.Text = "Del";
+            this.btnRemoveEmail.UseVisualStyleBackColor = true;
+            this.btnRemoveEmail.Click += new System.EventHandler(this.btnRemoveEmail_Click);
+            // 
+            // btnRemoveServer
+            // 
+            this.btnRemoveServer.Location = new System.Drawing.Point(414, 17);
+            this.btnRemoveServer.Name = "btnRemoveServer";
+            this.btnRemoveServer.Size = new System.Drawing.Size(37, 23);
+            this.btnRemoveServer.TabIndex = 23;
+            this.btnRemoveServer.TabStop = false;
+            this.btnRemoveServer.Text = "Del";
+            this.btnRemoveServer.UseVisualStyleBackColor = true;
+            this.btnRemoveServer.Click += new System.EventHandler(this.btnRemoveServer_Click);
+            // 
+            // btnRemoveWorldId
+            // 
+            this.btnRemoveWorldId.Location = new System.Drawing.Point(414, 11);
+            this.btnRemoveWorldId.Name = "btnRemoveWorldId";
+            this.btnRemoveWorldId.Size = new System.Drawing.Size(37, 23);
+            this.btnRemoveWorldId.TabIndex = 24;
+            this.btnRemoveWorldId.TabStop = false;
+            this.btnRemoveWorldId.Text = "Del";
+            this.btnRemoveWorldId.UseVisualStyleBackColor = true;
+            this.btnRemoveWorldId.Click += new System.EventHandler(this.btnRemoveWorldId_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(8, 22);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(64, 13);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "Drawspeed:";
             // 
             // Form1
             // 
@@ -464,6 +518,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudTaskAbortLimit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTaskTimeLimit)).EndInit();
             this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
@@ -504,6 +559,10 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Button btnRemoveWorldId;
+        private System.Windows.Forms.Button btnRemoveEmail;
+        private System.Windows.Forms.Button btnRemoveServer;
+        private System.Windows.Forms.Label label8;
     }
 }
 
