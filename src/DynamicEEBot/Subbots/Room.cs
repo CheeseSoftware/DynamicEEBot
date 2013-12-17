@@ -13,15 +13,12 @@ namespace DynamicEEBot
     {
         //public SafeDictionary<BlockPos, Block> blocksToPlace = new SafeDictionary<BlockPos, Block>();
 
-        private Thread drawRepairThread;
+        private Thread drawThread;
 
         List<Block>[][,] blockMap;
         Queue<Block> blockQueue;
         Queue<Block> blockRepairQueue;
         HashSet<Block> blockSet;
-
-        bool blockDrawerEnabled = false;
-
 
         public bool loadedWorld = false;
         private string owner;
@@ -32,8 +29,7 @@ namespace DynamicEEBot
         private int width;
         private int height;
         private string key;
-
-        int drawSleep = 8;
+        public int drawSleep = 5;
 
         public Room(Bot bot)
             : base(bot)
@@ -60,12 +56,16 @@ namespace DynamicEEBot
                 blockRepairQueue = null;
             lock (blockSet)
                 blockSet = null;
-            StopDrawerThread();
+            StopDrawThread();
         }
 
-        private void StopDrawerThread()
+        private void StopDrawThread()
         {
-            
+            if(drawThread != null)
+            {
+                if(drawThread.IsAlive)
+                    drawThread.Abort();
+            }
         }
 
         public override void onMessage(object sender, PlayerIOClient.Message m, Bot bot)
@@ -92,8 +92,9 @@ namespace DynamicEEBot
                         LoadMap(m, 18);
                         loadedWorld = true;
 
-                        //bool isOwner = m.GetBoolean(9);
-                        //if (isOwner)
+                        bool isOwner = m.GetBoolean(11);
+                        if (isOwner)
+                            StartDrawThread();
                     }
                     break;
                 case "reset":
@@ -110,7 +111,7 @@ namespace DynamicEEBot
                     break;
 
                 case "lostaccess":
-                    StopDrawerThread();
+                    StopDrawThread();
                     break;
 
                 case "b":
@@ -145,19 +146,16 @@ namespace DynamicEEBot
         private void StartDrawThread()
         {
             bot.connection.Send(key + "k", true);
-            if (!blockDrawerEnabled)
+            if (drawThread == null || !drawThread.IsAlive)
             {
-                blockDrawerEnabled = true;
                 Thread thread = new Thread(() =>
                 {
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();
-
                     while (bot.connected)
                     {
                         while (bot.hasCode)
                         {
-
                             lock (blockQueue)
                             {
                                 if (blockQueue.Count != 0)
@@ -209,15 +207,15 @@ namespace DynamicEEBot
                     }
                 });
 
-                drawRepairThread = thread;
-                thread.Start();
+                drawThread = thread;
+                drawThread.Start();
             }
         }
 
         public override void onDisconnect(object sender, string reason, Bot bot)
         {
             //blocksToPlace.Clear();
-            drawRepairThread.Abort();
+            StopDrawThread();
         }
 
         public override void onCommand(object sender, string text, string[] args, Player player, bool isBotMod, Bot bot)
@@ -230,20 +228,15 @@ namespace DynamicEEBot
                         bot.connection.Send("say", "Size: " + blockSet.Count);
                     }
                     break;
-                /*case "checkblock":
+                case "getplacer":
                     {
-                        Block b = blockMap[0, player.blockX, player.blockY].Last();
+                        Block b = blockMap[0][player.blockX, player.blockY].Last();
                         int id = -1;
                         if (b != null)
                             id = b.b_userId;
                         bot.connection.Send("say", "Block is placed by " + bot.playerList[id].name);
                     }
                     break;
-                case "pos":
-                    {
-                        bot.connection.Send("say", "Your position: X:" + player.blockX + " Y:" + player.blockY);
-                    }
-                    break;*/
             }
         }
 
@@ -254,12 +247,8 @@ namespace DynamicEEBot
 
         public Block getBlock(int layer, int x, int y, int rollbacks)
         {
-            while (blockMap == null)
+            while (blockMap == null || blockMap[layer] == null)
                 Thread.Sleep(100);
-
-            while (blockMap[layer] == null)
-                Thread.Sleep(100);
-
 
             if (x >= 0 && y >= 0 && x < width && y < height)
             {
@@ -299,7 +288,7 @@ namespace DynamicEEBot
 
         private void OnBlockDraw(Block b)
         {
-            while (blockMap[b.layer] == null)
+            while (blockMap == null || blockMap[b.layer] == null)
                 Thread.Sleep(50);
 
             lock (blockMap)

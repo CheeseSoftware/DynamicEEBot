@@ -59,6 +59,12 @@ namespace DynamicEEBot
                     case "clear":
                         bot.connection.Send("clear");
                         break;
+                    case "ping":
+                        bot.connection.Send("say", "Pong!");
+                        break;
+                    case "pos":
+                        bot.connection.Send("say", "Your position: X:" + player.blockX + " Y:" + player.blockY);
+                        break;
                 }
             }
         }
