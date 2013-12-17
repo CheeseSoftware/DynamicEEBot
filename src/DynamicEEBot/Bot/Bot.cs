@@ -24,12 +24,8 @@ namespace DynamicEEBot
             subBotHandler.AddSubBot(new Commands(this), this);
             subBotHandler.AddSubBot(new Zombies(this), this);
             subBotHandler.AddSubBot(new WorldEdit(this), this);
-<<<<<<< HEAD
-            subBotHandler.AddSubBot(new Dig(this), this);*/
-=======
             subBotHandler.AddSubBot(new Dig(this), this);
-            subBotHandler.AddSubBot(new MazeGenerator(this), this);
->>>>>>> 8106b37e68b2e762bb443c996d36bd5a49ad968d
+            subBotHandler.AddSubBot(new MazeGenerator(this), this);*/
         }
 
         protected override void OnMessage(object sender, PlayerIOClient.Message m)

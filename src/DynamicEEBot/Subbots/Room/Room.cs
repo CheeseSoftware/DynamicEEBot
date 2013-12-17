@@ -16,8 +16,8 @@ namespace DynamicEEBot.Subbots
         Queue<Block> blockRepairQueue;
         HashSet<Block> blockSet;
 
-        private Thread drawThread;
         public bool loadedWorld = false;
+        private Thread drawThread;
         private string owner;
         private string name;
         private int totalPlays;
@@ -26,7 +26,7 @@ namespace DynamicEEBot.Subbots
         private int width;
         private int height;
         private string key;
-        public int drawSleep = 5;
+        private int drawSleep = 5;
 
         public Room(Bot bot)
             : base(bot)
@@ -139,13 +139,11 @@ namespace DynamicEEBot.Subbots
         }
         #endregion
 
-<<<<<<< HEAD:src/DynamicEEBot/Subbots/Room/Room.cs
         #region block draw functions
         /// <summary>
         /// Körs när "b" tas emot och lägger blocket i blockmap
         /// </summary>
         /// <param name="b"></param>
-=======
         public Block getBotBlock(int layer, int x, int y)
         {
             if (x >= 0 && y >= 0 && x < width && y < height)
@@ -176,27 +174,6 @@ namespace DynamicEEBot.Subbots
             return Block.CreateBlock(layer, x, y, 0, -1);
         }
 
-        public void ResetMap()
-        {
-            lock (blockSet)
-                blockSet.Clear();//blocksToPlace.Clear();
-            for (int i = 0; i < 2; i++)
-            {
-                lock (blockMap)
-                {
-                    blockMap[i] = new List<Block>[width, height];
-                    for (int x = 0; x < width; x++)
-                    {
-                        for (int y = 0; y < height; y++)
-                        {
-                            blockMap[i][x, y] = new List<Block>();
-                        }
-                    }
-                }
-            }
-        }
-
->>>>>>> 8106b37e68b2e762bb443c996d36bd5a49ad968d:src/DynamicEEBot/Subbots/Room.cs
         private void OnBlockDraw(Block b)
         {
             while (blockMap == null || blockMap[b.layer] == null)

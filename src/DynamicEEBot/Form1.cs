@@ -266,7 +266,7 @@ namespace DynamicEEBot
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            bot.room.SetSleepTime((int)numericUpDown1.Value);
+            bot.room.DrawSleep = ((int)numericUpDown1.Value);
         }
 
         private void btnRemoveServer_Click(object sender, EventArgs e)
