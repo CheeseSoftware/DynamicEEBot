@@ -11,6 +11,11 @@ namespace DynamicEEBot
         public int x;
         public int y;
 
+        public int l
+        {
+            get { return layer; }
+        }
+
         public BlockPos(int layer, int x, int y)
         {
             this.layer = layer;

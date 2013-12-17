@@ -40,7 +40,9 @@ namespace DynamicEEBot
                     {
                         //if (updateTask.IsAlive)
                           //  this.updateTask.Suspend();
-                        updateTask.Dispose();
+                        if (BotUtility.isTaskRunning(updateTask))
+                            updateTask.Dispose();
+
                         this.onDisable(bot);
                         Console.WriteLine(this.GetType().Name + ".cs is disabled.");
                     }

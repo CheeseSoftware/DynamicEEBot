@@ -62,10 +62,13 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+<<<<<<< HEAD
             this.btnRemoveEmail = new System.Windows.Forms.Button();
             this.btnRemoveServer = new System.Windows.Forms.Button();
             this.btnRemoveWorldId = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
+=======
+>>>>>>> 9a1475213f0e1f6625a01c0714d29f53148c5bfb
             this.tabs.SuspendLayout();
             this.loginTab.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -141,11 +144,12 @@
             this.tabs.Controls.Add(this.subbotsTab);
             this.tabs.Controls.Add(this.tabPage1);
             this.tabs.Controls.Add(this.tabPage2);
+            this.tabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabs.Location = new System.Drawing.Point(0, 0);
             this.tabs.Multiline = true;
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
-            this.tabs.Size = new System.Drawing.Size(485, 362);
+            this.tabs.Size = new System.Drawing.Size(484, 362);
             this.tabs.TabIndex = 17;
             // 
             // loginTab
@@ -156,7 +160,7 @@
             this.loginTab.Location = new System.Drawing.Point(4, 22);
             this.loginTab.Name = "loginTab";
             this.loginTab.Padding = new System.Windows.Forms.Padding(3);
-            this.loginTab.Size = new System.Drawing.Size(477, 336);
+            this.loginTab.Size = new System.Drawing.Size(476, 336);
             this.loginTab.TabIndex = 1;
             this.loginTab.Text = "Login";
             this.loginTab.UseVisualStyleBackColor = true;
@@ -452,6 +456,7 @@
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+<<<<<<< HEAD
             // btnRemoveEmail
             // 
             this.btnRemoveEmail.Location = new System.Drawing.Point(414, 71);
@@ -494,6 +499,8 @@
             this.label8.TabIndex = 1;
             this.label8.Text = "Drawspeed:";
             // 
+=======
+>>>>>>> 9a1475213f0e1f6625a01c0714d29f53148c5bfb
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

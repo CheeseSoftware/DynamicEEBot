@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DynamicEEBot
 {
@@ -40,5 +42,14 @@ namespace DynamicEEBot
             }
             return str;
         }
+
+        public static bool isTaskRunning(Task task)
+        {
+            return (task.IsCompleted == false
+                || task.Status == TaskStatus.Running
+                || task.Status == TaskStatus.WaitingToRun
+                || task.Status == TaskStatus.WaitingForActivation);
+        }
+
     }
 }
