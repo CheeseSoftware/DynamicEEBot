@@ -120,7 +120,7 @@ namespace DynamicEEBot
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-            if (bot.Login(cbEmail.Text.Split('#').First(), tbPassword.Text.Split('#').First()))
+            if (bot.Login(cbEmail.Text.Split('#').First(), tbPassword.Text))
                 loginButton.Enabled = false;
             else
                 loginButton.Text = "Login failed";
@@ -216,7 +216,7 @@ namespace DynamicEEBot
                 {
                     if (o.stopwatch.ElapsedMilliseconds / 1000 > nudTaskAbortLimit.Value)
                     {
-                        if (o.task.IsCompleted == false || o.task.Status == TaskStatus.Running || o.task.Status == TaskStatus.WaitingToRun || o.task.Status == TaskStatus.WaitingForActivation)
+                        if (BotUtility.isTaskRunning(o.task))//(o.task.IsCompleted == false || o.task.Status == TaskStatus.Running || o.task.Status == TaskStatus.WaitingToRun || o.task.Status == TaskStatus.WaitingForActivation)
                         {
                             o.task.Dispose();
                         }

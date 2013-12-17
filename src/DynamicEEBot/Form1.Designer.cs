@@ -59,9 +59,9 @@
             this.nudTaskAbortLimit = new System.Windows.Forms.NumericUpDown();
             this.nudTaskTimeLimit = new System.Windows.Forms.NumericUpDown();
             this.lbTasks = new System.Windows.Forms.ListBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabs.SuspendLayout();
             this.loginTab.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -137,11 +137,12 @@
             this.tabs.Controls.Add(this.subbotsTab);
             this.tabs.Controls.Add(this.tabPage1);
             this.tabs.Controls.Add(this.tabPage2);
+            this.tabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabs.Location = new System.Drawing.Point(0, 0);
             this.tabs.Multiline = true;
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
-            this.tabs.Size = new System.Drawing.Size(485, 362);
+            this.tabs.Size = new System.Drawing.Size(484, 362);
             this.tabs.TabIndex = 17;
             // 
             // loginTab
@@ -152,7 +153,7 @@
             this.loginTab.Location = new System.Drawing.Point(4, 22);
             this.loginTab.Name = "loginTab";
             this.loginTab.Padding = new System.Windows.Forms.Padding(3);
-            this.loginTab.Size = new System.Drawing.Size(477, 336);
+            this.loginTab.Size = new System.Drawing.Size(476, 336);
             this.loginTab.TabIndex = 1;
             this.loginTab.Text = "Login";
             this.loginTab.UseVisualStyleBackColor = true;
@@ -405,12 +406,6 @@
             this.lbTasks.Size = new System.Drawing.Size(233, 316);
             this.lbTasks.TabIndex = 0;
             // 
-            // timer1
-            // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 500;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.numericUpDown1);
@@ -439,6 +434,12 @@
             0,
             0});
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 500;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 

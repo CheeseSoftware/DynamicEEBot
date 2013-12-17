@@ -8,7 +8,7 @@ namespace DynamicEEBot.SubBots
 {
     public class SubBotHandler
     {
-        private Dictionary<string, SubBot> SubBots = new Dictionary<string, SubBot>();
+        private SafeDictionary<string, SubBot> SubBots = new SafeDictionary<string, SubBot>();
 
         private Queue<TaskData> tasks = new Queue<TaskData>();
 
@@ -69,18 +69,18 @@ namespace DynamicEEBot.SubBots
         {
             //lock (SubBots)
             {
-                foreach (var pair in SubBots)
+                foreach (SubBot o in SubBots.Values)
                 {
-                    if (pair.Value != null && pair.Value.enabled)
+                    if (o != null && o.enabled)
                     {
                         //Task task = new Task(() =>//new Thread(() =>
                         //{
-                            pair.Value.onMessage(sender, m, bot);
+                            o.onMessage(sender, m, bot);
 //                        });
 
                         lock (tasks)
                         {
-                            //tasks.Enqueue(new TaskData(pair.Value.GetType().ToString(), task, new SubBots.OnMessage(m)));
+                            //tasks.Enqueue(new TaskData(o.GetType().ToString(), task, new SubBots.OnMessage(m)));
                         }
 
                         //task.Start();
@@ -95,25 +95,28 @@ namespace DynamicEEBot.SubBots
             {
                 while (tasks.Count > 0)
                 {
-                    tasks.Dequeue().task.Dispose();
+                    Task task = tasks.Dequeue().task;
+
+                    if (BotUtility.isTaskRunning(task))
+                        task.Dispose();
                 }
             }
 
             lock (SubBots)
             {
-                foreach (var pair in SubBots)
+                foreach (SubBot o in SubBots.Values)
                 {
-                    if (pair.Value != null)
+                    if (o != null)
                     {
                         //Task task = new Task(() =>
                         //{
-                            pair.Value.onDisconnect(sender, reason, bot);
-                            pair.Value.onDisable(bot);
+                            o.onDisconnect(sender, reason, bot);
+                            o.onDisable(bot);
                         //});
 
                         lock (tasks)
                         {
-                            //tasks.Enqueue(new TaskData(pair.Value.GetType().ToString(), task, new SubBots.OnDisconnect(reason)));
+                            //tasks.Enqueue(new TaskData(o.GetType().ToString(), task, new SubBots.OnDisconnect(reason)));
                         }
 
                         //task.Start();
@@ -140,18 +143,18 @@ namespace DynamicEEBot.SubBots
 
             lock (SubBots)
             {
-                foreach (var pair in SubBots)
+                foreach (SubBot o in SubBots.Values)
                 {
-                    if (pair.Value != null && pair.Value.enabled)
+                    if (o != null && o.enabled)
                     {
                         //Task task = new Task(() =>//new Thread(() =>
                         //{
-                            pair.Value.onCommand(sender, text, args, player, isBotMod, bot);
+                            o.onCommand(sender, text, args, player, isBotMod, bot);
                         //});
 
                         lock (tasks)
                         {
-                            //tasks.Enqueue(new TaskData(pair.Value.GetType().ToString(), task, new SubBots.OnCommand(text, player.id, player)));
+                            //tasks.Enqueue(new TaskData(o.GetType().ToString(), task, new SubBots.OnCommand(text, player.id, player)));
                         }
 
                         //task.Start();
