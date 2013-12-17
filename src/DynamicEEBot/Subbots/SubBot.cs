@@ -33,9 +33,16 @@ namespace DynamicEEBot
                     if (value)
                     {
                         this.onEnable(bot);
+<<<<<<< HEAD
                         if (updateTask == null || updateTask.IsCanceled || updateTask.IsCompleted || updateTask.IsFaulted)
                             updateTask = new Task(updateTaskWork);
                         updateTask.Start();
+=======
+
+                        if (!BotUtility.isTaskRunning(updateTask))
+                            updateTask.Start();
+
+>>>>>>> ae3228f5f7d07a6cb7994f060e0d0125fb6e9ee9
                         Console.WriteLine(this.GetType().Name + ".cs is enabled.");
                     }
                     else
