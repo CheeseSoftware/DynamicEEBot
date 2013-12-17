@@ -336,7 +336,7 @@ namespace DynamicEEBot
                     {
                         if (b == b2)
                         {
-                           // return;
+                           return;
                         }
                         else if (b2.layer == b.layer && b2.x == b.x && b2.y == b.y)
                         {
