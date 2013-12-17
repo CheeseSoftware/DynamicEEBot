@@ -124,11 +124,7 @@ namespace DynamicEEBot
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-<<<<<<< HEAD
             if (bot.Login(cbEmail.Text.Split('#').First(), tbPassword.Text.Split('#').First(), cbServer.Text.Split('#').First()))
-=======
-            if (bot.Login(cbEmail.Text.Split('#').First(), tbPassword.Text))
->>>>>>> 9a1475213f0e1f6625a01c0714d29f53148c5bfb
                 loginButton.Enabled = false;
             else
                 loginButton.Text = "Login failed";
