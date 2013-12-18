@@ -431,12 +431,10 @@ namespace DynamicEEBot
 
         public override void onEnable(Bot bot)
         {
-            throw new NotImplementedException();
         }
 
         public override void onDisable(Bot bot)
         {
-            throw new NotImplementedException();
         }
     }
 }

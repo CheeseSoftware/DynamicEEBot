@@ -132,12 +132,21 @@ namespace DynamicEEBot
             {
                 i = 0;
             }
+            else if (blockType == "pt")
+            {
+                dataArray = new object[m.Count + 1];
+                dataArray[0] = 0;
+                for (int j = 0; j < m.Count; j++)
+                {
+                    dataArray[j + 1] = toObject(m, (uint)(j));
+                }
+                return;
+            }
             else
             {
                 i = 1;
                 dataArray[0] = 0;
             }
-
             for (int j = i; j < m.Count; j++)
             {
                 dataArray[j] = toObject(m, (uint)(j));

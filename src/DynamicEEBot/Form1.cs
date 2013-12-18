@@ -22,6 +22,11 @@ namespace DynamicEEBot
         {
             InitializeComponent();
             bot = new Bot(this);
+
+            this.IsMdiContainer = true;
+            MdiForm mdi = new MdiForm();
+            mdi.MdiParent = this;
+            mdi.Show();
         }
 
         private void SaveData()

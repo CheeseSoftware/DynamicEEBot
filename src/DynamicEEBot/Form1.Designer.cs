@@ -41,9 +41,12 @@
             this.tbCode = new System.Windows.Forms.TextBox();
             this.accessButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnRemoveWorldId = new System.Windows.Forms.Button();
             this.btnAddWorldId = new System.Windows.Forms.Button();
             this.cbWorldId = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnRemoveEmail = new System.Windows.Forms.Button();
+            this.btnRemoveServer = new System.Windows.Forms.Button();
             this.tbPassword = new System.Windows.Forms.TextBox();
             this.btnAddEmail = new System.Windows.Forms.Button();
             this.buttonAddServer = new System.Windows.Forms.Button();
@@ -60,12 +63,9 @@
             this.nudTaskTimeLimit = new System.Windows.Forms.NumericUpDown();
             this.lbTasks = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label8 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.btnRemoveEmail = new System.Windows.Forms.Button();
-            this.btnRemoveServer = new System.Windows.Forms.Button();
-            this.btnRemoveWorldId = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
             this.tabs.SuspendLayout();
             this.loginTab.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -205,6 +205,17 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Connect";
             // 
+            // btnRemoveWorldId
+            // 
+            this.btnRemoveWorldId.Location = new System.Drawing.Point(414, 11);
+            this.btnRemoveWorldId.Name = "btnRemoveWorldId";
+            this.btnRemoveWorldId.Size = new System.Drawing.Size(37, 23);
+            this.btnRemoveWorldId.TabIndex = 24;
+            this.btnRemoveWorldId.TabStop = false;
+            this.btnRemoveWorldId.Text = "Del";
+            this.btnRemoveWorldId.UseVisualStyleBackColor = true;
+            this.btnRemoveWorldId.Click += new System.EventHandler(this.btnRemoveWorldId_Click);
+            // 
             // btnAddWorldId
             // 
             this.btnAddWorldId.Location = new System.Drawing.Point(371, 11);
@@ -243,6 +254,28 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Login";
+            // 
+            // btnRemoveEmail
+            // 
+            this.btnRemoveEmail.Location = new System.Drawing.Point(414, 71);
+            this.btnRemoveEmail.Name = "btnRemoveEmail";
+            this.btnRemoveEmail.Size = new System.Drawing.Size(37, 23);
+            this.btnRemoveEmail.TabIndex = 24;
+            this.btnRemoveEmail.TabStop = false;
+            this.btnRemoveEmail.Text = "Del";
+            this.btnRemoveEmail.UseVisualStyleBackColor = true;
+            this.btnRemoveEmail.Click += new System.EventHandler(this.btnRemoveEmail_Click);
+            // 
+            // btnRemoveServer
+            // 
+            this.btnRemoveServer.Location = new System.Drawing.Point(414, 17);
+            this.btnRemoveServer.Name = "btnRemoveServer";
+            this.btnRemoveServer.Size = new System.Drawing.Size(37, 23);
+            this.btnRemoveServer.TabIndex = 23;
+            this.btnRemoveServer.TabStop = false;
+            this.btnRemoveServer.Text = "Del";
+            this.btnRemoveServer.UseVisualStyleBackColor = true;
+            this.btnRemoveServer.Click += new System.EventHandler(this.btnRemoveServer_Click);
             // 
             // tbPassword
             // 
@@ -295,12 +328,13 @@
             // cbServer
             // 
             this.cbServer.FormattingEnabled = true;
+            this.cbServer.Items.AddRange(new object[] {
+            "everybody-edits-su9rn58o40itdbnw69plyw"});
             this.cbServer.Location = new System.Drawing.Point(73, 19);
             this.cbServer.Name = "cbServer";
             this.cbServer.Size = new System.Drawing.Size(292, 21);
             this.cbServer.TabIndex = 0;
             this.cbServer.TabStop = false;
-            this.cbServer.Items.Add("everybody-edits-su9rn58o40itdbnw69plyw");
             this.cbServer.Text = "everybody-edits-su9rn58o40itdbnw69plyw";
             // 
             // subbotsTab
@@ -308,7 +342,7 @@
             this.subbotsTab.Controls.Add(this.subbotCheckedListBox);
             this.subbotsTab.Location = new System.Drawing.Point(4, 22);
             this.subbotsTab.Name = "subbotsTab";
-            this.subbotsTab.Size = new System.Drawing.Size(477, 336);
+            this.subbotsTab.Size = new System.Drawing.Size(473, 336);
             this.subbotsTab.TabIndex = 2;
             this.subbotsTab.Text = "Bot systems";
             this.subbotsTab.UseVisualStyleBackColor = true;
@@ -333,7 +367,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(477, 336);
+            this.tabPage1.Size = new System.Drawing.Size(473, 336);
             this.tabPage1.TabIndex = 3;
             this.tabPage1.Text = "Tasks";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -425,10 +459,19 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(477, 336);
+            this.tabPage2.Size = new System.Drawing.Size(473, 336);
             this.tabPage2.TabIndex = 4;
             this.tabPage2.Text = "Room";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(8, 22);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(64, 13);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "Drawspeed:";
             // 
             // numericUpDown1
             // 
@@ -453,48 +496,6 @@
             this.timer1.Enabled = true;
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // btnRemoveEmail
-            // 
-            this.btnRemoveEmail.Location = new System.Drawing.Point(414, 71);
-            this.btnRemoveEmail.Name = "btnRemoveEmail";
-            this.btnRemoveEmail.Size = new System.Drawing.Size(37, 23);
-            this.btnRemoveEmail.TabIndex = 24;
-            this.btnRemoveEmail.TabStop = false;
-            this.btnRemoveEmail.Text = "Del";
-            this.btnRemoveEmail.UseVisualStyleBackColor = true;
-            this.btnRemoveEmail.Click += new System.EventHandler(this.btnRemoveEmail_Click);
-            // 
-            // btnRemoveServer
-            // 
-            this.btnRemoveServer.Location = new System.Drawing.Point(414, 17);
-            this.btnRemoveServer.Name = "btnRemoveServer";
-            this.btnRemoveServer.Size = new System.Drawing.Size(37, 23);
-            this.btnRemoveServer.TabIndex = 23;
-            this.btnRemoveServer.TabStop = false;
-            this.btnRemoveServer.Text = "Del";
-            this.btnRemoveServer.UseVisualStyleBackColor = true;
-            this.btnRemoveServer.Click += new System.EventHandler(this.btnRemoveServer_Click);
-            // 
-            // btnRemoveWorldId
-            // 
-            this.btnRemoveWorldId.Location = new System.Drawing.Point(414, 11);
-            this.btnRemoveWorldId.Name = "btnRemoveWorldId";
-            this.btnRemoveWorldId.Size = new System.Drawing.Size(37, 23);
-            this.btnRemoveWorldId.TabIndex = 24;
-            this.btnRemoveWorldId.TabStop = false;
-            this.btnRemoveWorldId.Text = "Del";
-            this.btnRemoveWorldId.UseVisualStyleBackColor = true;
-            this.btnRemoveWorldId.Click += new System.EventHandler(this.btnRemoveWorldId_Click);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 22);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(64, 13);
-            this.label8.TabIndex = 1;
-            this.label8.Text = "Drawspeed:";
             // 
             // Form1
             // 

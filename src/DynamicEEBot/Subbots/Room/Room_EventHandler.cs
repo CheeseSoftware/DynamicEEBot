@@ -118,11 +118,19 @@ namespace DynamicEEBot.Subbots
                     break;
                 case "getplacer":
                     {
-                        Block b = blockMap[0][player.blockX, player.blockY].Last();
-                        int id = -1;
-                        if (b != null)
-                            id = b.b_userId;
-                        bot.connection.Send("say", "Block is placed by " + bot.playerList[id].name);
+                        if (blockMap[0][player.blockX, player.blockY].Count > 0)
+                        {
+                            Block b = blockMap[0][player.blockX, player.blockY].Last();
+                            int id = -1;
+                            if (b != null)
+                                id = b.b_userId;
+                            if(id != -1 && bot.playerList.ContainsKey(id))
+                                bot.connection.Send("say", "Block is placed by " + bot.playerList[id].name);
+                            else
+                                bot.connection.Send("say", "Block is placed by undefined/server");
+                        }
+                        else
+                            bot.connection.Send("say", "There is no block there.");
                     }
                     break;
             }
