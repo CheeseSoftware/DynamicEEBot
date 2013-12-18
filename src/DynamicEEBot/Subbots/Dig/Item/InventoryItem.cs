@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DynamicEEBot.Subbots.Dig.Item
+namespace DynamicEEBot.SubBots.Dig.Item
 {
     [Serializable]
-    public abstract class InventoryItem : Subbots.Dig.Item.IShopItem
+    public abstract class InventoryItem : SubBots.Dig.Item.IShopItem
     {
         private object[] data;
 

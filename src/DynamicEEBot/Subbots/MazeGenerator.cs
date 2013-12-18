@@ -8,6 +8,7 @@ namespace DynamicEEBot
     class MazeGenerator : SubBot
     {
         BlockPos[] moves = new BlockPos[] { new BlockPos(0, -1, 0), new BlockPos(0, 1, 0), new BlockPos(0, 0, -1), new BlockPos(0, 0, 1) };
+        private System.Windows.Forms.Button button1;
 
         Random random = new Random();
 
@@ -74,6 +75,11 @@ namespace DynamicEEBot
         public override void Update(Bot bot)
         {
 
+        }
+
+        public override bool HasForm
+        {
+            get { return false; }
         }
     }
 }

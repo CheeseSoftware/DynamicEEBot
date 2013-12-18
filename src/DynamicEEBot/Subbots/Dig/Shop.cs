@@ -1,5 +1,5 @@
-﻿using DynamicEEBot.Subbots.Dig;
-using DynamicEEBot.Subbots.Dig.Item;
+﻿using DynamicEEBot.SubBots.Dig;
+using DynamicEEBot.SubBots.Dig.Item;
 using System;
 using System.Collections.Generic;
 using System.IO;

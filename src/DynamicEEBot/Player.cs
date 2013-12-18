@@ -1,4 +1,4 @@
-﻿using DynamicEEBot.Subbots.Dig.Item;
+﻿using DynamicEEBot.SubBots.Dig.Item;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

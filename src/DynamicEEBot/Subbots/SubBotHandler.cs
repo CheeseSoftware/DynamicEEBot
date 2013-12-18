@@ -3,41 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace DynamicEEBot.SubBots
 {
     public class SubBotHandler
     {
-        private SafeDictionary<string, SubBot> SubBots = new SafeDictionary<string, SubBot>();
+        private SafeDictionary<string, SubBot> subBots = new SafeDictionary<string, SubBot>();
+        private SafeDictionary<string, TabPage> subBotTabPages = new SafeDictionary<string, TabPage>();
 
         private Queue<TaskData> tasks = new Queue<TaskData>();
 
         public SubBot getSubBot(string name)
         {
-            lock (SubBots)
+            lock (subBots)
             {
-                if (SubBots.ContainsKey(name))
-                    return SubBots[name];
+                if (subBots.ContainsKey(name))
+                    return subBots[name];
                 else
                     return null;
             }
         }
 
-        public void AddSubBot(SubBot SubBot, Bot bot)
+        public void AddSubBot(SubBot subBot, Bot bot)
         {
-            lock (SubBots)
+            lock (subBots)
             {
-                SubBots.Add(SubBot.GetType().ToString(), SubBot);
+                subBots.Add(subBot.ToString(), subBot);
             }
-            bot.form.subbotCheckedListBox.Items.Add(SubBot);
-            SubBot.id = bot.form.subbotCheckedListBox.Items.Count - 1;
-            bot.form.subbotCheckedListBox.SetItemChecked(SubBot.id, SubBot.enabled);
+            bot.form.subbotCheckedListBox.Items.Add(subBot);
+            subBot.id = bot.form.subbotCheckedListBox.Items.Count - 1;
+            bot.form.subbotCheckedListBox.SetItemChecked(subBot.id, subBot.Enabled);
+            if (subBot.HasForm)
+            {
+                subBot.Form.TopLevel = false;
+                subBot.Form.Parent = bot.form;
+                subBot.Form.Location = new System.Drawing.Point(50, 50);
+            }
         }
 
-        public void RemoveSubBot(SubBot SubBot)
+        public void RemoveSubBot(SubBot subBot, Bot bot)
         {
-            lock (SubBots)
-                SubBots.Remove(SubBot.GetType().ToString());
+            lock (subBots)
+            {
+                subBots.Remove(subBot.ToString());
+            }
         }
 
         public List<TaskData> Update(int seconds)
@@ -67,23 +77,13 @@ namespace DynamicEEBot.SubBots
 
         public void onMessage(object sender, PlayerIOClient.Message m, Bot bot)
         {
-            //lock (SubBots)
+            //lock (subBots)
             {
-                foreach (SubBot o in SubBots.Values)
+                foreach (SubBot o in subBots.Values)
                 {
-                    if (o != null && o.enabled)
+                    if (o != null && o.Enabled)
                     {
-                        //Task task = new Task(() =>//new Thread(() =>
-                        //{
                         o.onMessage(sender, m, bot);
-                        //                        });
-
-                        lock (tasks)
-                        {
-                            //tasks.Enqueue(new TaskData(o.GetType().ToString(), task, new SubBots.OnMessage(m)));
-                        }
-
-                        //task.Start();
                     }
                 }
             }
@@ -101,19 +101,24 @@ namespace DynamicEEBot.SubBots
                         task.Dispose();
                 }
             }
-            lock (SubBots)
+            lock (subBots)
             {
-                foreach (SubBot o in SubBots.Values)
+                foreach (SubBot o in subBots.Values)
                 {
                     if (o != null)
                     {
                         o.onDisconnect(sender, reason, bot);
                         o.onDisable(bot);
+                        bot.form.Invoke(new Action(() =>
+                        {
+                            if (o.HasForm)
+                                o.Form.Close();
+                        }));
                     }
                 }
 
                 System.Threading.Thread.Sleep(500);
-                SubBots.Clear();
+                subBots.Clear();
                 bot.form.Invoke(new Action(() =>
                     bot.form.subbotCheckedListBox.Items.Clear()
                     ));
@@ -128,25 +133,37 @@ namespace DynamicEEBot.SubBots
             string name = player.name;
             bool isBotMod = (name == "ostkaka" || name == "botost" || name == "gustav9797" || name == "gbot" || player.ismod || player.id == -1);
 
-            lock (SubBots)
+            lock (subBots)
             {
-                foreach (SubBot o in SubBots.Values)
+                foreach (SubBot o in subBots.Values)
                 {
-                    if (o != null && o.enabled)
+                    if (o != null && o.Enabled)
                     {
-                        //Task task = new Task(() =>//new Thread(() =>
-                        //{
                         o.onCommand(sender, text, args, player, isBotMod, bot);
-                        //});
-
-                        lock (tasks)
-                        {
-                            //tasks.Enqueue(new TaskData(o.GetType().ToString(), task, new SubBots.OnCommand(text, player.id, player)));
-                        }
-
-                        //task.Start();
                     }
                 }
+            }
+        }
+
+        public void ShowAllForms(Bot bot)
+        {
+            foreach (SubBot subBot in subBots.Values)
+            {
+                if (subBot.HasForm)
+                {
+                    subBot.Form.Show();
+                    subBot.Form.BringToFront();
+                    subBot.Form.Focus();
+                }
+            }
+        }
+
+        public void HideAllForms(Bot bot)
+        {
+            foreach (SubBot subBot in subBots.Values)
+            {
+                if (subBot.HasForm)
+                    subBot.Form.Hide();
             }
         }
     }

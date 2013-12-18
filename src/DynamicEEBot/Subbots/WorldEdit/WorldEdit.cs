@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace DynamicEEBot.Subbots.WorldEdit
+namespace DynamicEEBot.SubBots.WorldEdit
 {
     class WorldEdit : SubBot
     {
@@ -16,7 +16,7 @@ namespace DynamicEEBot.Subbots.WorldEdit
         public WorldEdit(Bot bot)
             : base(bot)
         {
-            enabled = true;
+            Enabled = true;
         }
 
         public override void onMessage(object sender, PlayerIOClient.Message m, Bot bot)
@@ -325,6 +325,11 @@ namespace DynamicEEBot.Subbots.WorldEdit
         public override void Update(Bot bot)
         {
             //throw new NotImplementedException();
+        }
+
+        public override bool HasForm
+        {
+            get { return false; }
         }
     }
 }

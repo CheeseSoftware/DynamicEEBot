@@ -436,5 +436,10 @@ namespace DynamicEEBot
         public override void onDisable(Bot bot)
         {
         }
+
+        public override bool HasForm
+        {
+            get { return false; }
+        }
     }
 }

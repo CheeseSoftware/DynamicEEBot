@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Graphics.Tools.Noise;
-using DynamicEEBot.Subbots.Dig.Item;
+using DynamicEEBot.SubBots.Dig.Item;
 using System.Diagnostics;
 
-namespace DynamicEEBot.Subbots.Dig
+namespace DynamicEEBot.SubBots.Dig
 {
     public partial class Dig : SubBot
     {
@@ -188,6 +188,11 @@ namespace DynamicEEBot.Subbots.Dig
                 if (Shop.shopInventory.ContainsKey(DigBlockMap.blockTranslator[blockId].GetName()))
                     digHardness[x, y] = Convert.ToInt32(Shop.shopInventory[DigBlockMap.blockTranslator[blockId].GetName()].GetDataAt(4));
             }
+        }
+
+        public override bool HasForm
+        {
+            get { return false; }
         }
     }
 }

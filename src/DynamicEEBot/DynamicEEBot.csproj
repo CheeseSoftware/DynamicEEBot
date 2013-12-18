@@ -58,14 +58,15 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractFormDescriptionProvider.cs" />
     <Compile Include="MdiForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MdiForm.Designer.cs">
       <DependentUpon>MdiForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Subbots\Room\Block.cs" />
-    <Compile Include="Subbots\Room\BlockPos.cs" />
+    <Compile Include="SubBots\Room\Block.cs" />
+    <Compile Include="SubBots\Room\BlockPos.cs" />
     <Compile Include="BotUtility.cs" />
     <Compile Include="Bot\Bot.cs" />
     <Compile Include="Form1.cs">
@@ -79,54 +80,63 @@
     <Compile Include="Methods\OnCommand.cs" />
     <Compile Include="Methods\OnDisconnect.cs" />
     <Compile Include="Methods\OnMessage.cs" />
-    <Compile Include="Subbots\Room\Room_EventHandler.cs" />
-    <Compile Include="Subbots\WorldEdit\Brush.cs" />
-    <Compile Include="Subbots\WorldEdit\RandomBrush.cs" />
-    <Compile Include="Subbots\WorldEdit\SolidBrush.cs" />
-    <Compile Include="Subbots\Zombies\Monster.cs" />
+    <Compile Include="SubBots\Room\Room_EventHandler.cs" />
+    <Compile Include="SubBots\Room\Room_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubBots\Room\Room_Form.Designer.cs">
+      <DependentUpon>Room_Form.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SubBots\SubBot.cs" />
+    <Compile Include="SubBots\SubBot.Designer.cs">
+      <DependentUpon>SubBot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SubBots\WorldEdit\Brush.cs" />
+    <Compile Include="SubBots\WorldEdit\RandomBrush.cs" />
+    <Compile Include="SubBots\WorldEdit\SolidBrush.cs" />
+    <Compile Include="SubBots\Zombies\Monster.cs" />
     <Compile Include="Movement\BlObject.cs" />
     <Compile Include="Movement\Config.cs" />
     <Compile Include="Movement\ItemId.cs" />
     <Compile Include="Movement\PhysicsPlayer.cs" />
     <Compile Include="Movement\SynchronizedObject.cs" />
     <Compile Include="Movement\SynchronizedSprite.cs" />
-    <Compile Include="Subbots\Zombies\PathFinding.cs" />
+    <Compile Include="SubBots\Zombies\PathFinding.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="Subbots\Room\RoomData.cs" />
+    <Compile Include="SubBots\Room\RoomData.cs" />
     <Compile Include="SafeDictionary.cs" />
-    <Compile Include="Subbots\Commands.cs" />
-    <Compile Include="Subbots\Dig\Dig.cs" />
-    <Compile Include="Subbots\Dig\DigMap.cs" />
-    <Compile Include="Subbots\Dig\Dig_EventHandler.cs" />
-    <Compile Include="Subbots\Dig\Dig_Generator.cs" />
-    <Compile Include="Subbots\Dig\Item\BlockItem.cs" />
-    <Compile Include="Subbots\Dig\Item\IDestroyable.cs" />
-    <Compile Include="Subbots\Dig\Item\Inventory.cs" />
-    <Compile Include="Subbots\Dig\Item\InventoryItem.cs" />
-    <Compile Include="Subbots\Dig\Item\IShopItem.cs" />
-    <Compile Include="Subbots\Dig\Item\ItemType.cs" />
-    <Compile Include="Subbots\Dig\Pair.cs" />
-    <Compile Include="Subbots\Dig\Item\PickaxeItem.cs" />
-    <Compile Include="Subbots\Dig\Shop.cs" />
-    <Compile Include="Subbots\MazeGenerator.cs" />
-    <Compile Include="Subbots\PlayerPhysics.cs" />
+    <Compile Include="SubBots\Commands.cs" />
+    <Compile Include="SubBots\Dig\Dig.cs" />
+    <Compile Include="SubBots\Dig\DigMap.cs" />
+    <Compile Include="SubBots\Dig\Dig_EventHandler.cs" />
+    <Compile Include="SubBots\Dig\Dig_Generator.cs" />
+    <Compile Include="SubBots\Dig\Item\BlockItem.cs" />
+    <Compile Include="SubBots\Dig\Item\IDestroyable.cs" />
+    <Compile Include="SubBots\Dig\Item\Inventory.cs" />
+    <Compile Include="SubBots\Dig\Item\InventoryItem.cs" />
+    <Compile Include="SubBots\Dig\Item\IShopItem.cs" />
+    <Compile Include="SubBots\Dig\Item\ItemType.cs" />
+    <Compile Include="SubBots\Dig\Pair.cs" />
+    <Compile Include="SubBots\Dig\Item\PickaxeItem.cs" />
+    <Compile Include="SubBots\Dig\Shop.cs" />
+    <Compile Include="SubBots\MazeGenerator.cs" />
+    <Compile Include="SubBots\PlayerPhysics.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Subbots\Redstone\Denstinations\Destination.cs" />
-    <Compile Include="Subbots\Redstone\Denstinations\Door.cs" />
-    <Compile Include="Subbots\Redstone\Denstinations\Lamp.cs" />
-    <Compile Include="Subbots\Redstone\Denstinations\PowerSources\PowerSource.cs" />
-    <Compile Include="Subbots\Redstone\Denstinations\PowerSources\PressurePlate.cs" />
-    <Compile Include="Subbots\Redstone\Redstone.cs" />
-    <Compile Include="Subbots\Redstone\Denstinations\PowerSources\Torch.cs" />
-    <Compile Include="Subbots\Redstone\Wire.cs" />
-    <Compile Include="Subbots\Room\Room.cs" />
-    <Compile Include="Subbots\SubBot.cs" />
-    <Compile Include="Subbots\SubBotHandler.cs" />
-    <Compile Include="Subbots\TaskData.cs" />
-    <Compile Include="Subbots\Zombies\Zombies.cs" />
-    <Compile Include="Subbots\WorldEdit\WorldEdit.cs" />
-    <Compile Include="Subbots\Zombies\Zombie.cs" />
+    <Compile Include="SubBots\Redstone\Denstinations\Destination.cs" />
+    <Compile Include="SubBots\Redstone\Denstinations\Door.cs" />
+    <Compile Include="SubBots\Redstone\Denstinations\Lamp.cs" />
+    <Compile Include="SubBots\Redstone\Denstinations\PowerSources\PowerSource.cs" />
+    <Compile Include="SubBots\Redstone\Denstinations\PowerSources\PressurePlate.cs" />
+    <Compile Include="SubBots\Redstone\Redstone.cs" />
+    <Compile Include="SubBots\Redstone\Denstinations\PowerSources\Torch.cs" />
+    <Compile Include="SubBots\Redstone\Wire.cs" />
+    <Compile Include="SubBots\Room\Room.cs" />
+    <Compile Include="SubBots\SubBotHandler.cs" />
+    <Compile Include="SubBots\TaskData.cs" />
+    <Compile Include="SubBots\Zombies\Zombies.cs" />
+    <Compile Include="SubBots\WorldEdit\WorldEdit.cs" />
+    <Compile Include="SubBots\Zombies\Zombie.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using Graphics.Tools.Noise;
-using DynamicEEBot.Subbots.Dig.Item;
+using DynamicEEBot.SubBots.Dig.Item;
 using System.Drawing;
 
-namespace DynamicEEBot.Subbots.Dig
+namespace DynamicEEBot.SubBots.Dig
 {
     public partial class Dig : SubBot
     {

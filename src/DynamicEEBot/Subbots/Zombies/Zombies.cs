@@ -100,5 +100,10 @@ namespace DynamicEEBot
         {
 
         }
+
+        public override bool HasForm
+        {
+            get { return false; }
+        }
     }
 }

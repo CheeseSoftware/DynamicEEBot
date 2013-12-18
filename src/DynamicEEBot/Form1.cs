@@ -22,11 +22,7 @@ namespace DynamicEEBot
         {
             InitializeComponent();
             bot = new Bot(this);
-
-            this.IsMdiContainer = true;
-            MdiForm mdi = new MdiForm();
-            mdi.MdiParent = this;
-            mdi.Show();
+            //this.IsMdiContainer = true;
         }
 
         private void SaveData()
@@ -171,7 +167,7 @@ namespace DynamicEEBot
             for (int i = 0; i < subbotCheckedListBox.Items.Count; i++)
             {
                 var subBot = subbotCheckedListBox.Items[i] as SubBot;
-                subBot.enabled = subbotCheckedListBox.GetItemChecked(i);
+                subBot.Enabled = subbotCheckedListBox.GetItemChecked(i);
             }
         }
 
@@ -269,11 +265,6 @@ namespace DynamicEEBot
             }));
         }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-            bot.room.DrawSleep = ((int)numericUpDown1.Value);
-        }
-
         private void btnRemoveServer_Click(object sender, EventArgs e)
         {
             if (cbServer.Items.Contains(cbServer.Text))
@@ -306,5 +297,15 @@ namespace DynamicEEBot
             }
         }
 
+        private void tabs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TabControl t = (TabControl)sender;
+            if (t.SelectedTab.Text == "SubBots")
+            {
+                bot.subBotHandler.ShowAllForms(bot);
+            }
+            else
+                bot.subBotHandler.HideAllForms(bot);
+        }
     }
 }

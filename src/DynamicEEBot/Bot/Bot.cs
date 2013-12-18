@@ -1,6 +1,7 @@
-﻿using DynamicEEBot.Subbots;
-using DynamicEEBot.Subbots.Dig;
-using DynamicEEBot.Subbots.WorldEdit;
+﻿using DynamicEEBot.SubBots;
+using DynamicEEBot.SubBots.Dig;
+using DynamicEEBot.SubBots.WorldEdit;
+using DynamicEEBot.SubBots;
 using System;
 using System.Collections.Generic;
 using System.Linq;

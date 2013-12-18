@@ -1,11 +1,11 @@
-﻿using DynamicEEBot.Subbots.Dig.Item;
+﻿using DynamicEEBot.SubBots.Dig.Item;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DynamicEEBot.Subbots.Dig
+namespace DynamicEEBot.SubBots.Dig
 {
     public class DigBlockMap
     {

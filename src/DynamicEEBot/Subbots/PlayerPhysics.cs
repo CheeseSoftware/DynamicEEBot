@@ -13,7 +13,7 @@ namespace DynamicEEBot
         public PlayerPhysics(Bot bot)
             : base(bot)
         {
-            enabled = true;
+            Enabled = true;
             playerTickTimer.Start();
             UpdateSleep = 10;
         }
@@ -62,6 +62,11 @@ namespace DynamicEEBot
         public override void onDisable(Bot bot)
         {
 
+        }
+
+        public override bool HasForm
+        {
+            get { return false; }
         }
     }
 }

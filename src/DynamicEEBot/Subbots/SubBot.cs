@@ -1,26 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace DynamicEEBot
 {
-    public abstract class SubBot
+    //[TypeDescriptionProvider(typeof(AbstractFormDescriptionProvider<SubBot, Form>))]
+    public abstract class SubBot// : MdiForm
     {
+        private bool enabledValue;
         protected Bot bot;
         protected Task updateTask;
         protected int UpdateSleep = 4;
+        protected Form form;
         public int id = -1;
-        private bool enabledValue;
-        public bool enabled
+        public Form Form { get { return form; } }
+
+        public new bool Enabled
         {
             get { return enabledValue; }
             set
             {
-                if (value != enabled)
+                if (value != Enabled)
                 {
                     enabledValue = value;
                     if (id != -1)
@@ -37,23 +45,22 @@ namespace DynamicEEBot
                             updateTask = new Task(updateTaskWork);
                         if (!BotUtility.isTaskRunning(updateTask))
                             updateTask.Start();
-                        Console.WriteLine(this.GetType().Name + ".cs is enabled.");
+                        Console.WriteLine(this.GetType() + ".cs is enabled.");
                     }
                     else
                     {
-                        //if (updateTask.IsAlive)
-                          //  this.updateTask.Suspend();
-                        //if (BotUtility.isTaskRunning(updateTask))
-                        //    updateTask.Dispose();
+                        if (BotUtility.isTaskRunning(updateTask))
+                            updateTask.Dispose();
 
                         this.onDisable(bot);
-                        Console.WriteLine(this.GetType().Name + ".cs is disabled.");
+                        Console.WriteLine(this.GetType() + ".cs is disabled.");
                     }
                 }
             }
         }
 
         public SubBot(Bot bot)
+            : base()
         {
             this.bot = bot;
             updateTask = new Task(updateTaskWork);
@@ -67,7 +74,7 @@ namespace DynamicEEBot
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            while (enabled)
+            while (Enabled)
             {
                 Update(bot);
                 int time = (int)stopwatch.ElapsedMilliseconds;
@@ -83,10 +90,11 @@ namespace DynamicEEBot
         public abstract void onDisconnect(object sender, string reason, Bot bot);
         public abstract void onCommand(object sender, string text, string[] args, Player player, bool isBotMod, Bot bot);
         public abstract void Update(Bot bot);
+        public abstract bool HasForm { get; }
 
         public override string ToString()
         {
-            return this.GetType().Name;
+            return base.GetType().Name;
         }
     }
 }

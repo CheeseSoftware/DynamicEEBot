@@ -17,7 +17,7 @@ namespace DynamicEEBot
         public Commands(Bot bot)
             : base(bot)
         {
-            enabled = true;
+            Enabled = true;
         }
 
         public override void onMessage(object sender, PlayerIOClient.Message m, Bot bot)
@@ -82,6 +82,11 @@ namespace DynamicEEBot
         public override void Update(Bot bot)
         {
 
+        }
+
+        public override bool HasForm
+        {
+            get { return false; }
         }
     }
 }

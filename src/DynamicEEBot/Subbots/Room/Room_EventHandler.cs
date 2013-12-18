@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DynamicEEBot.Subbots
+namespace DynamicEEBot.SubBots
 {
-    partial class Room
+    public partial class Room : SubBot
     {
         public override void onEnable(Bot bot)
         {
@@ -124,7 +124,7 @@ namespace DynamicEEBot.Subbots
                             int id = -1;
                             if (b != null)
                                 id = b.b_userId;
-                            if(id != -1 && bot.playerList.ContainsKey(id))
+                            if (id != -1 && bot.playerList.ContainsKey(id))
                                 bot.connection.Send("say", "Block is placed by " + bot.playerList[id].name);
                             else
                                 bot.connection.Send("say", "Block is placed by undefined/server");
@@ -141,6 +141,8 @@ namespace DynamicEEBot.Subbots
         {
 
         }
+
+        public override bool HasForm { get { return true; } }
 
     }
 }

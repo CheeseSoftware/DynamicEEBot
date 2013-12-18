@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using PlayerIOClient;
 
-namespace DynamicEEBot.Subbots
+namespace DynamicEEBot.SubBots
 {
     public partial class Room : SubBot
     {
@@ -31,7 +31,8 @@ namespace DynamicEEBot.Subbots
         public Room(Bot bot)
             : base(bot)
         {
-            enabled = true;
+            form = new Room_Form();
+            Enabled = true;
         }
 
         #region draw functions

@@ -62,9 +62,7 @@
             this.nudTaskAbortLimit = new System.Windows.Forms.NumericUpDown();
             this.nudTaskTimeLimit = new System.Windows.Forms.NumericUpDown();
             this.lbTasks = new System.Windows.Forms.ListBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label8 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.subBotsTabPage = new System.Windows.Forms.TabPage();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabs.SuspendLayout();
             this.loginTab.SuspendLayout();
@@ -75,8 +73,6 @@
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTaskAbortLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTaskTimeLimit)).BeginInit();
-            this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // label4
@@ -140,7 +136,7 @@
             this.tabs.Controls.Add(this.loginTab);
             this.tabs.Controls.Add(this.subbotsTab);
             this.tabs.Controls.Add(this.tabPage1);
-            this.tabs.Controls.Add(this.tabPage2);
+            this.tabs.Controls.Add(this.subBotsTabPage);
             this.tabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabs.Location = new System.Drawing.Point(0, 0);
             this.tabs.Multiline = true;
@@ -148,6 +144,7 @@
             this.tabs.SelectedIndex = 0;
             this.tabs.Size = new System.Drawing.Size(484, 362);
             this.tabs.TabIndex = 17;
+            this.tabs.SelectedIndexChanged += new System.EventHandler(this.tabs_SelectedIndexChanged);
             // 
             // loginTab
             // 
@@ -342,7 +339,7 @@
             this.subbotsTab.Controls.Add(this.subbotCheckedListBox);
             this.subbotsTab.Location = new System.Drawing.Point(4, 22);
             this.subbotsTab.Name = "subbotsTab";
-            this.subbotsTab.Size = new System.Drawing.Size(473, 336);
+            this.subbotsTab.Size = new System.Drawing.Size(476, 336);
             this.subbotsTab.TabIndex = 2;
             this.subbotsTab.Text = "Bot systems";
             this.subbotsTab.UseVisualStyleBackColor = true;
@@ -367,7 +364,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(473, 336);
+            this.tabPage1.Size = new System.Drawing.Size(476, 336);
             this.tabPage1.TabIndex = 3;
             this.tabPage1.Text = "Tasks";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -452,44 +449,14 @@
             this.lbTasks.Size = new System.Drawing.Size(233, 316);
             this.lbTasks.TabIndex = 0;
             // 
-            // tabPage2
+            // subBotsTabPage
             // 
-            this.tabPage2.Controls.Add(this.label8);
-            this.tabPage2.Controls.Add(this.numericUpDown1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(473, 336);
-            this.tabPage2.TabIndex = 4;
-            this.tabPage2.Text = "Room";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 22);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(64, 13);
-            this.label8.TabIndex = 1;
-            this.label8.Text = "Drawspeed:";
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(78, 20);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown1.TabIndex = 0;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            this.subBotsTabPage.Location = new System.Drawing.Point(4, 22);
+            this.subBotsTabPage.Name = "subBotsTabPage";
+            this.subBotsTabPage.Size = new System.Drawing.Size(476, 336);
+            this.subBotsTabPage.TabIndex = 5;
+            this.subBotsTabPage.Text = "SubBots";
+            this.subBotsTabPage.UseVisualStyleBackColor = true;
             // 
             // timer1
             // 
@@ -520,9 +487,6 @@
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTaskAbortLimit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTaskTimeLimit)).EndInit();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -560,12 +524,10 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnAbortTask;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Button btnRemoveWorldId;
         private System.Windows.Forms.Button btnRemoveEmail;
         private System.Windows.Forms.Button btnRemoveServer;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TabPage subBotsTabPage;
     }
 }
 
