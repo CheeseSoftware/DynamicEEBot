@@ -128,33 +128,6 @@ namespace DynamicEEBot.SubBots
             return getBlock(layer, x, y, 0);
         }
 
-        public Block getBlock(int layer, int x, int y, int rollbacks)
-        {
-            while (blockMap == null || blockMap[layer] == null)
-                Thread.Sleep(100);
-
-            if (x >= 0 && y >= 0 && x < width && y < height)
-            {
-                lock (blockMap)
-                {
-                    if (blockMap[layer][x, y].Count > 0)
-                    {
-                        if (blockMap[layer][x, y].Count <= rollbacks)
-                            return Block.CreateBlock(layer, x, y, 0, -1);
-                        else
-                            return blockMap[layer][x, y][blockMap[layer][x, y].Count - 1 - rollbacks];
-                    }
-                }
-            }
-            return Block.CreateBlock(layer, x, y, 0, -1);
-        }
-        #endregion
-
-        #region block draw functions
-        /// <summary>
-        /// Körs när "b" tas emot och lägger blocket i blockmap
-        /// </summary>
-        /// <param name="b"></param>
         public Block getBotBlock(int layer, int x, int y)
         {
             if (x >= 0 && y >= 0 && x < width && y < height)
@@ -185,6 +158,33 @@ namespace DynamicEEBot.SubBots
             return Block.CreateBlock(layer, x, y, 0, -1);
         }
 
+        public Block getBlock(int layer, int x, int y, int rollbacks)
+        {
+            while (blockMap == null || blockMap[layer] == null)
+                Thread.Sleep(100);
+
+            if (x >= 0 && y >= 0 && x < width && y < height)
+            {
+                lock (blockMap)
+                {
+                    if (blockMap[layer][x, y].Count > 0)
+                    {
+                        if (blockMap[layer][x, y].Count <= rollbacks)
+                            return Block.CreateBlock(layer, x, y, 0, -1);
+                        else
+                            return blockMap[layer][x, y][blockMap[layer][x, y].Count - 1 - rollbacks];
+                    }
+                }
+            }
+            return Block.CreateBlock(layer, x, y, 0, -1);
+        }
+        #endregion
+
+        #region block draw functions
+        /// <summary>
+        /// Körs när "b" tas emot och lägger blocket i blockmap
+        /// </summary>
+        /// <param name="b"></param>
         private void OnBlockDraw(Block b)
         {
             while (blockMap == null || blockMap[b.layer] == null)
