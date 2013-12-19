@@ -31,7 +31,7 @@ namespace DynamicEEBot.SubBots
         public Room(Bot bot)
             : base(bot)
         {
-            form = new Room_Form();
+            form = new Room_Form(bot, this);
             Enabled = true;
         }
 
@@ -205,6 +205,10 @@ namespace DynamicEEBot.SubBots
                         break;
                     }
                 }
+                this.form.Invoke(new Action(() =>
+                {
+                    ((Room_Form)this.form).repairQueueSizeBox.Text = blockSet.Count.ToString();
+                }));
             }
         }
 

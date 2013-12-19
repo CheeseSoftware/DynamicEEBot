@@ -11,9 +11,19 @@ namespace DynamicEEBot.SubBots
 {
     public partial class Room_Form : Form
     {
-        public Room_Form()
+        Bot bot;
+        Room room;
+
+        public Room_Form(Bot bot, Room room)
         {
             InitializeComponent();
+            this.bot = bot;
+            this.room = room;
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            room.DrawSleep = (int)numericUpDown1.Value;
         }
     }
 }

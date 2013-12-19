@@ -28,37 +28,37 @@ namespace DynamicEEBot
 
         public Redstone(Bot bot)
             : base(bot)
+        {
+            UpdateSleep = 10;
+            currentRedTime.Start();
+
+            wireTypes.Add(189/*red checker*/, 0.001F);
+            wireTypes.Add(516/*background checker red*/, 0.001F);
+
+            conductivityDelegateList.Add(new IsConductive((BlockPos pos, int jumps, float power, Block sourceBlock, Block block) =>  // colored wires
             {
-                UpdateSleep = 10;
-                currentRedTime.Start();
+                return (block.blockId >= 186/*gray checker*/
+                    && block.blockId <= 192/*cyan checker*/
+                    && (block.blockId == sourceBlock.blockId
+                        || sourceBlock.blockId == 20 // redstone
+                        || powerSourceTypes.ContainsKey(sourceBlock.blockId)
+                        || layerSwitches.Contains(sourceBlock.blockId)));
+            }));
+            conductivityDelegateList.Add(new IsConductive((BlockPos pos, int jumps, float power, Block sourceBlock, Block block) =>
+            {
+                return block.blockId == 20;
+            }));
 
-                wireTypes.Add(189/*red checker*/, 0.001F);
-                wireTypes.Add(516/*background checker red*/, 0.001F);
-
-                conductivityDelegateList.Add(new IsConductive((BlockPos pos, int jumps, float power, Block sourceBlock, Block block)=>  // colored wires
-                {
-                    return (block.blockId >= 186/*gray checker*/
-                        && block.blockId <= 192/*cyan checker*/
-                        && (block.blockId == sourceBlock.blockId
-                            || sourceBlock.blockId == 20 // redstone
-                            || powerSourceTypes.ContainsKey(sourceBlock.blockId)
-                            || layerSwitches.Contains(sourceBlock.blockId)));
-                }));
-                conductivityDelegateList.Add(new IsConductive((BlockPos pos, int jumps, float power, Block sourceBlock, Block block) =>
-                {
-                    return block.blockId == 20;
-                }));
-
-                layerSwitches.Add(146/*industrial crosssupport*/);
-                layerSwitches.Add(548/*carnival checker*/);
-                powerSourceTypes.Add(30/*metal red*/, new Torch());
-                powerSourceTypes.Add(311/*cloud bottom*/, new PressurePlate());
-                powerSourceTypes.Add(301/*sand white*/, new PressurePlate());
-                destinationTypes.Add(33/*glossy black special*/, new Lamp());
-                destinationTypes.Add(143/*cloud white*/, new Lamp());
-                destinationTypes.Add(86/*scifi gray*/, new Door());
-                destinationTypes.Add(243/*secrets nonsolid*/, new Door());
-            }
+            layerSwitches.Add(146/*industrial crosssupport*/);
+            layerSwitches.Add(548/*carnival checker*/);
+            powerSourceTypes.Add(30/*metal red*/, new Torch());
+            powerSourceTypes.Add(311/*cloud bottom*/, new PressurePlate());
+            powerSourceTypes.Add(301/*sand white*/, new PressurePlate());
+            destinationTypes.Add(33/*glossy black special*/, new Lamp());
+            destinationTypes.Add(143/*cloud white*/, new Lamp());
+            destinationTypes.Add(86/*scifi gray*/, new Door());
+            destinationTypes.Add(243/*secrets nonsolid*/, new Door());
+        }
 
         public override void onMessage(object sender, PlayerIOClient.Message m, Bot bot)
         {
@@ -268,6 +268,8 @@ namespace DynamicEEBot
 
                             if (destinationTypes.ContainsKey(block.blockId))
                             {
+                                if (destinations.ContainsKey(new BlockPos(x, y, l)))
+                                    destinations.Remove(new BlockPos(x, y, l));
                                 destinations.Add(new BlockPos(x, y, l),
                                     destinationTypes[block.blockId].Clone() as Destination
                                     );
@@ -280,7 +282,7 @@ namespace DynamicEEBot
                 {
                     ResetPowerSourceWires(powerSourceKeyValuePair);
                 }
-                
+
             }
 
         }
@@ -353,7 +355,7 @@ namespace DynamicEEBot
                         }
                         else if (layerSwitches.Contains(block.blockId))
                         {
-                            blockQueue.Enqueue(new BlockPos(newPos.x, newPos.y, newPos.l^1));
+                            blockQueue.Enqueue(new BlockPos(newPos.x, newPos.y, newPos.l ^ 1));
                             redMap[newPos.x, newPos.y, newPos.l ^ 1] = power;
                             break;
                         }

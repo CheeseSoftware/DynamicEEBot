@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -92,6 +92,9 @@
       <DependentUpon>SubBot.cs</DependentUpon>
     </Compile>
     <Compile Include="SubBots\WorldEdit\Brush.cs" />
+    <Compile Include="SubBots\WorldEdit\BrushTypes\BrushShape.cs" />
+    <Compile Include="SubBots\WorldEdit\BrushTypes\RoundBrushShape.cs" />
+    <Compile Include="SubBots\WorldEdit\BrushTypes\SquareBrushShape.cs" />
     <Compile Include="SubBots\WorldEdit\RandomBrush.cs" />
     <Compile Include="SubBots\WorldEdit\SolidBrush.cs" />
     <Compile Include="SubBots\Zombies\Monster.cs" />
@@ -152,6 +155,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="SubBots\Room\Room_Form.resx">
+      <DependentUpon>Room_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

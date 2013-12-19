@@ -105,10 +105,10 @@ namespace DynamicEEBot.SubBots.WorldEdit
                                 brush.SetData(args[1], args[2], bot, player);
                             }
                             else
-                                bot.connection.Send("say", "You have no brush.");
+                                bot.connection.Send("say", player.name + ": You have no brush.");
                         }
                         else
-                            bot.connection.Send("say", "Usage: !brushset <var> <value>");
+                            bot.connection.Send("say", player.name + ": Usage: !brushset <var> <value>");
                     }
                     break;
                 case "replace":
@@ -137,7 +137,7 @@ namespace DynamicEEBot.SubBots.WorldEdit
                 case "set":
                     //if (isBotMod)
                     {
-                        if (player.hasVar("brush"))
+                        if (player.hasVar("brushtype"))
                         {
                             string arg = "";
                             if (args.Length > 1)
@@ -150,16 +150,7 @@ namespace DynamicEEBot.SubBots.WorldEdit
                 case "b":
                     //if (isBotMod)
                     {
-                        if (args.Length == 1)
-                        {
-                            if (player.hasVar("brush"))
-                                player.setVar("brush", !(bool)player.getVar("brush"));
-                            else
-                                player.setVar("brush", true);
-                            bool playerHasBrush = (bool)player.getVar("brush");
-                            bot.connection.Send("say", player.name + ": Brush is " + (playerHasBrush ? "ON" : "OFF"));
-                        }
-                        else if (args.Length > 1)
+                        if (args.Length > 1)
                         {
                             string brushName = args[1].Trim().ToLower();
                             Brush brush = (Brush)Brush.FromName(brushName);
@@ -169,37 +160,36 @@ namespace DynamicEEBot.SubBots.WorldEdit
                                 bot.connection.Send("say", "Your brush is now: " + brushName);
                             }
                             else
-                                bot.connection.Send("say", "Brush does not exist.");
+                                bot.connection.Send("say", player.name + ": Brush does not exist.");
                         }
                         else
-                            bot.connection.Send("say", "Usage: !brush <brushname>");
+                            bot.connection.Send("say", player.name + ": Usage: !brush <brushname>");
                     }
                     break;
-                case "bs":
-                    if (isBotMod)
+                case "bon":
+                    //if (isBotMod)
                     {
-                        int size;
-                        if (args.Length > 1 && int.TryParse(args[1], out size))
-                        {
-                            if (size < 10)
-                                player.setVar("brushsize", size);
-                            else
-                                bot.connection.Send("say", "Too big size! 0-9");
-                        }
+                        if (player.hasVar("brush") && (bool)player.getVar("brush"))
+                            bot.connection.Send("say", player.name + ": Brush already ON");
                         else
-                            bot.connection.Send("say", "Usage: !bs <size>");
+                        {
+                            player.setVar("brush", true);
+                            bot.connection.Send("say", player.name + ": Brush ON");
+                        }
                     }
                     break;
-                case "bb":
-                    if (isBotMod)
+                case "boff":
+                    //if (isBotMod)
                     {
-                        int blockId;
-                        if (args.Length > 1 && int.TryParse(args[1], out blockId))
+                        if (!player.hasVar("brush"))
                         {
-                            player.setVar("brushblock", blockId);
+                            bot.connection.Send("say", player.name + ": Brush already OFF");
                         }
                         else
-                            bot.connection.Send("say", "Usage: !bb <id>");
+                        {
+                            player.setVar("brush", false);
+                            bot.connection.Send("say", player.name + ": Brush OFF");
+                        }
                     }
                     break;
                 case "fillworld":
