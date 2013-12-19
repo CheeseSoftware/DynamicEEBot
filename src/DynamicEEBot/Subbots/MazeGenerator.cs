@@ -48,6 +48,9 @@ namespace DynamicEEBot
                             else
                                 maxLength = 1;
 
+                            if (maxLength < 1)
+                                maxLength = 1;
+
                             List<BlockPos> points = new List<BlockPos>();
 
                             points.Add(new BlockPos(0, player.blockX & 0xFFFE, player.blockY & 0xFFFE));
@@ -58,7 +61,7 @@ namespace DynamicEEBot
                             {
                                 int i = random.Next(points.Count);
 
-                                foreach (BlockPos p in moves)
+                                BlockPos p = moves[random.Next(moves.Count())];
                                 {
 
                                     BlockPos pointA, pointB;
@@ -95,7 +98,29 @@ namespace DynamicEEBot
                                     }
                                 }
 
-                                points.RemoveAt(i);
+                                bool noWay = false;
+
+                                foreach (var m in moves)
+                                {
+                                    BlockPos a = new BlockPos(0, points[i].x + m.x, points[i].y + m.y);
+                                    BlockPos b = new BlockPos(0, points[i].x + m.x, points[i].y + m.y);
+
+                                    Block bl = bot.room.getBotBlock(0, b.x, b.y);
+                                        Block bl2 = bot.room.getBotBlock(0, a.x, a.y);
+
+                                        if (!(bl.blockId > 8 && bl.blockId < 218 && bl2.blockId > 8 && bl2.blockId < 218
+                                            && bl.x > 1 && bl.y > 1 && bl.x < bot.room.Width - 1 && bl.y < bot.room.Height - 1))
+                                        {
+                                            noWay = true;
+                                            break;
+                                        }
+
+                                }
+
+                                if (noWay)
+                                {
+                                    points.RemoveAt(i);
+                                }
                             }
                         }
                         break;
