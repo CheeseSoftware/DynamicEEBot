@@ -15,7 +15,7 @@ namespace DynamicEEBot
         {
             Enabled = true;
             playerTickTimer.Start();
-            UpdateSleep = 10;
+            UpdateSleep = 1;
         }
 
         public override void onMessage(object sender, PlayerIOClient.Message m, Bot bot)

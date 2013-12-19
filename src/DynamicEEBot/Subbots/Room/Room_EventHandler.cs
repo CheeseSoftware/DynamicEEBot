@@ -17,14 +17,13 @@ namespace DynamicEEBot.SubBots
 
         public override void onDisable(Bot bot)
         {
-            lock (blockMap)
-                blockMap = null;
+            ResetMap();
             lock (blockQueue)
-                blockQueue = null;
+                blockQueue.Clear();
             lock (blockRepairQueue)
-                blockRepairQueue = null;
+                blockRepairQueue.Clear();
             lock (blockSet)
-                blockSet = null;
+                blockSet.Clear();
             StopDrawThread();
         }
 

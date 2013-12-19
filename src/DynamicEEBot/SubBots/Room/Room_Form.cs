@@ -9,21 +9,25 @@ using System.Windows.Forms;
 
 namespace DynamicEEBot.SubBots
 {
-    public partial class Room_Form : Form
+    public partial class Room_Form : MdiForm
     {
-        Bot bot;
         Room room;
 
         public Room_Form(Bot bot, Room room)
+            :base(bot)
         {
             InitializeComponent();
-            this.bot = bot;
             this.room = room;
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             room.DrawSleep = (int)numericUpDown1.Value;
+        }
+
+        private void clearRepairQueueButton_Click(object sender, EventArgs e)
+        {
+            room.ClearRepairQueue();
         }
     }
 }

@@ -36,6 +36,16 @@ namespace DynamicEEBot.SubBots
         }
 
         #region draw functions
+        public void ClearRepairQueue()
+        {
+            lock (blockQueue)
+                blockQueue.Clear();
+            lock (blockRepairQueue)
+                blockRepairQueue.Clear();
+            lock (blockSet)
+                blockSet.Clear();
+        }
+
         private void StartDrawThread()
         {
             bot.connection.Send(key + "k", true);

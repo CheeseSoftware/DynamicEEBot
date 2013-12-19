@@ -142,11 +142,11 @@ namespace DynamicEEBot
 
                     }
                     newpath = new Stack<Square>(newpath);
-                    Console.WriteLine(newpath.Count);
-                    string str = "";
-                    foreach (Square s in newpath)
-                        str += "X:" + s.x + " Y:" + s.y + " \n";
-                    Console.WriteLine(str);
+                    //Console.WriteLine(newpath.Count);
+                    //string str = "";
+                    //foreach (Square s in newpath)
+                      //  str += "X:" + s.x + " Y:" + s.y + " \n";
+                    //Console.WriteLine(str);
                     return newpath;
                 }
 
@@ -175,7 +175,7 @@ namespace DynamicEEBot
                         current.G + adjacentSquares[i].cost,
                         CalculateH(current.x + adjacentSquares[i].x, current.y + adjacentSquares[i].y, targetX, targetY),
                         current);
-                    if (neighbour.x < 0 || neighbour.y < 0 || neighbour.x > bot.room.Width || neighbour.y > bot.room.Height)
+                    if (neighbour.x < 0 || neighbour.y < 0 || neighbour.x >= bot.room.Width || neighbour.y >= bot.room.Height)
                         continue;
                     if (bot.room.getBlock(0, neighbour.x, neighbour.y).blockId != 4)
                         neighbour.G += 10000;

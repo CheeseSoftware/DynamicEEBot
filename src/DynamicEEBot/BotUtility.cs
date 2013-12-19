@@ -67,10 +67,13 @@ namespace DynamicEEBot
 
         public static bool isTaskRunning(Task task)
         {
-            return (task.IsCompleted == false
+            return ((task.IsCompleted == false
                 || task.Status == TaskStatus.Running
                 || task.Status == TaskStatus.WaitingToRun
-                || task.Status == TaskStatus.WaitingForActivation);
+                || task.Status == TaskStatus.WaitingForActivation)
+                && (task.Status != TaskStatus.Created 
+                && task.Status != TaskStatus.Faulted 
+                && task.Status != TaskStatus.Canceled));
         }
 
     }

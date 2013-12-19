@@ -33,6 +33,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.repairQueueSizeBox = new System.Windows.Forms.TextBox();
+            this.clearRepairQueueButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -93,18 +94,30 @@
             this.repairQueueSizeBox.Size = new System.Drawing.Size(92, 20);
             this.repairQueueSizeBox.TabIndex = 4;
             // 
+            // clearRepairQueueButton
+            // 
+            this.clearRepairQueueButton.Location = new System.Drawing.Point(211, 28);
+            this.clearRepairQueueButton.Name = "clearRepairQueueButton";
+            this.clearRepairQueueButton.Size = new System.Drawing.Size(61, 23);
+            this.clearRepairQueueButton.TabIndex = 5;
+            this.clearRepairQueueButton.Text = "Clear";
+            this.clearRepairQueueButton.UseVisualStyleBackColor = true;
+            this.clearRepairQueueButton.Click += new System.EventHandler(this.clearRepairQueueButton_Click);
+            // 
             // Room_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(284, 62);
+            this.Controls.Add(this.clearRepairQueueButton);
             this.Controls.Add(this.repairQueueSizeBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.label1);
+            this.Cursor = System.Windows.Forms.Cursors.SizeWE;
             this.Name = "Room_Form";
-            this.Text = "Room_Form";
+            this.Text = "Room";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -118,5 +131,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.TextBox repairQueueSizeBox;
+        private System.Windows.Forms.Button clearRepairQueueButton;
     }
 }

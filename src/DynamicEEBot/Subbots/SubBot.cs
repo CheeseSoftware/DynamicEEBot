@@ -41,17 +41,17 @@ namespace DynamicEEBot
                     if (value)
                     {
                         this.onEnable(bot);
-                        if (updateTask == null || updateTask.IsCanceled || updateTask.IsCompleted || updateTask.IsFaulted)
+                        if (updateTask == null || updateTask.IsFaulted || updateTask.IsCanceled || updateTask.IsCompleted)
+                        {
                             updateTask = new Task(updateTaskWork);
+                            updateTask.Start();
+                        }
                         if (!BotUtility.isTaskRunning(updateTask))
                             updateTask.Start();
                         Console.WriteLine(this.GetType() + ".cs is enabled.");
                     }
                     else
                     {
-                        if (BotUtility.isTaskRunning(updateTask))
-                            updateTask.Dispose();
-
                         this.onDisable(bot);
                         Console.WriteLine(this.GetType() + ".cs is disabled.");
                     }
@@ -64,6 +64,7 @@ namespace DynamicEEBot
         {
             this.bot = bot;
             updateTask = new Task(updateTaskWork);
+            //new Thread(updateTaskWork).Start();
         }
 
         ~SubBot()
