@@ -41,6 +41,13 @@ namespace DynamicEEBot
                 {
                     case "generatemaze":
                         {
+                            int maxLength;
+
+                            if (args.Count() >= 1)
+                                int.TryParse(args[1], out maxLength);
+                            else
+                                maxLength = 1;
+
                             List<BlockPos> points = new List<BlockPos>();
 
                             points.Add(new BlockPos(0, player.blockX & 0xFFFE, player.blockY & 0xFFFE));
@@ -53,14 +60,38 @@ namespace DynamicEEBot
 
                                 foreach (BlockPos p in moves)
                                 {
-                                    BlockPos newPoint = new BlockPos(0, points[i].x + p.x * 2, points[i].y + p.y * 2);
 
-                                    Block b = bot.room.getBotBlock(0, newPoint.x, newPoint.y);
-                                    if (b.blockId > 8 && b.blockId < 218)
+                                    BlockPos pointA, pointB;
+
+                                    pointA = new BlockPos(0, points[i].x + p.x, points[i].y + p.y); // is between the previous point nad pointB
+                                    pointB = new BlockPos(0, points[i].x, points[i].y); //"destination"
+
+                                    for (int j = 0; j < random.Next(1,maxLength); j++)
                                     {
-                                        bot.room.DrawBlock(Block.CreateBlock(0, points[i].x + p.x, points[i].y + p.y, 4, -1));
-                                        bot.room.DrawBlock(Block.CreateBlock(0, newPoint.x, newPoint.y, 4, -1));
-                                        points.Add(newPoint);
+                                        pointB = new BlockPos(0, pointB.x + p.x * 2, pointB.y + p.y * 2);
+                                        //pointB.y = p.y * 2;
+                                        //pointB.x //BlockPos pointA = new BlockPos(0, points[i].x + p.x * 2, points[i].y + p.y * 2);
+                                        //BlockPos pointB = new BlockPos(0, points[i].x + p.x * 2, points[i].y + p.y * 2);
+
+                                        Block b = bot.room.getBotBlock(0, pointB.x, pointB.y);
+                                        Block b2 = bot.room.getBotBlock(0, pointA.x, pointA.y);
+
+                                        if (b.blockId > 8 && b.blockId < 218 && b2.blockId > 8 && b2.blockId < 218
+                                            && b.x > 1 && b.y > 1 && b.x < bot.room.Width-1 && b.y < bot.room.Height-1)
+                                        {
+                                            bot.room.DrawBlock(Block.CreateBlock(0, pointA.x, pointA.y, 4, -1));
+                                            bot.room.DrawBlock(Block.CreateBlock(0, pointB.x, pointB.y, 4, -1));
+                                            points.Add(pointB);
+
+                                            pointA = new BlockPos(0, pointA.x + p.x * 2, pointA.y + p.y * 2);
+                                            //pointA.x += p.x * 2;
+                                            //pointA.y += p.y * 2;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+
                                     }
                                 }
 
