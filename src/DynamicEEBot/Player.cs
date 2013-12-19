@@ -27,6 +27,7 @@ namespace DynamicEEBot
             : base(bot, ID, name, frame, xPos, yPos, isGod, isMod, bla, coins, purple, isFriend, level)
         {
             Load();
+            setVar("brushtype", new SubBots.WorldEdit.SolidBrush());
         }
 
         public void setVar(string key, object value)

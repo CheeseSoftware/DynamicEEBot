@@ -215,10 +215,6 @@ namespace DynamicEEBot.SubBots
                         break;
                     }
                 }
-                this.form.Invoke(new Action(() =>
-                {
-                    ((Room_Form)this.form).repairQueueSizeBox.Text = blockSet.Count.ToString();
-                }));
             }
         }
 

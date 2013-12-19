@@ -138,7 +138,20 @@ namespace DynamicEEBot.SubBots
 
         public override void Update(Bot bot)
         {
+            try
+            {
+                this.form.Invoke(new Action(() =>
+                {
+                    ((Room_Form)this.form).repairQueueSizeBox.Text = blockRepairQueue.Count.ToString();
+                    ((Room_Form)this.form).blockQueueSizeBox.Text = blockQueue.Count.ToString();
+                    ((Room_Form)this.form).blockSetSizeBox.Text = blockSet.Count.ToString();
+                }));
+            }
+            catch (Exception e)
+            {
+                string s = e.ToString();
 
+            }
         }
 
         public override bool HasForm { get { return true; } }
