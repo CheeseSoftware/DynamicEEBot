@@ -39,7 +39,62 @@ namespace DynamicEEBot
             {
                 switch (args[0])
                 {
-                    case "generatemaze":
+                    case "genmaze":
+                        {
+                            Stack<BlockPos> points = new Stack<BlockPos>();
+
+                            points.Push(new BlockPos(0, player.blockX & 0xFFFE, player.blockY & 0xFFFE));
+                            points.Push(new BlockPos(0, player.blockX & 0xFFFE, player.blockY & 0xFFFE));
+
+                            int maxLength;
+
+                            if (args.Count() >= 1)
+                                int.TryParse(args[1], out maxLength);
+                            else
+                                maxLength = 1;
+
+                            if (maxLength < 1)
+                                maxLength = 1;
+
+                            while (points.Count > 0)
+                            {
+                                BlockPos point = points.Pop();
+                                BlockPos wallPoint = points.Pop();
+
+                                if (point.x > 0 && point.x < bot.room.Width - 1 && point.y > 0 && point.y < bot.room.Height - 1)
+                                {
+                                    Block block = bot.room.getBotBlock(0, point.x, point.y);
+
+                                    if (block.blockId > 8 && block.blockId < 226)
+                                    {
+                                        bot.room.DrawBlock(Block.CreateBlock(0, point.x, point.y, 4, -1));
+                                        bot.room.DrawBlock(Block.CreateBlock(0, wallPoint.x, wallPoint.y, 4, -1));
+
+                                        List<BlockPos> namnpriblem = new List<BlockPos>();
+
+                                        for (int i = 0; i < moves.Length; i++)
+                                            namnpriblem.Add(moves[i]);
+
+                                        while(namnpriblem.Count > 0)
+                                        {
+                                            int index = random.Next(namnpriblem.Count);
+                                            BlockPos newPoint = new BlockPos(0, point.x + namnpriblem[index].x * 2, point.y + namnpriblem[index].y * 2);
+                                            BlockPos newWallPoint = new BlockPos(0, point.x + namnpriblem[index].x, point.y + namnpriblem[index].y);
+                                            namnpriblem.RemoveAt(index);
+             
+                                            //BlockPos newWallPoint = new BlockPos(0, point.x + newPoint.x, point.y + newPoint.y);
+
+                                            points.Push(newWallPoint);
+                                            points.Push(newPoint);
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                        break;
+
+                    case "genemaze2":
                         {
                             int maxLength;
 
